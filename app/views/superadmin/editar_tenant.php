@@ -83,12 +83,20 @@
 
                         <div class="mb-3">
                             <label class="form-label">Logo de la Tienda</label>
-                            <?php if (!empty($tenant['logo']) && is_file(APP_ROOT . '/' . $tenant['logo'])): ?>
+                            <?php
+                            $lv = $tenant['logo'] ?? '';
+                            if (!empty($lv)) {
+                                if (str_starts_with($lv, 'http://') || str_starts_with($lv, 'https://')) {
+                                    $lsrc = $lv;
+                                } else {
+                                    $lsrc = is_file(APP_ROOT . '/' . $lv) ? (APP_URL . '/' . $lv) : '';
+                                }
+                                if ($lsrc): ?>
                                 <div class="mb-2">
-                                    <img src="<?php echo APP_URL . '/' . $tenant['logo']; ?>" alt="Logo actual" style="max-height: 80px; border-radius: 5px;">
+                                    <img src="<?php echo htmlspecialchars($lsrc); ?>" alt="Logo actual" style="max-height: 80px; border-radius: 5px;">
                                     <br><small class="text-muted">Logo actual</small>
                                 </div>
-                            <?php endif; ?>
+                            <?php endif; } ?>
                             <input type="file" class="form-control" name="logo" accept="image/jpeg,image/png,image/webp">
                             <small class="text-muted">JPG, PNG o WebP. Máximo 2MB. Déjalo vacío para mantener el logo actual.</small>
                         </div>

@@ -703,54 +703,44 @@ EOT;
     }
     
     /**
-     * Guardar logo de tenant
+     * Guardar logo de tenant en Cloudinary
      */
     private function guardarLogoTenant($fieldName, $slug) {
         if (empty($_FILES[$fieldName]) || $_FILES[$fieldName]['error'] !== UPLOAD_ERR_OK) {
             return ['success' => false, 'message' => 'No se subió archivo'];
         }
-        
+
         $file = $_FILES[$fieldName];
         $maxSizeMb = 2;
         $sizeLimit = $maxSizeMb * 1024 * 1024;
-        
+
         if ($file['size'] > $sizeLimit) {
             return ['success' => false, 'message' => "El archivo excede {$maxSizeMb}MB"];
         }
-        
+
         $allowedExts = ['jpg', 'jpeg', 'png', 'webp'];
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        
+
         if (!in_array($ext, $allowedExts)) {
             return ['success' => false, 'message' => 'Formato no permitido (JPG, PNG, WebP)'];
         }
-        
-        // Crear nombre seguro
-        $fileName = 'logo.' . $ext;
-        
-        // Crear directorio de tenant
-        $tenantDir = APP_ROOT . '/public/tenants/' . $slug;
-        if (!is_dir($tenantDir)) {
-            @mkdir($tenantDir, 0755, true);
+
+        if (!function_exists('uploadToCloudinary')) {
+            require_once APP_ROOT . '/config/cloudinary.php';
         }
-        
-        $targetPath = $tenantDir . '/' . $fileName;
-        
-        // Si existe logo anterior, eliminarlo
-        if (is_file($targetPath)) {
-            @unlink($targetPath);
+
+        $folder   = 'tenants/logos';
+        $publicId = 'logo_' . $slug;
+        $upload   = uploadToCloudinary($file['tmp_name'], $folder, $publicId);
+
+        if (!$upload['success']) {
+            return ['success' => false, 'message' => $upload['message']];
         }
-        
-        if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
-            return ['success' => false, 'message' => 'No se pudo guardar el archivo'];
-        }
-        
-        $relPath = 'public/tenants/' . $slug . '/' . $fileName;
-        
+
         return [
             'success' => true,
-            'path' => $targetPath,
-            'relPath' => $relPath
+            'path'    => '',
+            'relPath' => $upload['url'],   // URL completa de Cloudinary guardada en BD
         ];
     }
 }

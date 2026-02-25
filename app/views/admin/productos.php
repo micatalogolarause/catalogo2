@@ -6,6 +6,9 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
 // Helper para resolver URL de imagen respetando rutas por tenant y legacy
 function admin_producto_img_url($img) {
     if (!$img) return APP_URL . '/public/images/no-image.jpg';
+    if (str_starts_with($img, 'http://') || str_starts_with($img, 'https://')) {
+        return $img; // URL de Cloudinary u externa
+    }
     if (str_starts_with($img, 'public/tenants/')) {
         return APP_URL . '/' . $img;
     }

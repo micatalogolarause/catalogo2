@@ -1,7 +1,12 @@
 <?php
 /**
- * Helpers de uploads por tenant
+ * Helpers de uploads por tenant — almacenamiento en Cloudinary
  */
+
+// Cargar helper de Cloudinary
+if (!function_exists('uploadToCloudinary')) {
+    require_once __DIR__ . '/cloudinary.php';
+}
 
 // Base URL del proyecto (ajústalo si cambia el subdirectorio)
 if (!defined('BASE_PATH')) {
@@ -74,30 +79,21 @@ function move_uploaded_file_tenant($fieldName, $subdir = 'images', $allowedExts 
         return ['success' => false, 'message' => 'Extensión no permitida'];
     }
 
+    $tid      = defined('TENANT_ID') ? TENANT_ID : 0;
     $safeName = uniqid('upl_') . '_' . sanitize_filename(pathinfo($file['name'], PATHINFO_FILENAME)) . '.' . $ext;
+    $folder   = 'tenants/' . $tid . '/' . $subdir;
 
-    $baseDir = tenant_upload_base_dir();
-    ensure_upload_dirs_for_tenant(defined('TENANT_ID') ? TENANT_ID : 0);
+    $upload = uploadToCloudinary($file['tmp_name'], $folder);
 
-    $targetDir = rtrim($baseDir, '/\\') . '/' . $subdir;
-    if (!is_dir($targetDir)) {
-        @mkdir($targetDir, 0775, true);
+    if (!$upload['success']) {
+        return ['success' => false, 'message' => $upload['message']];
     }
-
-    $targetPath = rtrim($targetDir, '/\\') . '/' . $safeName;
-    if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
-        return ['success' => false, 'message' => 'No fue posible guardar el archivo'];
-    }
-
-    $url = tenant_upload_base_url() . '/' . $subdir . '/' . $safeName;
-    $relPath = 'public/tenants/' . (defined('TENANT_ID') ? TENANT_ID : 0) . '/' . $subdir . '/' . $safeName;
 
     return [
-        'success' => true,
-        'message' => 'Archivo subido',
-        'path' => $targetPath,
-        'url' => $url,
-        'name' => $safeName,
-        'relPath' => $relPath
+        'success'   => true,
+        'message'   => 'Archivo subido a Cloudinary',
+        'path'      => '',                  // sin ruta local
+        'url'       => $upload['url'],
+        'name'      => $upload['public_id'],
+        'relPath'   => $upload['url'],      // se guarda la URL completa en BD
     ];
-}

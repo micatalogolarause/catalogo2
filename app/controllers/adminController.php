@@ -1177,8 +1177,6 @@ class AdminController {
             return;
         }
 
-        global $conn;
-
         // Verificar que se subió un archivo
         if (!isset($_FILES['logo']) || $_FILES['logo']['error'] !== UPLOAD_ERR_OK) {
             $_SESSION['error'] = 'Error al subir el archivo';
@@ -1202,33 +1200,19 @@ class AdminController {
             exit;
         }
 
-        // Crear directorio si no existe
-        $logoDir = APP_ROOT . '/public/tenants/' . TENANT_ID;
-        if (!is_dir($logoDir)) {
-            @mkdir($logoDir, 0775, true);
+        // Subir logo a Cloudinary
+        if (!function_exists('uploadToCloudinary')) {
+            require_once APP_ROOT . '/config/cloudinary.php';
         }
-
-        // Nombre único para el archivo
-        $nombreArchivo = 'logo_' . time() . '.' . $extension;
-        $rutaDestino = $logoDir . '/' . $nombreArchivo;
-
-        // Mover archivo
-        if (!move_uploaded_file($file['tmp_name'], $rutaDestino)) {
-            $_SESSION['error'] = 'Error al guardar el archivo';
+        $upload = uploadToCloudinary($file['tmp_name'], 'tenants/logos', 'logo_tenant_' . TENANT_ID);
+        if (!$upload['success']) {
+            $_SESSION['error'] = 'Error al subir el logo: ' . $upload['message'];
             header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=miPerfil');
             exit;
         }
 
-        // Eliminar logo anterior si existe
-        if (!empty($_SESSION['tenant_data']['logo'])) {
-            $logoAnterior = APP_ROOT . '/' . $_SESSION['tenant_data']['logo'];
-            if (is_file($logoAnterior)) {
-                @unlink($logoAnterior);
-            }
-        }
-
         // Actualizar en la base de datos
-        $logoPath = 'public/tenants/' . TENANT_ID . '/' . $nombreArchivo;
+        $logoPath = $upload['url'];
         $tenantId = TENANT_ID;
         $sql = "UPDATE tenants SET logo = ? WHERE id = ?";
         

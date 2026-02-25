@@ -28,9 +28,18 @@ if (!isset($_SESSION['usuario_id'])) {
     <!-- Offcanvas Sidebar -->
     <div class="offcanvas offcanvas-start bg-dark" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarLabel">
                 <div class="offcanvas-header border-bottom border-secondary">
-            <?php if (!empty($_SESSION['tenant_data']['logo']) && is_file(APP_ROOT . '/' . $_SESSION['tenant_data']['logo'])): ?>
-                <img src="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_data']['logo']); ?>" alt="Logo" style="max-height:40px; margin-right:10px;">
-            <?php endif; ?>
+            <?php
+            $logoVal = $_SESSION['tenant_data']['logo'] ?? '';
+            if (!empty($logoVal)) {
+                if (str_starts_with($logoVal, 'http://') || str_starts_with($logoVal, 'https://')) {
+                    $logoSrc = $logoVal;
+                } else {
+                    $logoSrc = is_file(APP_ROOT . '/' . $logoVal) ? (APP_URL . '/' . $logoVal) : '';
+                }
+                if ($logoSrc):
+            ?>
+                <img src="<?php echo sanitizar($logoSrc); ?>" alt="Logo" style="max-height:40px; margin-right:10px;">
+            <?php endif; } ?>
             <h5 class="offcanvas-title text-white" id="sidebarLabel">
                 <i class="bi bi-house-gear"></i> <?php echo sanitizar($_SESSION['tenant_data']['titulo_empresa'] ?? $_SESSION['tenant_data']['nombre'] ?? 'Admin'); ?>
             </h5>

@@ -35,9 +35,18 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid px-4">
             <a class="navbar-brand d-flex align-items-center" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>">
-                <?php if (!empty($_SESSION['tenant_data']['logo']) && is_file(APP_ROOT . '/' . $_SESSION['tenant_data']['logo'])): ?>
-                    <img src="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_data']['logo']); ?>" alt="Logo" style="max-height: 40px; margin-right: 15px; border-radius: 3px;">
-                <?php endif; ?>
+                <?php
+                $logoVal = $_SESSION['tenant_data']['logo'] ?? '';
+                if (!empty($logoVal)) {
+                    if (str_starts_with($logoVal, 'http://') || str_starts_with($logoVal, 'https://')) {
+                        $logoSrc = $logoVal;
+                    } else {
+                        $logoSrc = is_file(APP_ROOT . '/' . $logoVal) ? (APP_URL . '/' . $logoVal) : '';
+                    }
+                    if ($logoSrc):
+                ?>
+                    <img src="<?php echo sanitizar($logoSrc); ?>" alt="Logo" style="max-height: 40px; margin-right: 15px; border-radius: 3px;">
+                <?php endif; } ?>
                 <span><?php echo sanitizar($_SESSION['tenant_data']['titulo_empresa'] ?? $_SESSION['tenant_data']['nombre'] ?? 'Tienda Virtual'); ?></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

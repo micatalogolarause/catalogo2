@@ -81,9 +81,18 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                 <h5 class="mb-0"><i class="bi bi-image"></i> Logo del Tenant</h5>
             </div>
             <div class="card-body">
-                <?php if (!empty($_SESSION['tenant_data']['logo']) && is_file(APP_ROOT . '/' . $_SESSION['tenant_data']['logo'])): ?>
+                <?php
+                $lv = $_SESSION['tenant_data']['logo'] ?? '';
+                if (!empty($lv)) {
+                    if (str_starts_with($lv, 'http://') || str_starts_with($lv, 'https://')) {
+                        $lsrc = $lv;
+                    } else {
+                        $lsrc = is_file(APP_ROOT . '/' . $lv) ? (APP_URL . '/' . $lv) : '';
+                    }
+                } else { $lsrc = ''; }
+                if ($lsrc): ?>
                 <div class="text-center mb-3">
-                    <img src="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_data']['logo']); ?>" 
+                    <img src="<?php echo sanitizar($lsrc); ?>" 
                          alt="Logo actual" 
                          style="max-height: 120px; max-width: 100%; object-fit: contain;">
                     <p class="text-muted mt-2 mb-0"><small>Logo actual</small></p>
