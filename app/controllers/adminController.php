@@ -15,17 +15,17 @@ class AdminController {
             $this->verificarAutenticacion();
         }
         
-        require_once 'app/models/CategoriaModel.php';
-        require_once 'app/models/SubcategoriaModel.php';
-        require_once 'app/models/ProductoModel.php';
-        require_once 'app/models/PedidoModel.php';
-        require_once 'config/uploads.php';
-        require_once 'app/helpers/FacturaPDF.php';
-        require_once 'app/helpers/FacturaExcel.php';
-        require_once 'app/helpers/ProductosPDF.php';
-        require_once 'app/helpers/ProductosExcel.php';
-        require_once 'app/helpers/PedidosPDF.php';
-        require_once 'app/helpers/PedidosExcel.php';
+        require_once APP_ROOT . '/app/models/CategoriaModel.php';
+        require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
+        require_once APP_ROOT . '/app/models/ProductoModel.php';
+        require_once APP_ROOT . '/app/models/PedidoModel.php';
+        require_once APP_ROOT . '/config/uploads.php';
+        require_once APP_ROOT . '/app/helpers/FacturaPDF.php';
+        require_once APP_ROOT . '/app/helpers/FacturaExcel.php';
+        require_once APP_ROOT . '/app/helpers/ProductosPDF.php';
+        require_once APP_ROOT . '/app/helpers/ProductosExcel.php';
+        require_once APP_ROOT . '/app/helpers/PedidosPDF.php';
+        require_once APP_ROOT . '/app/helpers/PedidosExcel.php';
         
         global $conn;
         $this->categoriaModel = new CategoriaModel($conn);

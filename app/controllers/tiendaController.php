@@ -22,11 +22,11 @@ class TiendaController {
     }
     
     public function __construct() {
-        require_once 'app/models/CategoriaModel.php';
-        require_once 'app/models/SubcategoriaModel.php';
-        require_once 'app/models/ProductoModel.php';
-        require_once 'app/models/ClienteModel.php';
-        require_once 'app/models/PedidoModel.php';
+        require_once APP_ROOT . '/app/models/CategoriaModel.php';
+        require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
+        require_once APP_ROOT . '/app/models/ProductoModel.php';
+        require_once APP_ROOT . '/app/models/ClienteModel.php';
+        require_once APP_ROOT . '/app/models/PedidoModel.php';
         
         global $conn;
         $this->categoriaModel = new CategoriaModel($conn);

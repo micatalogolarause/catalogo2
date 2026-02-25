@@ -6,7 +6,7 @@ class UsuarioController {
     private $clienteModel;
     
     public function __construct() {
-        require_once 'app/models/ClienteModel.php';
+        require_once APP_ROOT . '/app/models/ClienteModel.php';
         
         global $conn;
         $this->clienteModel = new ClienteModel($conn);
@@ -83,12 +83,12 @@ class UsuarioController {
         }
         
         $categorias = array();
-        require_once 'app/models/CategoriaModel.php';
+        require_once APP_ROOT . '/app/models/CategoriaModel.php';
         global $conn;
         $categoriaModel = new CategoriaModel($conn);
         $categorias = $categoriaModel->obtenerTodas();
         foreach ($categorias as &$cat) {
-            require_once 'app/models/SubcategoriaModel.php';
+            require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
             $subcategoriaModel = new SubcategoriaModel($conn);
             $cat['subcategorias'] = $subcategoriaModel->obtenerPorCategoria($cat['id']);
         }
@@ -217,11 +217,11 @@ class UsuarioController {
         }
         
         $categorias = array();
-        require_once 'app/models/CategoriaModel.php';
+        require_once APP_ROOT . '/app/models/CategoriaModel.php';
         $categoriaModel = new CategoriaModel($conn);
         $categorias = $categoriaModel->obtenerTodas();
         foreach ($categorias as &$cat) {
-            require_once 'app/models/SubcategoriaModel.php';
+            require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
             $subcategoriaModel = new SubcategoriaModel($conn);
             $cat['subcategorias'] = $subcategoriaModel->obtenerPorCategoria($cat['id']);
         }
