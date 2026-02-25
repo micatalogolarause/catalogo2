@@ -1,0 +1,271 @@
+/* Sistema de Temas para Multi-Tenant */
+
+/* ======================================
+   TEMA CLARO
+   ====================================== */
+body.tema-claro {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+body.tema-claro .navbar {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+body.tema-claro .card {
+    background-color: #ffffff;
+    border-color: #dee2e6;
+}
+
+body.tema-claro .table {
+    background-color: #ffffff;
+}
+
+/* ======================================
+   TEMA OSCURO
+   ====================================== */
+body.tema-oscuro {
+    background-color: #1a1a1a;
+    color: #e9ecef;
+}
+
+body.tema-oscuro .navbar {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
+}
+
+body.tema-oscuro .card {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e9ecef;
+}
+
+body.tema-oscuro .table {
+    background-color: #2d2d2d;
+    color: #e9ecef;
+}
+
+body.tema-oscuro .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.tema-oscuro .form-control,
+body.tema-oscuro .form-select {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e9ecef;
+}
+
+body.tema-oscuro .form-control:focus,
+body.tema-oscuro .form-select:focus {
+    background-color: #2d2d2d;
+    color: #e9ecef;
+    border-color: var(--color-primary);
+}
+
+body.tema-oscuro .btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+body.tema-oscuro .btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+
+/* ======================================
+   COLORES - AZUL (Default)
+   ====================================== */
+body.color-azul {
+    --color-primary: #5e72e4;
+    --color-secondary: #825ee4;
+    --color-primary-dark: #4c63d2;
+    --color-secondary-dark: #6b4fc1;
+}
+
+/* ======================================
+   COLORES - VERDE
+   ====================================== */
+body.color-verde {
+    --color-primary: #2dce89;
+    --color-secondary: #11cdef;
+    --color-primary-dark: #24a46d;
+    --color-secondary-dark: #0da5c0;
+}
+
+/* ======================================
+   COLORES - ROJO
+   ====================================== */
+body.color-rojo {
+    --color-primary: #f5365c;
+    --color-secondary: #fb6340;
+    --color-primary-dark: #d62947;
+    --color-secondary-dark: #ea4c29;
+}
+
+/* ======================================
+   COLORES - MORADO
+   ====================================== */
+body.color-morado {
+    --color-primary: #8965e0;
+    --color-secondary: #bc65e0;
+    --color-primary-dark: #7251c4;
+    --color-secondary-dark: #a351c4;
+}
+
+/* ======================================
+   COLORES - NARANJA
+   ====================================== */
+body.color-naranja {
+    --color-primary: #fb6340;
+    --color-secondary: #ffa500;
+    --color-primary-dark: #e04f2a;
+    --color-secondary-dark: #cc8800;
+}
+
+/* ======================================
+   COLORES - MARINO (corporativo)
+   ====================================== */
+body.color-marino {
+    --color-primary: #1f3b70;        /* Navy */
+    --color-secondary: #2a5298;      /* Lighter navy */
+    --color-primary-dark: #182e5a;   
+    --color-secondary-dark: #21447e; 
+}
+
+/* ======================================
+   COLORES - GRAFITO (corporativo)
+   ====================================== */
+body.color-grafito {
+    --color-primary: #3a3f44;        /* Graphite */
+    --color-secondary: #5a6268;      /* Slate */
+    --color-primary-dark: #2b2f33;
+    --color-secondary-dark: #4c545a;
+}
+
+/* ======================================
+   COLORES - PETROLEO (corporativo)
+   ====================================== */
+body.color-petroleo {
+    --color-primary: #0f4c5c;        /* Petroleum teal */
+    --color-secondary: #2c7a7b;      /* Teal */
+    --color-primary-dark: #0c3a46;
+    --color-secondary-dark: #245f60;
+}
+
+/* ======================================
+   COLORES - ACERO (corporativo)
+   ====================================== */
+body.color-acero {
+    --color-primary: #4682b4;        /* Steel blue */
+    --color-secondary: #5f9ea0;      /* Cadet blue */
+    --color-primary-dark: #3a6a93;
+    --color-secondary-dark: #4f8280;
+}
+
+/* ======================================
+   COLORES - GRIS (corporativo)
+   ====================================== */
+body.color-gris {
+    --color-primary: #6c757d;        /* Gray */
+    --color-secondary: #495057;      /* Dark gray */
+    --color-primary-dark: #5a6268;
+    --color-secondary-dark: #3f474e;
+}
+
+/* ======================================
+   APLICAR COLORES A ELEMENTOS
+   ====================================== */
+.navbar {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%) !important;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+
+.badge.bg-primary {
+    background-color: var(--color-primary) !important;
+}
+
+.text-primary {
+    color: var(--color-primary) !important;
+}
+
+a {
+    color: var(--color-primary);
+}
+
+a:hover {
+    color: var(--color-primary-dark);
+}
+
+/* ======================================
+   NAVBAR PERSONALIZADO
+   ====================================== */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ======================================
+   CARDS Y PRODUCTOS
+   ====================================== */
+.card-producto {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* ======================================
+   COMPATIBILIDAD TEMA OSCURO
+   ====================================== */
+body.tema-oscuro .alert {
+    border-width: 1px;
+}
+
+body.tema-oscuro .alert-info {
+    background-color: rgba(94, 114, 228, 0.2);
+    color: #8fa4f3;
+    border-color: rgba(94, 114, 228, 0.3);
+}
+
+body.tema-oscuro .alert-success {
+    background-color: rgba(45, 206, 137, 0.2);
+    color: #6dd5ae;
+    border-color: rgba(45, 206, 137, 0.3);
+}
+
+body.tema-oscuro .alert-danger {
+    background-color: rgba(245, 54, 92, 0.2);
+    color: #f88096;
+    border-color: rgba(245, 54, 92, 0.3);
+}
+
+body.tema-oscuro .badge {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.tema-oscuro .dropdown-menu {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+body.tema-oscuro .dropdown-item {
+    color: #e9ecef;
+}
+
+body.tema-oscuro .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}

@@ -1,0 +1,7 @@
+# Seguridad básica para uploads
+Options -Indexes
+
+# Bloquear ejecución de scripts PHP en subcarpetas de uploads
+<FilesMatch "\.(php|php5|phtml)$">
+  Require all denied
+</FilesMatch>

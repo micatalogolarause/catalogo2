@@ -1,0 +1,129 @@
+===============================================
+ARCHIVOS DE BACKUP Y REFERENCIA - FASE 1
+===============================================
+
+Fecha: 2026-01-09
+Fase Completada: FASE 1 - Migración de Base de Datos a Multi-Tenancy
+Usuario: root (XAMPP)
+Base de Datos: catalogo_tienda
+
+===============================================
+ARCHIVOS GENERADOS
+===============================================
+
+1. catalogo_tienda_backup_multitenancy.sql (45 KB)
+   - Dump completo de la BD con multi-tenancy
+   - Incluye: tablas, estructura, datos, índices, FKs
+   - USO: Restaurar BD completa si es necesario
+   - COMANDO: mysql -u root catalogo_tienda < catalogo_tienda_backup_multitenancy.sql
+
+2. FASE_1_MIGRACION_MULTITENANCY.sql
+   - Script original de migración
+   - Crea tabla tenants
+   - Agrega tenant_id a 9 tablas
+   - Referencia de cambios realizados
+
+3. FASE_1_MIGRACION_COMPLETA.sql
+   - Script mejorado con manejo de errores
+   - Version final ejecutada correctamente
+   - Sirve como referencia de exactamente qué se hizo
+
+4. BD_ESTRUCTURA_FUTURO.sql
+   - Documentación de estructura para el futuro
+   - Patrones de queries con tenant_id
+   - Checklist de fases
+   - URLs esperadas
+
+5. BACKUPS_Y_REFERENCIAS.txt (Este archivo)
+   - Guía rápida de uso
+
+===============================================
+CAMBIOS REALIZADOS EN LA BD
+===============================================
+
+TABLA NUEVA:
+✓ tenants (id, nombre, slug UNIQUE, whatsapp_phone, logo, tema, estado, timestamps)
+  - Tenant Default insertado (id=1, slug='default', whatsapp='573112969569')
+
+TABLAS MODIFICADAS (9):
+✓ categorias + tenant_id
+✓ subcategorias + tenant_id
+✓ productos + tenant_id
+✓ clientes + tenant_id
+✓ carrito + tenant_id
+✓ pedidos + tenant_id
+✓ pedido_detalles + tenant_id
+✓ usuarios + tenant_id
+✓ pedido_historial + tenant_id
+
+ÍNDICES ACTUALIZADOS:
+✓ Foreign keys: Cada tabla tiene FK a tenants(id)
+✓ Índices únicos: Ahora incluyen tenant_id (evita conflictos entre tenants)
+✓ Índices de búsqueda: Creados para cada tenant_id
+
+DATOS EXISTENTES:
+✓ Asignados a tenant_id = 1 (default)
+✓ 3 categorías
+✓ 6 subcategorías
+✓ 10 productos
+✓ 5 clientes
+✓ 3 pedidos
+✓ 5 detalles de pedidos
+✓ 1 usuario admin
+
+===============================================
+PRÓXIMOS PASOS - FASE 2
+===============================================
+
+FASE 2: Middleware de Resolución de Tenant
+- Archivo: public/index.php
+- Tarea: Detectar tenant desde URL (/catalogo2/{slug})
+- Definir: define('TENANT_ID', $tenant_id)
+- Usar en: Todas las queries de BD
+
+FASE 3: IIS Rewrite Rules
+- Archivo: public/web.config
+- Tarea: Reescribir URLs con patrón {slug}
+- URLs: /catalogo2/mauricio → /catalogo2/index.php?tenant=mauricio
+
+FASE 4: Database Helpers Scoped
+- Archivo: config/database.php
+- Tarea: Funciones que auto-incluyen WHERE tenant_id = TENANT_ID
+
+FASE 5: Tenant Registration
+- Archivo: public/registro-tenant.php
+- Tarea: Formulario para registrar nuevos tenants
+- Crear: Mauricio, Distribuciones EBS
+
+===============================================
+COMO RESTAURAR SI ALGO FALLA
+===============================================
+
+Opción 1 - Restaurar BD Completa:
+  mysql -u root catalogo_tienda < catalogo_tienda_backup_multitenancy.sql
+
+Opción 2 - Si necesitas empezar de cero:
+  1. mysql -u root -e "DROP DATABASE catalogo_tienda;"
+  2. mysql -u root -e "CREATE DATABASE catalogo_tienda;"
+  3. Restaurar backup original (catalogo_tienda1.sql)
+  4. Aplicar migración: FASE_1_MIGRACION_COMPLETA.sql
+
+===============================================
+IMPORTANTE
+===============================================
+
+✓ BD está lista para multi-tenancy
+✓ Estructura es correcta y validada
+✓ Datos existentes están preservados
+✓ Backups están generados
+
+PROXIMOS COMMITS:
+1. Modificar index.php con middleware
+2. Crear web.config con rewrite rules
+3. Actualizar database.php con scoped helpers
+4. Crear registro de tenants
+5. Aislar todos los controllers
+
+===============================================
+FIN
+===============================================

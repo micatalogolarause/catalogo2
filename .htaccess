@@ -1,0 +1,32 @@
+# Configuración para Apache (compatible con XAMPP)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /catalogo2/
+    
+    # Permitir archivos y carpetas existentes
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Redirigir todas las solicitudes al index.php
+    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>
+
+# Configuración de seguridad
+<FilesMatch "\.php$">
+    Order Deny,Allow
+    Deny from all
+    Allow from all
+</FilesMatch>
+
+# Proteger archivos sensibles
+<FilesMatch "\.(htaccess|config\.php)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Configuración de headers para seguridad
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
