@@ -97,3 +97,4 @@ function move_uploaded_file_tenant($fieldName, $subdir = 'images', $allowedExts 
         'name'      => $upload['public_id'],
         'relPath'   => $upload['url'],      // se guarda la URL completa en BD
     ];
+}
