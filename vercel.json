@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "installCommand": "composer install --no-dev --optimize-autoloader",
+  "builds": [
+    {
+      "src": "index.php",
+      "use": "vercel-php@0.7.2"
+    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.php" }
+  ]
+}

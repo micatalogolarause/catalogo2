@@ -5,9 +5,10 @@
  */
 
 // Credenciales Cloudinary
-define('CLOUDINARY_CLOUD_NAME', 'dc6in819o');
-define('CLOUDINARY_API_KEY',    '216774864662758');
-define('CLOUDINARY_API_SECRET', 'XxQYYgHIBCe-muQDeWXw3IEw9P0');
+// En Vercel se leen desde variables de entorno; en local usan valores directos como fallback
+define('CLOUDINARY_CLOUD_NAME', getenv('CLOUDINARY_CLOUD_NAME') ?: 'dc6in819o');
+define('CLOUDINARY_API_KEY',    getenv('CLOUDINARY_API_KEY')    ?: '216774864662758');
+define('CLOUDINARY_API_SECRET', getenv('CLOUDINARY_API_SECRET') ?: 'XxQYYgHIBCe-muQDeWXw3IEw9P0');
 
 /**
  * Sube un archivo al Cloudinary y retorna la URL segura.

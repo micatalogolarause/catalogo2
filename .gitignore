@@ -1,0 +1,50 @@
+# Dependencias de Composer (Vercel las instala automáticamente)
+/vendor/
+
+# Logs
+/logs/
+*.log
+
+# Archivos de entorno locales
+.env
+.env.local
+
+# SQL dumps / backups (no subir a GitHub)
+*.sql
+!supabase_migration.sql
+
+# Archivos de diagnóstico y prueba
+test_*.php
+debug*.php
+diagnostico*.php
+check_*.php
+fix_*.php
+run_diag*.php
+limpiar*.php
+verificar*.php
+script_limpiar.php
+update_factura_terminology.php
+index_old.php
+index.php.backup
+upload-test.php
+crear_tenant.php
+deployment_check.php
+
+# Archivos de credenciales y documentación interna
+CREDENCIALES.md
+*.txt
+*.bat
+*.sh
+*.ps1
+Deploy-*.ps1
+
+# Directorios de uploads locales (imágenes ahora en Cloudinary)
+/public/tenants/*/images/
+/public/tenants/*/docs/
+/public/tenants/*/temp/
+
+# IDE y sistema
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
