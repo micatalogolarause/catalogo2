@@ -17,7 +17,7 @@
 define('DB_HOST',     'db.XXXXXXXXXXXXXXXX.supabase.co'); // tu host de Supabase
 define('DB_PORT',     '5432');
 define('DB_USER',     'postgres');
-define('DB_PASS',     'TU_PASSWORD_SUPABASE');            // tu password de DB
+define('DB_PASS',     'Larause820626');            // tu password de DB
 define('DB_NAME',     'postgres');
 define('DB_CHARSET',  'utf8');
 // ──────────────────────────────────────────────────────────────────────────────
