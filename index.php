@@ -7,22 +7,7 @@
 // Incluir configuraciones
 require_once 'config/config.php';
 
-// Ejecutar instalación automática si no existe la BD
-$conn_test = @new mysqli('localhost', 'root', '');
-if ($conn_test->connect_error) {
-    die("Error: No se pudo conectar a MySQL. Verifique que XAMPP/MySQL esté en ejecución.");
-}
-
-// Verificar si la BD existe
-$resultado = $conn_test->query("SHOW DATABASES LIKE 'catalogo_tienda'");
-if (!$resultado || $resultado->num_rows == 0) {
-    // Ejecutar instalador
-    require_once 'config/installer.php';
-    require_once 'config/generate_images.php';
-}
-$conn_test->close();
-
-// Incluir conexión a BD
+// Incluir conexión a BD (Supabase/PostgreSQL)
 require_once 'config/database.php';
 
 // Determinar la acción y controlador PRIMERO (antes de resolver tenant)

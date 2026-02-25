@@ -14,9 +14,9 @@
 // ─── SUPABASE CONNECTION SETTINGS ─────────────────────────────────────────────
 // Reemplaza estos valores con los de tu proyecto Supabase:
 //   Settings → Database → Connection parameters
-define('DB_HOST',     'db.XXXXXXXXXXXXXXXX.supabase.co'); // tu host de Supabase
+define('DB_HOST',     'aws-0-us-west-2.pooler.supabase.com'); // Pooler Supabase
 define('DB_PORT',     '5432');
-define('DB_USER',     'postgres');
+define('DB_USER',     'postgres.ebpvdrwptoqiainuvztx');
 define('DB_PASS',     'Larause820626');            // tu password de DB
 define('DB_NAME',     'postgres');
 define('DB_CHARSET',  'utf8');

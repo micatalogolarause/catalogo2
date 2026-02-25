@@ -160,26 +160,11 @@ class TenantResolver {
      * @return array|null Datos del tenant o null
      */
     private static function getTenantBySlug($slug) {
-        global $conn;
-        
-        if (!$conn) {
-            return null;
-        }
-        
-        // Hacer búsqueda case-insensitive para slugs
-        $slug = $conn->real_escape_string($slug);
         $sql = "SELECT id, nombre, slug, whatsapp_phone, logo, tema, tema_color, titulo_empresa, estado 
                 FROM tenants 
-                WHERE LOWER(slug) = LOWER('$slug') 
+                WHERE LOWER(slug) = LOWER(?) 
                 LIMIT 1";
-        
-        $resultado = $conn->query($sql);
-        
-        if ($resultado && $resultado->num_rows > 0) {
-            return $resultado->fetch_assoc();
-        }
-        
-        return null;
+        return obtenerFila($sql, "s", [$slug]);
     }
     
     /**
@@ -189,22 +174,13 @@ class TenantResolver {
      * @return bool
      */
     private static function setDefaultTenant() {
-        global $conn;
-        
         // Obtener lista de tenants activos para mostrar en error
         $sql = "SELECT slug, titulo_empresa, nombre 
                 FROM tenants 
                 WHERE estado = 'activo'
                 ORDER BY nombre ASC";
         
-        $resultado = $conn->query($sql);
-        $tenants_disponibles = [];
-        
-        if ($resultado && $resultado->num_rows > 0) {
-            while ($row = $resultado->fetch_assoc()) {
-                $tenants_disponibles[] = $row;
-            }
-        }
+        $tenants_disponibles = obtenerFilas($sql) ?: [];
         
         // Mostrar página de error indicando que se debe especificar un tenant
         http_response_code(404);
