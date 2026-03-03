@@ -88,6 +88,46 @@ function uploadToCloudinary(string $tmpPath, string $folder = 'uploads', ?string
     $apiKey     = CLOUDINARY_API_KEY;
     $apiSecret  = CLOUDINARY_API_SECRET;
 
+    // 1) Intentar con SDK oficial de Cloudinary (firma interna)
+    if (class_exists('\\Cloudinary\\Cloudinary')) {
+        try {
+            $cloudinary = new \Cloudinary\Cloudinary([
+                'cloud' => [
+                    'cloud_name' => $cloudName,
+                    'api_key' => $apiKey,
+                    'api_secret' => $apiSecret,
+                ],
+                'url' => [
+                    'secure' => true,
+                ],
+            ]);
+
+            $options = [
+                'folder' => $folder,
+                'resource_type' => 'image',
+            ];
+
+            if ($publicId !== null && $publicId !== '') {
+                $options['public_id'] = $publicId;
+                $options['overwrite'] = true;
+            }
+
+            $result = $cloudinary->uploadApi()->upload($tmpPath, $options);
+
+            if (!empty($result['secure_url'])) {
+                return [
+                    'success'   => true,
+                    'message'   => 'Subido correctamente',
+                    'url'       => $result['secure_url'],
+                    'public_id' => $result['public_id'] ?? '',
+                    'http_code' => 200,
+                ];
+            }
+        } catch (\Throwable $e) {
+            // Continuar con fallback cURL firmado
+        }
+    }
+
     // Parámetros de la solicitud
     $timestamp = time();
     $params    = [
