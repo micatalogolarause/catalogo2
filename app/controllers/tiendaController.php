@@ -317,13 +317,21 @@ class TiendaController {
                 // Crear cliente temporal (invitado)
                 $usuario = 'invitado_' . substr(md5($whatsapp . time()), 0, 10);
                 $password_temp = hash('sha256', uniqid());
-                $sql_insert = "INSERT INTO clientes (tenant_id, usuario, password, nombre, whatsapp, activo) VALUES (?, ?, ?, ?, ?, 1)";
-                ejecutarConsulta($sql_insert, "issssi", array($tenant_id_co, $usuario, $password_temp, $nombre, $whatsapp));
+                $sql_insert = "INSERT INTO clientes (tenant_id, usuario, password, nombre, email, whatsapp, activo) VALUES (?, ?, ?, ?, '', ?, 1)";
+                $stmtCliente = ejecutarConsulta($sql_insert, "", array($tenant_id_co, $usuario, $password_temp, $nombre, $whatsapp));
+                if (!$stmtCliente) {
+                    echo json_encode(['success' => false, 'message' => 'Error al crear cliente invitado (tenant=' . $tenant_id_co . ', whatsapp=' . $whatsapp . ')']);
+                    return;
+                }
                 $cliente_id = (int)obtenerUltimoId();
                 // Fallback: si obtenerUltimoId() falla, buscar el cliente recién insertado
                 if (!$cliente_id) {
                     $fila = obtenerFila("SELECT id FROM clientes WHERE tenant_id = ? AND usuario = ?", "is", array($tenant_id_co, $usuario));
                     $cliente_id = $fila ? (int)$fila['id'] : 0;
+                }
+                if (!$cliente_id) {
+                    echo json_encode(['success' => false, 'message' => 'No se pudo obtener id del cliente creado (usuario=' . $usuario . ')']);
+                    return;
                 }
             }
         }
