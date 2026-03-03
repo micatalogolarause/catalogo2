@@ -137,16 +137,14 @@ function uploadToCloudinary(string $tmpPath, string $folder = 'uploads', ?string
     $apiKey     = CLOUDINARY_API_KEY;
     $apiSecret  = CLOUDINARY_API_SECRET;
 
-    // 0) Si existe upload preset configurado, intentar subida unsigned (no requiere firma)
+    // 0) Si existe upload preset configurado, usar SOLO unsigned (no requiere API secret)
+    //    Si falla, devolver el error directamente — NO caer al flujo firmado que falla
+    //    porque el API secret en producción puede no estar configurado correctamente.
     if (CLOUDINARY_UPLOAD_PRESET !== '') {
-        $unsigned = cloudinaryUnsignedUploadRequest($tmpPath, $folder, $publicId, CLOUDINARY_UPLOAD_PRESET);
-        if ($unsigned['success']) {
-            return $unsigned;
-        }
-        // El preset falló, continuar con flujo firmado como fallback
+        return cloudinaryUnsignedUploadRequest($tmpPath, $folder, $publicId, CLOUDINARY_UPLOAD_PRESET);
     }
 
-    // 1) Intentar con SDK oficial de Cloudinary (firma interna)
+    // 1) Sin preset: intentar con SDK oficial de Cloudinary (firma interna)
     if (class_exists('\\Cloudinary\\Cloudinary')) {
         try {
             $cloudinary = new \Cloudinary\Cloudinary([
