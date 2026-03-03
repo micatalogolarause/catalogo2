@@ -421,40 +421,45 @@ class AdminController {
             $imagen = '';
                 $imagen2 = '';
                 $imagen3 = '';
-            $advertenciasUpload = [];
+            $uploadError = false;
             
-            // Procesar imagen
+            // Procesar imagen (obligatoria al crear)
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0) {
                 $upload = $this->guardarImagen('imagen');
                 if ($upload['success']) {
                     $imagen = $upload['relPath'];
                 } else {
-                    $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen principal';
+                    $_SESSION['error'] = $upload['message'] ?: 'No se pudo subir la imagen principal';
+                    $uploadError = true;
                 }
             }
             
                 // Procesar imagen2
-                if (isset($_FILES['imagen2']) && $_FILES['imagen2']['error'] === 0) {
+                if (!$uploadError && isset($_FILES['imagen2']) && $_FILES['imagen2']['error'] === 0) {
                     $upload = $this->guardarImagen('imagen2');
                     if ($upload['success']) {
                         $imagen2 = $upload['relPath'];
                     } else {
-                        $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen 2';
+                        $_SESSION['error'] = $upload['message'] ?: 'No se pudo subir la imagen 2';
+                        $uploadError = true;
                     }
                 }
             
                 // Procesar imagen3
-                if (isset($_FILES['imagen3']) && $_FILES['imagen3']['error'] === 0) {
+                if (!$uploadError && isset($_FILES['imagen3']) && $_FILES['imagen3']['error'] === 0) {
                     $upload = $this->guardarImagen('imagen3');
                     if ($upload['success']) {
                         $imagen3 = $upload['relPath'];
                     } else {
-                        $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen 3';
+                        $_SESSION['error'] = $upload['message'] ?: 'No se pudo subir la imagen 3';
+                        $uploadError = true;
                     }
                 }
             
-            if (!$nombre || !$categoria_id || !$subcategoria_id || !$precio) {
-                $_SESSION['error'] = 'Por favor complete todos los campos obligatorios';
+            if ($uploadError) {
+                // Error de subida: no guardar el producto
+            } elseif (!$nombre || !$categoria_id || !$subcategoria_id || !$precio || !$imagen) {
+                $_SESSION['error'] = 'Por favor complete todos los campos obligatorios (incluyendo imagen principal)';
             } else {
                 $data = array(
                     'categoria_id' => $categoria_id,
@@ -469,11 +474,7 @@ class AdminController {
                 );
                 
                 if ($this->productoModel->crear($data)) {
-                    if (!empty($advertenciasUpload)) {
-                        $_SESSION['success'] = 'Producto creado con advertencias: ' . implode(' | ', array_unique($advertenciasUpload));
-                    } else {
-                        $_SESSION['success'] = 'Producto creado exitosamente';
-                    }
+                    $_SESSION['success'] = 'Producto creado exitosamente';
                     header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=productos');
                     exit;
                 } else {
@@ -513,7 +514,7 @@ class AdminController {
             $imagen = $producto['imagen'];
                 $imagen2 = $producto['imagen2'] ?? '';
                 $imagen3 = $producto['imagen3'] ?? '';
-            $advertenciasUpload = [];
+            $uploadError = false;
             
             // Procesar nueva imagen si existe
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0) {
@@ -530,12 +531,13 @@ class AdminController {
                         }
                     }
                 } else {
-                    $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen principal';
+                    $_SESSION['error'] = $upload['message'] ?: 'No se pudo subir la imagen principal';
+                    $uploadError = true;
                 }
             }
             
                 // Procesar imagen2 si existe
-                if (isset($_FILES['imagen2']) && $_FILES['imagen2']['error'] === 0) {
+                if (!$uploadError && isset($_FILES['imagen2']) && $_FILES['imagen2']['error'] === 0) {
                     $upload = $this->guardarImagen('imagen2');
                     if ($upload['success']) {
                         $imagen2 = $upload['relPath'];
@@ -549,12 +551,13 @@ class AdminController {
                             }
                         }
                     } else {
-                        $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen 2';
+                        $_SESSION['error'] = $upload['message'] ?: 'No se pudo subir la imagen 2';
+                        $uploadError = true;
                     }
                 }
             
                 // Procesar imagen3 si existe
-                if (isset($_FILES['imagen3']) && $_FILES['imagen3']['error'] === 0) {
+                if (!$uploadError && isset($_FILES['imagen3']) && $_FILES['imagen3']['error'] === 0) {
                     $upload = $this->guardarImagen('imagen3');
                     if ($upload['success']) {
                         $imagen3 = $upload['relPath'];
@@ -568,11 +571,14 @@ class AdminController {
                             }
                         }
                     } else {
-                        $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen 3';
+                        $_SESSION['error'] = $upload['message'] ?: 'No se pudo subir la imagen 3';
+                        $uploadError = true;
                     }
                 }
             
-            if (!$nombre || !$categoria_id || !$subcategoria_id || !$precio) {
+            if ($uploadError) {
+                // Error de subida: no actualizar el producto
+            } elseif (!$nombre || !$categoria_id || !$subcategoria_id || !$precio) {
                 $_SESSION['error'] = 'Por favor complete todos los campos obligatorios';
             } else {
                 $data = array(
@@ -588,11 +594,7 @@ class AdminController {
                 );
                 
                 if ($this->productoModel->actualizar($id, $data)) {
-                    if (!empty($advertenciasUpload)) {
-                        $_SESSION['success'] = 'Producto actualizado con advertencias: ' . implode(' | ', array_unique($advertenciasUpload));
-                    } else {
-                        $_SESSION['success'] = 'Producto actualizado exitosamente';
-                    }
+                    $_SESSION['success'] = 'Producto actualizado exitosamente';
                     header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=productos');
                     exit;
                 } else {
