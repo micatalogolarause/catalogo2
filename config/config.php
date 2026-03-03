@@ -161,7 +161,7 @@ restore_session_from_auth_cookie();
 
 // Función de sanitización
 function sanitizar($texto) {
-    return htmlspecialchars($texto, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars($texto ?? '', ENT_QUOTES, 'UTF-8');
 }
 
 // Función para validar email
