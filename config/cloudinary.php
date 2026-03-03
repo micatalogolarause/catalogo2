@@ -27,13 +27,14 @@ define('CLOUDINARY_API_KEY', cloudinaryEnv('CLOUDINARY_API_KEY', CLOUDINARY_FALL
 define('CLOUDINARY_API_SECRET', cloudinaryEnv('CLOUDINARY_API_SECRET', CLOUDINARY_FALLBACK_API_SECRET));
 define('CLOUDINARY_UPLOAD_PRESET', cloudinaryEnv('CLOUDINARY_UPLOAD_PRESET', ''));
 
-function cloudinaryUnsignedUploadRequest(string $tmpPath, string $folder, ?string $publicId = null): array {
-    if (CLOUDINARY_UPLOAD_PRESET === '') {
+function cloudinaryUnsignedUploadRequest(string $tmpPath, string $folder, ?string $publicId = null, string $preset = ''): array {
+    $uploadPreset = trim($preset) !== '' ? trim($preset) : CLOUDINARY_UPLOAD_PRESET;
+    if ($uploadPreset === '') {
         return ['success' => false, 'message' => 'Upload preset no configurado', 'url' => '', 'public_id' => '', 'http_code' => 0];
     }
 
     $postFields = [
-        'upload_preset' => CLOUDINARY_UPLOAD_PRESET,
+        'upload_preset' => $uploadPreset,
         'folder' => $folder,
         'file' => new CURLFile($tmpPath),
     ];
@@ -136,8 +137,15 @@ function uploadToCloudinary(string $tmpPath, string $folder = 'uploads', ?string
     $apiSecret  = CLOUDINARY_API_SECRET;
 
     // 0) Si existe upload preset, intentar subida unsigned (evita firma)
+    $unsignedPresets = [];
     if (CLOUDINARY_UPLOAD_PRESET !== '') {
-        $unsigned = cloudinaryUnsignedUploadRequest($tmpPath, $folder, $publicId);
+        $unsignedPresets[] = CLOUDINARY_UPLOAD_PRESET;
+    }
+    $unsignedPresets[] = 'ml_default';
+    $unsignedPresets = array_values(array_unique($unsignedPresets));
+
+    foreach ($unsignedPresets as $preset) {
+        $unsigned = cloudinaryUnsignedUploadRequest($tmpPath, $folder, $publicId, $preset);
         if ($unsigned['success']) {
             return $unsigned;
         }
