@@ -19,19 +19,7 @@ function tienda_img_url($img) {
 <div class="row g-4">
     <!-- Contenido Principal -->
     <div class="col-12">
-            <!-- Título de Sección -->
-            <div class="mb-5 d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 style="font-size: 2.2rem; font-weight: 700; color: #2c3e50; margin-bottom: 15px;">
-                        <i class="bi bi-star-fill" style="color: #667eea;"></i> Nuestros Productos
-                    </h2>
-                    <div style="height: 4px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 200px; border-radius: 2px;"></div>
-                </div>
-                <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=carrito" class="position-relative" style="text-decoration: none;">
-                    <i class="bi bi-bag-fill" style="font-size: 2.5rem; color: #667eea;"></i>
-                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="carrito-badge" style="display:none;">0</span>
-                </a>
-            </div>
+
 
             <!-- Filtros y Búsqueda -->
             <div class="row mb-4 g-2">
