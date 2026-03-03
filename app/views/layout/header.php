@@ -30,7 +30,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
     <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/estilos.css">
     <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/temas.css">
 </head>
-<body class="tema-<?php echo sanitizar($_SESSION['tenant_data']['tema'] ?? 'claro'); ?> color-<?php echo sanitizar($_SESSION['tenant_data']['tema_color'] ?? 'azul'); ?>">
+<body class="tema-<?php $t=sanitizar($_SESSION['tenant_data']['tema']??'claro'); echo ($t==='default'?'claro':$t); ?> color-<?php $c=sanitizar($_SESSION['tenant_data']['tema_color']??'azul'); echo ($c?$c:'azul'); ?>">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid px-4">

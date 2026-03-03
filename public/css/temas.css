@@ -1,23 +1,37 @@
 /* Sistema de Temas para Multi-Tenant */
 
 /* ======================================
+   VARIABLES POR DEFECTO (fallback global)
+   ====================================== */
+:root {
+    --color-primary: #5e72e4;
+    --color-secondary: #825ee4;
+    --color-primary-dark: #4c63d2;
+    --color-secondary-dark: #6b4fc1;
+}
+
+/* ======================================
    TEMA CLARO
    ====================================== */
-body.tema-claro {
+body.tema-claro,
+body.tema-default {
     background-color: #f8f9fa;
     color: #212529;
 }
 
-body.tema-claro .navbar {
+body.tema-claro .navbar,
+body.tema-default .navbar {
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
 }
 
-body.tema-claro .card {
+body.tema-claro .card,
+body.tema-default .card {
     background-color: #ffffff;
     border-color: #dee2e6;
 }
 
-body.tema-claro .table {
+body.tema-claro .table,
+body.tema-default .table {
     background-color: #ffffff;
 }
 

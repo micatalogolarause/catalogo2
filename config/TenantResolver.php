@@ -174,15 +174,22 @@ class TenantResolver {
      * @return bool
      */
     private static function setDefaultTenant() {
-        // Obtener lista de tenants activos para mostrar en error
+        // Si hay exactamente un tenant activo, redirigir a él automáticamente
         $sql = "SELECT slug, titulo_empresa, nombre 
                 FROM tenants 
                 WHERE estado = 'activo'
                 ORDER BY nombre ASC";
         
         $tenants_disponibles = obtenerFilas($sql) ?: [];
-        
-        // Mostrar página de error indicando que se debe especificar un tenant
+
+        if (count($tenants_disponibles) === 1) {
+            // Un solo tenant activo: redirigir directamente
+            $slug = $tenants_disponibles[0]['slug'];
+            $base_url = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+            $base_path = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+            header('Location: ' . $base_url . $base_path . '/' . $slug);
+            exit;
+        }
         http_response_code(404);
         
         $base_url = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
