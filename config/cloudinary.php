@@ -28,8 +28,14 @@ define('CLOUDINARY_API_SECRET', cloudinaryEnv('CLOUDINARY_API_SECRET', CLOUDINAR
 
 function cloudinaryUploadRequest(string $tmpPath, array $params, string $cloudName, string $apiKey, string $apiSecret): array {
     ksort($params);
-    $toSign = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-    $toSign = urldecode($toSign);
+    $signParts = [];
+    foreach ($params as $key => $value) {
+        if ($value === null || $value === '') {
+            continue;
+        }
+        $signParts[] = $key . '=' . $value;
+    }
+    $toSign = implode('&', $signParts);
     $signature = sha1($toSign . $apiSecret);
 
     $postFields = $params;
