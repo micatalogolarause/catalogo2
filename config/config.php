@@ -7,12 +7,18 @@
 define('APP_ROOT', dirname(dirname(__FILE__)));
 
 // Auto-detectar APP_URL
-// Prioridades: 1) APP_URL env var (dominio custom en Vercel), 2) VERCEL_URL (auto Vercel),
-//              3) auto-detección local (XAMPP / IIS)
+// Prioridades:
+//   1) APP_URL env var (dominio custom en Vercel o manual)
+//   2) VERCEL_PROJECT_PRODUCTION_URL (URL estable de producción, sin https://)
+//   3) VERCEL_URL (URL única del deployment — cambia con cada deploy, usar solo como fallback)
+//   4) auto-detección local (XAMPP / IIS)
 if (getenv('APP_URL')) {
     define('APP_URL', rtrim(getenv('APP_URL'), '/'));
+} elseif (getenv('VERCEL_PROJECT_PRODUCTION_URL')) {
+    // Disponible en Vercel: URL estable de producción (ej: catalogo2-khaki.vercel.app)
+    define('APP_URL', 'https://' . getenv('VERCEL_PROJECT_PRODUCTION_URL'));
 } elseif (getenv('VERCEL_URL')) {
-    // VERCEL_URL lo inyecta Vercel automáticamente (sin https://)
+    // VERCEL_URL es la URL del deployment específico (no usar para assets)
     define('APP_URL', 'https://' . getenv('VERCEL_URL'));
 } else {
     $protocol  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
