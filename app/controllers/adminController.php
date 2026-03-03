@@ -421,6 +421,7 @@ class AdminController {
             $imagen = '';
                 $imagen2 = '';
                 $imagen3 = '';
+            $advertenciasUpload = [];
             
             // Procesar imagen
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0) {
@@ -428,8 +429,7 @@ class AdminController {
                 if ($upload['success']) {
                     $imagen = $upload['relPath'];
                 } else {
-                    $_SESSION['error'] = $upload['message'] ?: 'Error al subir la imagen';
-                    goto crear_producto_vista;
+                    $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen principal';
                 }
             }
             
@@ -438,6 +438,8 @@ class AdminController {
                     $upload = $this->guardarImagen('imagen2');
                     if ($upload['success']) {
                         $imagen2 = $upload['relPath'];
+                    } else {
+                        $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen 2';
                     }
                 }
             
@@ -446,6 +448,8 @@ class AdminController {
                     $upload = $this->guardarImagen('imagen3');
                     if ($upload['success']) {
                         $imagen3 = $upload['relPath'];
+                    } else {
+                        $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen 3';
                     }
                 }
             
@@ -465,7 +469,11 @@ class AdminController {
                 );
                 
                 if ($this->productoModel->crear($data)) {
-                    $_SESSION['success'] = 'Producto creado exitosamente';
+                    if (!empty($advertenciasUpload)) {
+                        $_SESSION['success'] = 'Producto creado con advertencias: ' . implode(' | ', array_unique($advertenciasUpload));
+                    } else {
+                        $_SESSION['success'] = 'Producto creado exitosamente';
+                    }
                     header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=productos');
                     exit;
                 } else {
@@ -505,6 +513,7 @@ class AdminController {
             $imagen = $producto['imagen'];
                 $imagen2 = $producto['imagen2'] ?? '';
                 $imagen3 = $producto['imagen3'] ?? '';
+            $advertenciasUpload = [];
             
             // Procesar nueva imagen si existe
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0) {
@@ -521,8 +530,7 @@ class AdminController {
                         }
                     }
                 } else {
-                    $_SESSION['error'] = $upload['message'] ?: 'Error al subir la imagen';
-                    goto editar_producto_vista;
+                    $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen principal';
                 }
             }
             
@@ -540,6 +548,8 @@ class AdminController {
                                 @unlink(APP_ROOT . '/public/images/productos/' . $oldPath);
                             }
                         }
+                    } else {
+                        $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen 2';
                     }
                 }
             
@@ -557,6 +567,8 @@ class AdminController {
                                 @unlink(APP_ROOT . '/public/images/productos/' . $oldPath);
                             }
                         }
+                    } else {
+                        $advertenciasUpload[] = $upload['message'] ?: 'No se pudo subir la imagen 3';
                     }
                 }
             
@@ -576,7 +588,11 @@ class AdminController {
                 );
                 
                 if ($this->productoModel->actualizar($id, $data)) {
-                    $_SESSION['success'] = 'Producto actualizado exitosamente';
+                    if (!empty($advertenciasUpload)) {
+                        $_SESSION['success'] = 'Producto actualizado con advertencias: ' . implode(' | ', array_unique($advertenciasUpload));
+                    } else {
+                        $_SESSION['success'] = 'Producto actualizado exitosamente';
+                    }
                     header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=productos');
                     exit;
                 } else {
