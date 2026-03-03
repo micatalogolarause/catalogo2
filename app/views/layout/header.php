@@ -62,7 +62,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                     </li>
                     <!-- DESKTOP: dropdown de categorías -->
                     <li class="nav-item dropdown d-none d-lg-block">
-                        <a class="nav-link dropdown-toggle" href="#" id="categoriasDropdown" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="categoriasDropdown" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-list"></i> Categorías
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="categoriasDropdown">
@@ -111,7 +111,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                     </li>
                     <?php if (isset($_SESSION['cliente_id'])): ?>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i> <?php echo sanitizar($_SESSION['cliente_nombre']); ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">

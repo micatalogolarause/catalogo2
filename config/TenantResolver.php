@@ -32,8 +32,14 @@ class TenantResolver {
         
         // Si hay slug en URL, usarlo (tiene prioridad)
         if (!empty($tenant_slug)) {
-            // Buscar tenant en BD por slug
-            $tenant = self::getTenantBySlug($tenant_slug);
+            // Primero intentar desde caché cookie (evita consulta BD en cada navegación en Vercel)
+            $tenant = self::getCachedTenant($tenant_slug);
+            if (!$tenant) {
+                $tenant = self::getTenantBySlug($tenant_slug);
+                if ($tenant && $tenant['estado'] === 'activo') {
+                    self::setCachedTenant($tenant);
+                }
+            }
             
             if (!$tenant) {
                 return self::handleTenantNotFound($tenant_slug);
@@ -167,6 +173,41 @@ class TenantResolver {
         return obtenerFila($sql, "s", [$slug]);
     }
     
+    /**
+     * Leer tenant cacheado en cookie (TTL 5 min)
+     */
+    private static function getCachedTenant($slug) {
+        $cookieName = 'tc_' . preg_replace('/[^a-z0-9]/', '', $slug);
+        if (empty($_COOKIE[$cookieName])) return null;
+        $data = json_decode(base64_decode($_COOKIE[$cookieName]), true);
+        if (!is_array($data) || empty($data['ts']) || empty($data['sig'])) return null;
+        if (time() - (int)$data['ts'] > 300) return null; // expirado
+        $secret = getenv('AUTH_COOKIE_SECRET') ?: 'catalogo2_auth_secret_change_me';
+        $expected = hash_hmac('sha256', ($data['slug'] ?? '') . '|' . ($data['id'] ?? '') . '|' . $data['ts'], $secret);
+        if (!hash_equals($expected, $data['sig'])) return null;
+        return $data;
+    }
+
+    /**
+     * Guardar tenant en cookie firmada (TTL 5 min)
+     */
+    private static function setCachedTenant($tenant) {
+        $secret = getenv('AUTH_COOKIE_SECRET') ?: 'catalogo2_auth_secret_change_me';
+        $ts = time();
+        $sig = hash_hmac('sha256', $tenant['slug'] . '|' . $tenant['id'] . '|' . $ts, $secret);
+        $payload = array_merge($tenant, ['ts' => $ts, 'sig' => $sig]);
+        $cookieName = 'tc_' . preg_replace('/[^a-z0-9]/', '', $tenant['slug']);
+        if (!headers_sent()) {
+            setcookie($cookieName, base64_encode(json_encode($payload)), [
+                'expires'  => $ts + 300,
+                'path'     => '/',
+                'secure'   => true,
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ]);
+        }
+    }
+
     /**
      * Establecer tenant por defecto (backward compatibility)
      * NOTA: Ahora muestra error 404 en lugar de cargar un tenant por defecto
