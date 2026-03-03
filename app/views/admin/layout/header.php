@@ -1,6 +1,11 @@
 <?php
 if (!isset($_SESSION['usuario_id'])) {
-    header('Location: ' . APP_URL . '/index.php?controller=admin&action=login');
+    $tenantSlug = $_SESSION['tenant_slug'] ?? (defined('TENANT_SLUG') ? TENANT_SLUG : '');
+    if (!empty($tenantSlug)) {
+        header('Location: ' . APP_URL . '/' . $tenantSlug . '/index.php?controller=admin&action=login');
+    } else {
+        header('Location: ' . APP_URL . '/index.php?controller=admin&action=login');
+    }
     exit;
 }
 ?>

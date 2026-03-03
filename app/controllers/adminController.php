@@ -38,6 +38,8 @@ class AdminController {
      * Verificar autenticación del usuario
      */
     private function verificarAutenticacion() {
+        restore_session_from_auth_cookie();
+
         if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'admin') {
             header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=login');
             exit;
@@ -75,6 +77,14 @@ class AdminController {
                     $_SESSION['usuario'] = $admin['usuario'];
                     $_SESSION['nombre'] = $admin['nombre'];
                     $_SESSION['rol'] = $admin['rol'];
+
+                    set_auth_cookie([
+                        'uid' => $admin['id'],
+                        'rol' => $admin['rol'],
+                        'tenant_slug' => TENANT_SLUG,
+                        'usuario' => $admin['usuario'],
+                        'nombre' => $admin['nombre']
+                    ]);
                     
                     // Actualizar último acceso
                     $sql_update = "UPDATE usuarios SET ultimo_acceso = NOW() WHERE id = ?";
@@ -97,6 +107,8 @@ class AdminController {
     public function logout() {
         // Guardar el slug del tenant antes de destruir la sesión
         $tenant_slug = $_SESSION['tenant_slug'] ?? '';
+
+        clear_auth_cookie();
         
         session_destroy();
         

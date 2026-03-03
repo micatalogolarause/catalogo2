@@ -37,6 +37,8 @@ define('APP_UPLOADS', APP_ROOT . '/public/images');
 // Configuración de sesión
 define('SESSION_TIMEOUT', 3600); // 1 hora
 define('REMEMBER_ME_DAYS', 30);
+define('AUTH_COOKIE_NAME', 'catalogo_auth');
+define('AUTH_COOKIE_SECRET', getenv('AUTH_COOKIE_SECRET') ?: 'catalogo2_auth_secret_change_me');
 
 // Configuración de WhatsApp
 define('WHATSAPP_API_URL', 'https://api.twilio.com');
@@ -58,6 +60,104 @@ if (isset($_SERVER['VERCEL']) || getenv('VERCEL')) {
 if (!session_id()) {
     session_start();
 }
+
+function base64url_encode($data) {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+    $remainder = strlen($data) % 4;
+    if ($remainder) {
+        $data .= str_repeat('=', 4 - $remainder);
+    }
+    return base64_decode(strtr($data, '-_', '+/'));
+}
+
+function set_auth_cookie(array $data) {
+    $payload = [
+        'uid' => (int)($data['uid'] ?? 0),
+        'rol' => (string)($data['rol'] ?? ''),
+        'tenant_slug' => (string)($data['tenant_slug'] ?? ''),
+        'usuario' => (string)($data['usuario'] ?? ''),
+        'nombre' => (string)($data['nombre'] ?? ''),
+        'exp' => time() + (REMEMBER_ME_DAYS * 24 * 60 * 60)
+    ];
+
+    $payloadJson = json_encode($payload, JSON_UNESCAPED_UNICODE);
+    $payloadB64 = base64url_encode($payloadJson);
+    $signature = hash_hmac('sha256', $payloadB64, AUTH_COOKIE_SECRET);
+    $token = $payloadB64 . '.' . $signature;
+
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    setcookie(AUTH_COOKIE_NAME, $token, [
+        'expires' => $payload['exp'],
+        'path' => '/',
+        'secure' => $secure,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+}
+
+function clear_auth_cookie() {
+    setcookie(AUTH_COOKIE_NAME, '', [
+        'expires' => time() - 3600,
+        'path' => '/',
+        'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+}
+
+function restore_session_from_auth_cookie() {
+    if (isset($_SESSION['usuario_id']) && isset($_SESSION['rol'])) {
+        return true;
+    }
+
+    if (empty($_COOKIE[AUTH_COOKIE_NAME])) {
+        return false;
+    }
+
+    $token = $_COOKIE[AUTH_COOKIE_NAME];
+    $parts = explode('.', $token);
+    if (count($parts) !== 2) {
+        return false;
+    }
+
+    $payloadB64 = $parts[0];
+    $signature = $parts[1];
+    $expected = hash_hmac('sha256', $payloadB64, AUTH_COOKIE_SECRET);
+
+    if (!hash_equals($expected, $signature)) {
+        return false;
+    }
+
+    $payloadJson = base64url_decode($payloadB64);
+    $payload = json_decode($payloadJson, true);
+    if (!is_array($payload)) {
+        return false;
+    }
+
+    if (empty($payload['exp']) || (int)$payload['exp'] < time()) {
+        return false;
+    }
+
+    if (empty($payload['uid']) || empty($payload['rol'])) {
+        return false;
+    }
+
+    $_SESSION['usuario_id'] = (int)$payload['uid'];
+    $_SESSION['rol'] = (string)$payload['rol'];
+    $_SESSION['usuario'] = (string)($payload['usuario'] ?? '');
+    $_SESSION['nombre'] = (string)($payload['nombre'] ?? '');
+
+    if (!empty($payload['tenant_slug']) && empty($_SESSION['tenant_slug'])) {
+        $_SESSION['tenant_slug'] = (string)$payload['tenant_slug'];
+    }
+
+    return true;
+}
+
+restore_session_from_auth_cookie();
 
 // Función de sanitización
 function sanitizar($texto) {
