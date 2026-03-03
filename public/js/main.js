@@ -5,13 +5,26 @@ document.addEventListener('DOMContentLoaded', function() {
     marcarProductosEnCarrito();
     inicializarVistaProductos();
     
-    // Usar delegación de eventos para los botones agregar al carrito
+    // Delegar click en botones agregar al carrito
     document.addEventListener('click', function(e) {
         if (e.target.closest('.agregar-carrito')) {
             const btn = e.target.closest('.agregar-carrito');
             agregarAlCarrito(btn.dataset.productoId, 1);
         }
     });
+
+    // Cerrar navbar móvil al hacer clic en cualquier enlace de navegación
+    const navbarNav = document.getElementById('navbarNav');
+    if (navbarNav) {
+        navbarNav.addEventListener('click', function(e) {
+            const link = e.target.closest('a[href]');
+            // Solo cerrar si el enlace navega (no es toggle de dropdown ni #)
+            if (link && link.href && !link.href.endsWith('#') && !link.hasAttribute('data-bs-toggle')) {
+                const bsCollapse = typeof bootstrap !== 'undefined' && bootstrap.Collapse.getInstance(navbarNav);
+                if (bsCollapse) bsCollapse.hide();
+            }
+        });
+    }
 });
 
 function getBaseUrl() {

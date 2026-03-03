@@ -60,7 +60,8 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                             <i class="bi bi-house"></i> Inicio
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <!-- DESKTOP: dropdown de categorías -->
+                    <li class="nav-item dropdown d-none d-lg-block">
                         <a class="nav-link dropdown-toggle" href="#" id="categoriasDropdown" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-list"></i> Categorías
                         </a>
@@ -83,6 +84,24 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                             <li><hr class="dropdown-divider"></li>
                             <?php endforeach; ?>
                         </ul>
+                    </li>
+                    <!-- MÓVIL: categorías directas (sin dropdown, 1 toque) -->
+                    <li class="nav-item d-lg-none">
+                        <span class="nav-link fw-bold text-muted" style="font-size:0.85rem; padding-bottom:2px;">
+                            <i class="bi bi-list"></i> Categorías
+                        </span>
+                        <?php foreach ($categorias as $cat): ?>
+                        <a class="nav-link py-1 ps-3" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>">
+                            <i class="bi bi-tag"></i> <?php echo sanitizar($cat['nombre']); ?>
+                        </a>
+                            <?php if (!empty($cat['subcategorias'])): ?>
+                                <?php foreach ($cat['subcategorias'] as $sub): ?>
+                                <a class="nav-link py-1 ps-5 text-muted" style="font-size:0.9rem;" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=subcategoria&id=<?php echo $sub['id']; ?>">
+                                    <i class="bi bi-chevron-right small"></i> <?php echo sanitizar($sub['nombre']); ?>
+                                </a>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=carrito">
