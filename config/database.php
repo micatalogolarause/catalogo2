@@ -57,11 +57,19 @@ date_default_timezone_set('America/Bogota');
  *  - Usa ? como placeholder (igual que MySQL)
  *  - No necesita bind_param con tipos
  */
+$_ultimo_insert_id = 0;
+
 function ejecutarConsulta($sql, $tipos = "", $params = array()) {
-    global $pdo;
+    global $pdo, $_ultimo_insert_id;
 
     // Convertir sintaxis MySQL a PostgreSQL si es necesario
     $sql = convertirSQL($sql);
+
+    // Para INSERT, agregar RETURNING id automáticamente (PostgreSQL no tiene lastInsertId fiable)
+    $esInsert = stripos(trim($sql), 'INSERT') === 0;
+    if ($esInsert && stripos($sql, 'RETURNING') === false) {
+        $sql = rtrim(trim($sql), ';') . ' RETURNING id';
+    }
 
     try {
         $stmt = $pdo->prepare($sql);
@@ -75,6 +83,13 @@ function ejecutarConsulta($sql, $tipos = "", $params = array()) {
         } else {
             $stmt->execute();
         }
+
+        // Capturar el ID retornado por RETURNING id
+        if ($esInsert) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $_ultimo_insert_id = $row['id'] ?? 0;
+        }
+
         return $stmt;
     } catch (PDOException $e) {
         error_log("Error en execute: " . $e->getMessage() . " | SQL: " . $sql);
@@ -186,19 +201,19 @@ function validarPerteneceATenant($tabla, $id) {
 
 /**
  * Obtener el último ID insertado (equivalente a insert_id)
+ * Usa la variable global $_ultimo_insert_id que se llena con RETURNING id
  */
 function obtenerUltimoId() {
-    global $pdo;
-    return $pdo->lastInsertId();
+    global $_ultimo_insert_id;
+    return (int)$_ultimo_insert_id;
 }
 
 /**
  * Compatibilidad: simula $conn->insert_id para código legado
- * En PDO se usa lastInsertId()
  */
 function getLastInsertId() {
-    global $pdo;
-    return $pdo->lastInsertId();
+    global $_ultimo_insert_id;
+    return (int)$_ultimo_insert_id;
 }
 
 /**

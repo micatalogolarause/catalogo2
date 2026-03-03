@@ -39,7 +39,8 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                 $logoVal = $_SESSION['tenant_data']['logo'] ?? '';
                 if (!empty($logoVal)) {
                     if (str_starts_with($logoVal, 'http://') || str_starts_with($logoVal, 'https://')) {
-                        $logoSrc = $logoVal;
+                        // Forzar https para evitar Mixed Content
+                        $logoSrc = str_replace('http://', 'https://', $logoVal);
                     } else {
                         $logoSrc = is_file(APP_ROOT . '/' . $logoVal) ? (APP_URL . '/' . $logoVal) : '';
                     }
