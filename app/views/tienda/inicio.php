@@ -95,7 +95,7 @@ function tienda_img_url($img) {
                         if (!empty($producto['imagen3'])) { $galeria[] = tienda_img_url($producto['imagen3']); }
                         $galeriaAttr = htmlspecialchars(implode('|', $galeria), ENT_QUOTES, 'UTF-8');
                     ?>
-                    <div class="col-md-6 col-lg-4 product-col">
+                    <div class="col-6 col-md-6 col-lg-4 product-col">
                         <div class="product-card" data-galeria="<?php echo $galeriaAttr; ?>">
                             <div class="product-image-wrapper" onclick="abrirModalGaleria(this)">
                                   <img src="<?php echo $galeria[0] ?? tienda_img_url($producto['imagen']); ?>" 
@@ -217,10 +217,10 @@ function buscarEnVivo(texto) {
             const descripcion = producto.querySelector('.product-description').textContent.toLowerCase();
             
             if (textoBusqueda === '' || nombre.includes(textoBusqueda) || descripcion.includes(textoBusqueda)) {
-                producto.closest('.col-md-6').style.display = '';
+                producto.closest('.product-col').style.display = '';
                 encontrados++;
             } else {
-                producto.closest('.col-md-6').style.display = 'none';
+                producto.closest('.product-col').style.display = 'none';
             }
         });
         

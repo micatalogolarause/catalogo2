@@ -68,7 +68,7 @@ function tienda_img_url($img) {
                     if (!empty($producto['imagen3'])) { $galeria[] = tienda_img_url($producto['imagen3']); }
                     $galeriaAttr = htmlspecialchars(implode('|', $galeria), ENT_QUOTES, 'UTF-8');
                 ?>
-                <div class="col-md-6 col-lg-4 mb-4 product-col">
+                <div class="col-6 col-md-6 col-lg-4 mb-4 product-col">
                     <div class="card h-100 product-item-card" data-galeria="<?php echo $galeriaAttr; ?>">
                             <img src="<?php echo $galeria[0] ?? tienda_img_url($producto['imagen']); ?>" 
                                 class="card-img-top" alt="<?php echo sanitizar($producto['nombre']); ?>" style="height: 250px; object-fit: cover; cursor:pointer;" onclick="abrirModalGaleria(this)">
