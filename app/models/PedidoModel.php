@@ -24,7 +24,8 @@ class PedidoModel {
         $sql_validate = "SELECT id FROM clientes WHERE tenant_id = ? AND id = ?";
         $cliente = obtenerFila($sql_validate, "ii", array($tenant_id, $cliente_id));
         if (!$cliente) {
-            return false; // Cliente no existe o no pertenece a este tenant
+            error_log("PedidoModel::crear - cliente_id={$cliente_id} no existe para tenant_id={$tenant_id}");
+            return false;
         }
 
         $sql_max = "SELECT COALESCE(MAX(numero_pedido), 0) + 1 as siguiente_numero FROM pedidos WHERE tenant_id = ?";
@@ -42,7 +43,16 @@ class PedidoModel {
         $params = array($tenant_id, $cliente_id, $total, $notas, $numero_pedido, $numero_cuenta_cobro);
 
         if (ejecutarConsulta($sql, $tipos, $params)) {
-            $pedido_id = obtenerUltimoId();
+            $pedido_id = (int)obtenerUltimoId();
+            // Fallback: si obtenerUltimoId() falla, buscar el pedido recién creado
+            if (!$pedido_id) {
+                $fila = obtenerFila("SELECT id FROM pedidos WHERE tenant_id = ? AND numero_pedido = ?", "ii", array($tenant_id, $numero_pedido));
+                $pedido_id = $fila ? (int)$fila['id'] : 0;
+            }
+            if (!$pedido_id) {
+                error_log("PedidoModel::crear - no se pudo obtener pedido_id tras INSERT");
+                return false;
+            }
             // Registrar historial inicial
             $estado_inicial = 'en_pedido';
             $nota = 'Pedido creado';

@@ -297,28 +297,34 @@ class TiendaController {
 
         // Determinar cliente_id
         $cliente_id = null;
+        $tenant_id_co = getTenantId();
         if (isset($_SESSION['cliente_id'])) {
             // Usuario logueado - actualizar su información
-            $cliente_id = $_SESSION['cliente_id'];
+            $cliente_id = (int)$_SESSION['cliente_id'];
             $sql_update = "UPDATE clientes SET nombre = ?, whatsapp = ? WHERE tenant_id = ? AND id = ?";
-            ejecutarConsultaScoped($sql_update, "ssi", array($nombre, $whatsapp, $cliente_id));
+            ejecutarConsulta($sql_update, "ssii", array($nombre, $whatsapp, $tenant_id_co, $cliente_id));
         } else {
             // Usuario invitado - buscar o crear cliente temporal
             $sql_check = "SELECT id FROM clientes WHERE tenant_id = ? AND whatsapp = ?";
-            $cliente_existente = obtenerFilaScoped($sql_check, "s", array($whatsapp));
+            $cliente_existente = obtenerFila($sql_check, "is", array($tenant_id_co, $whatsapp));
             
             if ($cliente_existente) {
-                $cliente_id = $cliente_existente['id'];
+                $cliente_id = (int)$cliente_existente['id'];
                 // Actualizar nombre si es diferente
                 $sql_update = "UPDATE clientes SET nombre = ? WHERE tenant_id = ? AND id = ?";
-                ejecutarConsultaScoped($sql_update, "si", array($nombre, $cliente_id));
+                ejecutarConsulta($sql_update, "sii", array($nombre, $tenant_id_co, $cliente_id));
             } else {
                 // Crear cliente temporal (invitado)
                 $usuario = 'invitado_' . substr(md5($whatsapp . time()), 0, 10);
-                $password_temp = hash('sha256', uniqid()); // Contraseña aleatoria
+                $password_temp = hash('sha256', uniqid());
                 $sql_insert = "INSERT INTO clientes (tenant_id, usuario, password, nombre, whatsapp, activo) VALUES (?, ?, ?, ?, ?, 1)";
-                ejecutarConsultaScoped($sql_insert, "ssss", array($usuario, $password_temp, $nombre, $whatsapp));
-                $cliente_id = obtenerUltimoId();
+                ejecutarConsulta($sql_insert, "issssi", array($tenant_id_co, $usuario, $password_temp, $nombre, $whatsapp));
+                $cliente_id = (int)obtenerUltimoId();
+                // Fallback: si obtenerUltimoId() falla, buscar el cliente recién insertado
+                if (!$cliente_id) {
+                    $fila = obtenerFila("SELECT id FROM clientes WHERE tenant_id = ? AND usuario = ?", "is", array($tenant_id_co, $usuario));
+                    $cliente_id = $fila ? (int)$fila['id'] : 0;
+                }
             }
         }
         
@@ -332,7 +338,7 @@ class TiendaController {
         $pedido_id = $this->pedidoModel->crear($cliente_id, $total, '');
         
         if (!$pedido_id) {
-            echo json_encode(['success' => false, 'message' => 'Error al crear el pedido']);
+            echo json_encode(['success' => false, 'message' => 'Error al crear el pedido (cliente_id=' . $cliente_id . ', total=' . $total . ', tenant=' . getTenantId() . ')']);
             return;
         }
         
