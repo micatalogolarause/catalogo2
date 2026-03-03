@@ -25,6 +25,53 @@ define('CLOUDINARY_FALLBACK_API_SECRET', 'XxQYYgHIBCe-muQDeWXw3IEw9P0');
 define('CLOUDINARY_CLOUD_NAME', cloudinaryEnv('CLOUDINARY_CLOUD_NAME', CLOUDINARY_FALLBACK_CLOUD_NAME));
 define('CLOUDINARY_API_KEY', cloudinaryEnv('CLOUDINARY_API_KEY', CLOUDINARY_FALLBACK_API_KEY));
 define('CLOUDINARY_API_SECRET', cloudinaryEnv('CLOUDINARY_API_SECRET', CLOUDINARY_FALLBACK_API_SECRET));
+define('CLOUDINARY_UPLOAD_PRESET', cloudinaryEnv('CLOUDINARY_UPLOAD_PRESET', ''));
+
+function cloudinaryUnsignedUploadRequest(string $tmpPath, string $folder, ?string $publicId = null): array {
+    if (CLOUDINARY_UPLOAD_PRESET === '') {
+        return ['success' => false, 'message' => 'Upload preset no configurado', 'url' => '', 'public_id' => '', 'http_code' => 0];
+    }
+
+    $postFields = [
+        'upload_preset' => CLOUDINARY_UPLOAD_PRESET,
+        'folder' => $folder,
+        'file' => new CURLFile($tmpPath),
+    ];
+
+    if (!empty($publicId)) {
+        $postFields['public_id'] = $publicId;
+    }
+
+    $url = "https://api.cloudinary.com/v1_1/" . CLOUDINARY_CLOUD_NAME . "/image/upload";
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlErr = curl_error($ch);
+    curl_close($ch);
+
+    if ($curlErr) {
+        return ['success' => false, 'message' => 'Error cURL: ' . $curlErr, 'url' => '', 'public_id' => '', 'http_code' => 0];
+    }
+
+    $data = json_decode($response, true);
+    if ($httpCode === 200 && isset($data['secure_url'])) {
+        return [
+            'success' => true,
+            'message' => 'Subido correctamente',
+            'url' => $data['secure_url'],
+            'public_id' => $data['public_id'] ?? '',
+            'http_code' => 200,
+        ];
+    }
+
+    $errorMsg = $data['error']['message'] ?? "HTTP {$httpCode}";
+    return ['success' => false, 'message' => 'Cloudinary unsigned error: ' . $errorMsg, 'url' => '', 'public_id' => '', 'http_code' => $httpCode];
+}
 
 function cloudinaryUploadRequest(string $tmpPath, array $params, string $cloudName, string $apiKey, string $apiSecret): array {
     ksort($params);
@@ -87,6 +134,14 @@ function uploadToCloudinary(string $tmpPath, string $folder = 'uploads', ?string
     $cloudName  = CLOUDINARY_CLOUD_NAME;
     $apiKey     = CLOUDINARY_API_KEY;
     $apiSecret  = CLOUDINARY_API_SECRET;
+
+    // 0) Si existe upload preset, intentar subida unsigned (evita firma)
+    if (CLOUDINARY_UPLOAD_PRESET !== '') {
+        $unsigned = cloudinaryUnsignedUploadRequest($tmpPath, $folder, $publicId);
+        if ($unsigned['success']) {
+            return $unsigned;
+        }
+    }
 
     // 1) Intentar con SDK oficial de Cloudinary (firma interna)
     if (class_exists('\\Cloudinary\\Cloudinary')) {
