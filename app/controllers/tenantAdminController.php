@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Tenant Admin Controller
  * Gestiona creaciÃ³n y provisioning de nuevos tenants
