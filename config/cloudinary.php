@@ -20,8 +20,8 @@ function cloudinaryEnv(string $key, string $fallback): string {
 // Credenciales Cloudinary
 // En Vercel se leen desde variables de entorno; en local usan valores directos como fallback
 define('CLOUDINARY_FALLBACK_CLOUD_NAME', 'dc6in819o');
-define('CLOUDINARY_FALLBACK_API_KEY', '216774864662758');
-define('CLOUDINARY_FALLBACK_API_SECRET', 'XxQYYgHIBCe-muQDeWXw3IEw9P0');
+define('CLOUDINARY_FALLBACK_API_KEY', '218129736965815');
+define('CLOUDINARY_FALLBACK_API_SECRET', 'n4YX1_wNJKxggYui4oMQULDS-yE');
 
 define('CLOUDINARY_CLOUD_NAME', cloudinaryEnv('CLOUDINARY_CLOUD_NAME', CLOUDINARY_FALLBACK_CLOUD_NAME));
 define('CLOUDINARY_API_KEY', cloudinaryEnv('CLOUDINARY_API_KEY', CLOUDINARY_FALLBACK_API_KEY));
