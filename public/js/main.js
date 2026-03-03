@@ -14,18 +14,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function getBaseUrl() {
+    if (typeof APP_BASE_URL !== 'undefined' && typeof TENANT_SLUG !== 'undefined' && TENANT_SLUG) {
+        return APP_BASE_URL + '/' + TENANT_SLUG;
+    }
+    // Fallback: derivar de la URL actual
+    let parts = window.location.pathname.split('/').filter(p => p && p !== 'index.php');
+    return window.location.origin + (parts.length > 0 ? '/' + parts[0] : '');
+}
+
 function agregarAlCarrito(productoId, cantidad) {
     let formData = new FormData();
     formData.append('producto_id', productoId);
     formData.append('cantidad', cantidad || 1);
 
-    // Obtener la ruta base correctamente
-    let pathArray = window.location.pathname.split('/');
-    pathArray.pop(); // Remover index.php o archivo actual
-    let basePath = pathArray.join('/');
-    if (!basePath) basePath = '';
+    let baseUrl = getBaseUrl();
     
-    fetch(window.location.origin + basePath + '/index.php?controller=api&action=agregarAlCarrito', {
+    fetch(baseUrl + '/index.php?controller=api&action=agregarAlCarrito', {
         method: 'POST',
         body: formData
     })
@@ -35,7 +40,7 @@ function agregarAlCarrito(productoId, cantidad) {
             // Mostrar notificación y redirigir al carrito
             mostrarNotificacion('✓ Producto agregado al carrito', 'success');
             setTimeout(() => {
-                window.location = window.location.origin + basePath + '/index.php?controller=tienda&action=carrito';
+                window.location = getBaseUrl() + '/index.php?controller=tienda&action=carrito';
             }, 800);
         } else {
             mostrarNotificacion(data.message, 'danger');
@@ -59,13 +64,8 @@ function marcarProductoAgregado(productoId) {
 }
 
 function marcarProductosEnCarrito() {
-    // Obtener la ruta base correctamente
-    let pathArray = window.location.pathname.split('/');
-    pathArray.pop();
-    let basePath = pathArray.join('/');
-    if (!basePath) basePath = '';
-    
-    fetch(window.location.origin + basePath + '/index.php?controller=api&action=obtenerCarrito', {
+    let baseUrl = getBaseUrl();
+    fetch(baseUrl + '/index.php?controller=api&action=obtenerCarrito', {
         method: 'GET'
     })
     .then(response => response.json())
@@ -82,13 +82,8 @@ function marcarProductosEnCarrito() {
 }
 
 function actualizarCarroBadge() {
-    // Obtener la ruta base correctamente
-    let pathArray = window.location.pathname.split('/');
-    pathArray.pop();
-    let basePath = pathArray.join('/');
-    if (!basePath) basePath = '';
-    
-    fetch(window.location.origin + basePath + '/index.php?controller=api&action=obtenerCarrito', {
+    let baseUrl = getBaseUrl();
+    fetch(baseUrl + '/index.php?controller=api&action=obtenerCarrito', {
         method: 'GET'
     })
     .then(response => response.json())
