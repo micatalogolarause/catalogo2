@@ -87,30 +87,6 @@ function admin_producto_img_url($img) {
                         <small class="text-muted">Deja en blanco si no deseas cambiar la imagen</small>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="imagen2" class="form-label">Imagen 2 (Opcional)</label>
-                        <?php if (!empty($producto['imagen2'])): ?>
-                        <div class="mb-2">
-                            <img src="<?php echo admin_producto_img_url($producto['imagen2']); ?>" 
-                                 alt="Imagen 2" style="max-height: 150px;">
-                        </div>
-                        <?php endif; ?>
-                        <input type="file" class="form-control" id="imagen2" name="imagen2" accept="image/*">
-                        <small class="text-muted">Imagen adicional opcional</small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="imagen3" class="form-label">Imagen 3 (Opcional)</label>
-                        <?php if (!empty($producto['imagen3'])): ?>
-                        <div class="mb-2">
-                            <img src="<?php echo admin_producto_img_url($producto['imagen3']); ?>" 
-                                 alt="Imagen 3" style="max-height: 150px;">
-                        </div>
-                        <?php endif; ?>
-                        <input type="file" class="form-control" id="imagen3" name="imagen3" accept="image/*">
-                        <small class="text-muted">Imagen adicional opcional</small>
-                    </div>
-
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-success btn-lg">
                             <i class="bi bi-check-circle"></i> Guardar Cambios

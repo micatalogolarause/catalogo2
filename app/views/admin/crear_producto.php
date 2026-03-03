@@ -61,18 +61,6 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                         <small class="text-muted">Formatos soportados: JPG, PNG, GIF, WebP (máx. 5MB)</small>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="imagen2" class="form-label">Imagen 2 (Opcional)</label>
-                        <input type="file" class="form-control" id="imagen2" name="imagen2" accept="image/*">
-                        <small class="text-muted">Imagen adicional opcional</small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="imagen3" class="form-label">Imagen 3 (Opcional)</label>
-                        <input type="file" class="form-control" id="imagen3" name="imagen3" accept="image/*">
-                        <small class="text-muted">Imagen adicional opcional</small>
-                    </div>
-
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="bi bi-check-circle"></i> Crear Producto
