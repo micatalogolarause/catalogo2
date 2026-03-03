@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if (!isset($_SESSION['usuario_id'])) {
     $tenantSlug = $_SESSION['tenant_slug'] ?? (defined('TENANT_SLUG') ? TENANT_SLUG : '');
     if (!empty($tenantSlug)) {
@@ -58,42 +58,42 @@ if (!isset($_SESSION['usuario_id'])) {
 
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=inicio">
+                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=inicio">
                             <i class="bi bi-graph-up"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=clientes">
+                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=clientes">
                             <i class="bi bi-people"></i> Clientes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=categorias">
+                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=categorias">
                             <i class="bi bi-tags"></i> Categorías
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=subcategorias">
+                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=subcategorias">
                             <i class="bi bi-tag"></i> Subcategorías
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=productos">
+                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=productos">
                             <i class="bi bi-box"></i> Productos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=pedidos">
+                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=pedidos">
                             <i class="bi bi-cart-check"></i> Pedidos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=facturas">
+                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=facturas">
                             <i class="bi bi-receipt"></i> Cuentas de Cobro
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=configuracion">
+                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=configuracion">
                             <i class="bi bi-gear-fill"></i> Configuración
                         </a>
                     </li>
@@ -102,13 +102,13 @@ if (!isset($_SESSION['usuario_id'])) {
                 <hr class="bg-secondary my-3">
 
                 <div class="list-group list-group-flush">
-                    <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=miPerfil" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
+                    <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=miPerfil" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
                         <i class="bi bi-person-circle"></i> Mi Perfil
                     </a>
-                    <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
+                    <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
                         <i class="bi bi-box-arrow-left"></i> Ir a la Tienda
                     </a>
-                    <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger border-secondary">
+                    <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger border-secondary">
                         <i class="bi bi-door-open"></i> Cerrar Sesión
                     </a>
                 </div>
@@ -128,42 +128,42 @@ if (!isset($_SESSION['usuario_id'])) {
 
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=inicio">
+                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=inicio">
                                 <i class="bi bi-graph-up"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=clientes">
+                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=clientes">
                                 <i class="bi bi-people"></i> Clientes
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=categorias">
+                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=categorias">
                                 <i class="bi bi-tags"></i> Categorías
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=subcategorias">
+                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=subcategorias">
                                 <i class="bi bi-tag"></i> Subcategorías
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=productos">
+                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=productos">
                                 <i class="bi bi-box"></i> Productos
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=pedidos">
+                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=pedidos">
                                 <i class="bi bi-cart-check"></i> Pedidos
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=facturas">
+                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=facturas">
                                 <i class="bi bi-receipt"></i> Cuentas de Cobro
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=configuracion">
+                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=configuracion">
                                 <i class="bi bi-gear-fill"></i> Configuración
                             </a>
                         </li>
@@ -172,13 +172,13 @@ if (!isset($_SESSION['usuario_id'])) {
                     <hr class="bg-secondary">
 
                     <div class="list-group">
-                        <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=miPerfil" class="list-group-item list-group-item-action bg-dark text-white">
+                        <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=miPerfil" class="list-group-item list-group-item-action bg-dark text-white">
                             <i class="bi bi-person-circle"></i> Mi Perfil
                         </a>
-                        <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>" class="list-group-item list-group-item-action bg-dark text-white">
+                        <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>" class="list-group-item list-group-item-action bg-dark text-white">
                             <i class="bi bi-box-arrow-left"></i> Ir a la Tienda
                         </a>
-                        <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger">
+                        <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger">
                             <i class="bi bi-door-open"></i> Cerrar Sesión
                         </a>
                     </div>
