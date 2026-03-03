@@ -37,11 +37,9 @@ function agregarAlCarrito(productoId, cantidad) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Mostrar notificación y redirigir al carrito
             mostrarNotificacion('✓ Producto agregado al carrito', 'success');
-            setTimeout(() => {
-                window.location = getBaseUrl() + '/index.php?controller=tienda&action=carrito';
-            }, 800);
+            marcarProductoAgregado(productoId);
+            actualizarCarroBadge();
         } else {
             mostrarNotificacion(data.message, 'danger');
         }

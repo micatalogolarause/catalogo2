@@ -414,41 +414,62 @@ class TiendaController {
     }
     
     /**
-     * Generar cuenta de cobro HTML del pedido y devolver URL pública
+     * Devolver URL dinámica de la cuenta de cobro (sin escribir archivos)
      */
     private function generarFacturaHtml($pedido_id, $cliente, $productos, $total) {
-        // Crear carpeta si no existe
-        $dir = APP_ROOT . '/public/invoices';
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-        $fecha = date('Y-m-d H:i');
+        $slug = defined('TENANT_SLUG') ? TENANT_SLUG : '';
+        $base = APP_URL . ($slug ? '/' . $slug : '');
+        return $base . '/index.php?controller=tienda&action=factura&pedido_id=' . (int)$pedido_id;
+    }
+
+    /**
+     * Muestra la cuenta de cobro de un pedido (generada dinámicamente)
+     */
+    public function factura() {
+        $pedido_id = isset($_GET['pedido_id']) ? (int)$_GET['pedido_id'] : 0;
+        if ($pedido_id <= 0) { http_response_code(404); echo 'Pedido no encontrado'; return; }
+
+        $tenant_id = getTenantId();
+        // Obtener pedido
+        $row = ejecutarConsulta(
+            "SELECT p.*, c.nombre AS cliente_nombre, c.whatsapp AS cliente_whatsapp FROM pedidos p LEFT JOIN clientes c ON c.id = p.cliente_id WHERE p.id = ? AND p.tenant_id = ?",
+            "", array($pedido_id, $tenant_id)
+        )->fetch(PDO::FETCH_ASSOC);
+        if (!$row) { http_response_code(404); echo 'Pedido no encontrado'; return; }
+
+        // Obtener detalle
+        $items = ejecutarConsulta(
+            "SELECT dp.*, pr.nombre AS producto_nombre FROM detalle_pedido dp JOIN productos pr ON pr.id = dp.producto_id WHERE dp.pedido_id = ?",
+            "", array($pedido_id)
+        )->fetchAll(PDO::FETCH_ASSOC);
+
+        $total = $row['total'];
+        $fecha = $row['created_at'] ?? date('Y-m-d H:i');
         $items_html = '';
-        foreach ($productos as $item) {
+        foreach ($items as $item) {
+            $subtotal = $item['precio'] * $item['cantidad'];
             $items_html .= '<tr>' .
                 '<td>' . htmlspecialchars($item['producto_nombre']) . '</td>' .
                 '<td style="text-align:right">$' . number_format($item['precio'], 2) . '</td>' .
                 '<td style="text-align:center">' . (int)$item['cantidad'] . '</td>' .
-                '<td style="text-align:right">$' . number_format($item['subtotal'], 2) . '</td>' .
+                '<td style="text-align:right">$' . number_format($subtotal, 2) . '</td>' .
                 '</tr>';
         }
-        $html = "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'><title>Cuenta de Cobro Pedido #$pedido_id</title>" .
-                "<style>body{font-family:Segoe UI,Arial,sans-serif;color:#333;padding:30px}h1{margin:0}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #ddd;padding:10px}th{background:#f5f5f5;text-align:left} .totales{margin-top:20px;text-align:right;font-size:1.1rem}</style></head><body>" .
-            "<h1>Cuenta de Cobro del Pedido #$pedido_id</h1><p>Fecha: $fecha</p>" .
-                "<h3>Cliente</h3><p><strong>Nombre:</strong> " . htmlspecialchars($cliente['nombre']) . "<br>" .
-                "<strong>Email:</strong> " . htmlspecialchars($cliente['email']) . "<br>" .
-                "<strong>Teléfono:</strong> " . htmlspecialchars($cliente['telefono']) . "<br>" .
-                "<strong>WhatsApp:</strong> " . htmlspecialchars($cliente['whatsapp']) . "<br>" .
-                "<strong>Ciudad:</strong> " . htmlspecialchars($cliente['ciudad']) . "<br>" .
-                "<strong>Dirección:</strong> " . htmlspecialchars($cliente['direccion']) . "</p>" .
-                "<h3>Detalle</h3><table><thead><tr><th>Producto</th><th>Precio</th><th>Cant.</th><th>Subtotal</th></tr></thead><tbody>" .
-                $items_html .
-                "</tbody></table><div class='totales'><strong>Total:</strong> $" . number_format($total, 2) . "</div>" .
-                "<p style='margin-top:30px'>Gracias por tu compra. Esta cuenta de cobro fue generada automáticamente.</p>" .
-                "</body></html>";
-        $file = $dir . "/pedido_" . $pedido_id . ".html";
-        file_put_contents($file, $html);
-        return APP_URL . "/public/invoices/pedido_" . $pedido_id . ".html";
+        header('Content-Type: text/html; charset=utf-8');
+        echo "<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>" .
+            "<meta name='viewport' content='width=device-width,initial-scale=1'>" .
+            "<title>Cuenta de Cobro Pedido #{$pedido_id}</title>" .
+            "<style>body{font-family:Segoe UI,Arial,sans-serif;color:#333;padding:30px;max-width:700px;margin:auto}" .
+            "h1{margin:0}table{width:100%;border-collapse:collapse;margin-top:20px}" .
+            "th,td{border:1px solid #ddd;padding:10px}th{background:#f5f5f5;text-align:left}" .
+            ".totales{margin-top:20px;text-align:right;font-size:1.1rem}</style></head><body>" .
+            "<h1>Cuenta de Cobro del Pedido #{$pedido_id}</h1><p>Fecha: " . htmlspecialchars($fecha) . "</p>" .
+            "<h3>Cliente</h3><p><strong>Nombre:</strong> " . htmlspecialchars($row['cliente_nombre'] ?? '') . "<br>" .
+            "<strong>WhatsApp:</strong> " . htmlspecialchars($row['cliente_whatsapp'] ?? '') . "</p>" .
+            "<h3>Detalle</h3><table><thead><tr><th>Producto</th><th>Precio</th><th>Cant.</th><th>Subtotal</th></tr></thead><tbody>" .
+            $items_html .
+            "</tbody></table><div class='totales'><strong>Total:</strong> $" . number_format($total, 2) . "</div>" .
+            "<p style='margin-top:30px'>Gracias por tu compra.</p></body></html>";
     }
 
     /**
