@@ -137,33 +137,13 @@ function uploadToCloudinary(string $tmpPath, string $folder = 'uploads', ?string
     $apiKey     = CLOUDINARY_API_KEY;
     $apiSecret  = CLOUDINARY_API_SECRET;
 
-    // 0) Si existe upload preset, intentar subida unsigned (evita firma)
-    $unsignedPresets = [];
+    // 0) Si existe upload preset configurado, intentar subida unsigned (no requiere firma)
     if (CLOUDINARY_UPLOAD_PRESET !== '') {
-        $unsignedPresets[] = CLOUDINARY_UPLOAD_PRESET;
-    }
-    $unsignedPresets[] = 'ml_default';
-    $unsignedPresets = array_values(array_unique($unsignedPresets));
-
-    $unsignedErrors = [];
-    foreach ($unsignedPresets as $preset) {
-        $unsigned = cloudinaryUnsignedUploadRequest($tmpPath, $folder, $publicId, $preset);
+        $unsigned = cloudinaryUnsignedUploadRequest($tmpPath, $folder, $publicId, CLOUDINARY_UPLOAD_PRESET);
         if ($unsigned['success']) {
             return $unsigned;
         }
-        $unsignedErrors[] = $unsigned['message'] ?? 'Error de upload preset';
-    }
-
-    // Si el usuario configuró un preset explícito, no degradar al flujo firmado
-    // (evita errores de firma cuando el objetivo era unsigned)
-    if (CLOUDINARY_UPLOAD_PRESET !== '') {
-        return [
-            'success' => false,
-            'message' => 'Cloudinary unsigned error: ' . implode(' | ', array_unique($unsignedErrors)),
-            'url' => '',
-            'public_id' => '',
-            'http_code' => 400,
-        ];
+        // El preset falló, continuar con flujo firmado como fallback
     }
 
     // 1) Intentar con SDK oficial de Cloudinary (firma interna)
