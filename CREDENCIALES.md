@@ -142,6 +142,7 @@
 1. Ir a: http://localhost/catalogo2/index.php?controller=superAdmin&action=login
 2. Usuario: `superadmin` / Contraseña: `SuperAdmin123!`
 3. Verificar dashboard con estadísticas globales
+https://catalogo2-khaki.vercel.app/index.php?controller=superAdmin&action=tenants
 
 ### 2. Gestión de Tenants
 1. Ver lista de tenants
