@@ -4,11 +4,70 @@
  * Cloud: dc6in819o
  */
 
+function cloudinaryEnv(string $key, string $fallback): string {
+    $value = getenv($key);
+    if ($value === false || $value === null) {
+        return $fallback;
+    }
+
+    $value = trim((string)$value);
+    $value = trim($value, "\"'");
+
+    return $value !== '' ? $value : $fallback;
+}
+
 // Credenciales Cloudinary
 // En Vercel se leen desde variables de entorno; en local usan valores directos como fallback
-define('CLOUDINARY_CLOUD_NAME', getenv('CLOUDINARY_CLOUD_NAME') ?: 'dc6in819o');
-define('CLOUDINARY_API_KEY',    getenv('CLOUDINARY_API_KEY')    ?: '216774864662758');
-define('CLOUDINARY_API_SECRET', getenv('CLOUDINARY_API_SECRET') ?: 'XxQYYgHIBCe-muQDeWXw3IEw9P0');
+define('CLOUDINARY_FALLBACK_CLOUD_NAME', 'dc6in819o');
+define('CLOUDINARY_FALLBACK_API_KEY', '216774864662758');
+define('CLOUDINARY_FALLBACK_API_SECRET', 'XxQYYgHIBCe-muQDeWXw3IEw9P0');
+
+define('CLOUDINARY_CLOUD_NAME', cloudinaryEnv('CLOUDINARY_CLOUD_NAME', CLOUDINARY_FALLBACK_CLOUD_NAME));
+define('CLOUDINARY_API_KEY', cloudinaryEnv('CLOUDINARY_API_KEY', CLOUDINARY_FALLBACK_API_KEY));
+define('CLOUDINARY_API_SECRET', cloudinaryEnv('CLOUDINARY_API_SECRET', CLOUDINARY_FALLBACK_API_SECRET));
+
+function cloudinaryUploadRequest(string $tmpPath, array $params, string $cloudName, string $apiKey, string $apiSecret): array {
+    ksort($params);
+    $toSign = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+    $toSign = urldecode($toSign);
+    $signature = sha1($toSign . $apiSecret);
+
+    $postFields = $params;
+    $postFields['api_key'] = $apiKey;
+    $postFields['signature'] = $signature;
+    $postFields['file'] = new CURLFile($tmpPath);
+
+    $url = "https://api.cloudinary.com/v1_1/{$cloudName}/image/upload";
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlErr = curl_error($ch);
+    curl_close($ch);
+
+    if ($curlErr) {
+        return ['success' => false, 'message' => 'Error cURL: ' . $curlErr, 'url' => '', 'public_id' => '', 'http_code' => 0];
+    }
+
+    $data = json_decode($response, true);
+    if ($httpCode === 200 && isset($data['secure_url'])) {
+        return [
+            'success' => true,
+            'message' => 'Subido correctamente',
+            'url' => $data['secure_url'],
+            'public_id' => $data['public_id'],
+            'http_code' => 200,
+        ];
+    }
+
+    $errorMsg = $data['error']['message'] ?? "HTTP {$httpCode}";
+    return ['success' => false, 'message' => 'Cloudinary error: ' . $errorMsg, 'url' => '', 'public_id' => '', 'http_code' => $httpCode];
+}
 
 /**
  * Sube un archivo al Cloudinary y retorna la URL segura.
@@ -33,49 +92,32 @@ function uploadToCloudinary(string $tmpPath, string $folder = 'uploads', ?string
         $params['public_id'] = $publicId;
     }
 
-    // Generar firma
-    ksort($params);
-    $toSign = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-    // Cloudinary firma con param_key=value&... + secret
-    $toSign          = urldecode($toSign);
-    $signature       = sha1($toSign . $apiSecret);
+    $result = cloudinaryUploadRequest($tmpPath, $params, $cloudName, $apiKey, $apiSecret);
 
-    // Montar body multipart
-    $postFields              = $params;
-    $postFields['api_key']   = $apiKey;
-    $postFields['signature'] = $signature;
-    $postFields['file']      = new CURLFile($tmpPath);
-
-    $url = "https://api.cloudinary.com/v1_1/{$cloudName}/image/upload";
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST,           true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS,     $postFields);
-    curl_setopt($ch, CURLOPT_TIMEOUT,        60);
-
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $curlErr  = curl_error($ch);
-    curl_close($ch);
-
-    if ($curlErr) {
-        return ['success' => false, 'message' => 'Error cURL: ' . $curlErr, 'url' => '', 'public_id' => ''];
+    if ($result['success']) {
+        return $result;
     }
 
-    $data = json_decode($response, true);
+    $isInvalidSignature = stripos($result['message'], 'Invalid Signature') !== false;
+    $usingFallback = ($cloudName === CLOUDINARY_FALLBACK_CLOUD_NAME)
+        && ($apiKey === CLOUDINARY_FALLBACK_API_KEY)
+        && ($apiSecret === CLOUDINARY_FALLBACK_API_SECRET);
 
-    if ($httpCode === 200 && isset($data['secure_url'])) {
-        return [
-            'success'   => true,
-            'message'   => 'Subido correctamente',
-            'url'       => $data['secure_url'],
-            'public_id' => $data['public_id'],
-        ];
+    if ($isInvalidSignature && !$usingFallback) {
+        $retry = cloudinaryUploadRequest(
+            $tmpPath,
+            $params,
+            CLOUDINARY_FALLBACK_CLOUD_NAME,
+            CLOUDINARY_FALLBACK_API_KEY,
+            CLOUDINARY_FALLBACK_API_SECRET
+        );
+
+        if ($retry['success']) {
+            return $retry;
+        }
     }
 
-    $errorMsg = $data['error']['message'] ?? "HTTP {$httpCode}";
-    return ['success' => false, 'message' => 'Cloudinary error: ' . $errorMsg, 'url' => '', 'public_id' => ''];
+    return $result;
 }
 
 /**
