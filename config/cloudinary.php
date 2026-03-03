@@ -12,6 +12,7 @@ function cloudinaryEnv(string $key, string $fallback): string {
 
     $value = trim((string)$value);
     $value = trim($value, "\"'");
+    $value = preg_replace('/[\x00-\x1F\x7F\x{00A0}\x{200B}-\x{200D}\x{FEFF}]/u', '', $value);
 
     return $value !== '' ? $value : $fallback;
 }
@@ -144,11 +145,25 @@ function uploadToCloudinary(string $tmpPath, string $folder = 'uploads', ?string
     $unsignedPresets[] = 'ml_default';
     $unsignedPresets = array_values(array_unique($unsignedPresets));
 
+    $unsignedErrors = [];
     foreach ($unsignedPresets as $preset) {
         $unsigned = cloudinaryUnsignedUploadRequest($tmpPath, $folder, $publicId, $preset);
         if ($unsigned['success']) {
             return $unsigned;
         }
+        $unsignedErrors[] = $unsigned['message'] ?? 'Error de upload preset';
+    }
+
+    // Si el usuario configuró un preset explícito, no degradar al flujo firmado
+    // (evita errores de firma cuando el objetivo era unsigned)
+    if (CLOUDINARY_UPLOAD_PRESET !== '') {
+        return [
+            'success' => false,
+            'message' => 'Cloudinary unsigned error: ' . implode(' | ', array_unique($unsignedErrors)),
+            'url' => '',
+            'public_id' => '',
+            'http_code' => 400,
+        ];
     }
 
     // 1) Intentar con SDK oficial de Cloudinary (firma interna)
