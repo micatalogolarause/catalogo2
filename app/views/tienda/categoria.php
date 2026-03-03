@@ -102,8 +102,19 @@ function tienda_img_url($img) {
                 </div>
             </div>
 
+            <div class="d-flex justify-content-end mb-3">
+                <div class="btn-group product-view-toggle" role="group" aria-label="Vista de productos">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-view="columnas">
+                        <i class="bi bi-grid-3x3-gap"></i> Columnas
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-view="lista">
+                        <i class="bi bi-list-ul"></i> Lista
+                    </button>
+                </div>
+            </div>
+
             <!-- Productos -->
-            <div class="row g-4">
+            <div class="row g-4 products-container view-columns">
                 <?php if (empty($productos)): ?>
                     <div class="col-12">
                         <div class="alert alert-warning" style="padding: 40px; text-align: center; border-radius: 12px;">
@@ -123,7 +134,7 @@ function tienda_img_url($img) {
                         if (!empty($producto['imagen3'])) { $galeria[] = tienda_img_url($producto['imagen3']); }
                         $galeriaAttr = htmlspecialchars(implode('|', $galeria), ENT_QUOTES, 'UTF-8');
                     ?>
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-md-6 col-lg-4 product-col">
                         <div class="product-card" data-galeria="<?php echo $galeriaAttr; ?>">
                             <div class="product-image-wrapper" onclick="abrirModalGaleria(this)">
                                   <img src="<?php echo $galeria[0] ?? tienda_img_url($producto['imagen']); ?>" 

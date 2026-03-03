@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     actualizarCarroBadge();
     marcarProductosEnCarrito();
+    inicializarVistaProductos();
     
     // Usar delegación de eventos para los botones agregar al carrito
     document.addEventListener('click', function(e) {
@@ -135,4 +136,44 @@ function mostrarNotificacion(mensaje, tipo = 'info') {
         main.insertBefore(alert, main.firstChild);
         setTimeout(() => alert.remove(), 5000);
     }
+}
+
+function inicializarVistaProductos() {
+    const toggles = document.querySelectorAll('.product-view-toggle');
+    const containers = document.querySelectorAll('.products-container');
+
+    if (!toggles.length || !containers.length) {
+        return;
+    }
+
+    const vistaGuardada = localStorage.getItem('catalogo_vista_productos') || 'columnas';
+    aplicarVistaProductos(vistaGuardada, toggles, containers);
+
+    toggles.forEach(toggle => {
+        toggle.querySelectorAll('button[data-view]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const vista = this.getAttribute('data-view') || 'columnas';
+                localStorage.setItem('catalogo_vista_productos', vista);
+                aplicarVistaProductos(vista, toggles, containers);
+            });
+        });
+    });
+}
+
+function aplicarVistaProductos(vista, toggles, containers) {
+    const esLista = vista === 'lista';
+
+    containers.forEach(container => {
+        container.classList.toggle('view-list', esLista);
+        container.classList.toggle('view-columns', !esLista);
+    });
+
+    toggles.forEach(toggle => {
+        toggle.querySelectorAll('button[data-view]').forEach(btn => {
+            const activa = btn.getAttribute('data-view') === (esLista ? 'lista' : 'columnas');
+            btn.classList.toggle('active', activa);
+            btn.classList.toggle('btn-primary', activa);
+            btn.classList.toggle('btn-outline-secondary', !activa);
+        });
+    });
 }

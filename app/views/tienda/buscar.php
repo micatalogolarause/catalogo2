@@ -39,7 +39,18 @@ function tienda_img_url($img) {
         <h2>Resultados de Búsqueda</h2>
         <p class="text-muted">Búsqueda: "<strong><?php echo sanitizar($termino); ?></strong>"</p>
 
-        <div class="row">
+        <div class="d-flex justify-content-end mb-3">
+            <div class="btn-group product-view-toggle" role="group" aria-label="Vista de productos">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-view="columnas">
+                    <i class="bi bi-grid-3x3-gap"></i> Columnas
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-view="lista">
+                    <i class="bi bi-list-ul"></i> Lista
+                </button>
+            </div>
+        </div>
+
+        <div class="row products-container view-columns">
             <?php if (empty($productos)): ?>
                 <div class="col-12">
                     <div class="alert alert-info">
@@ -57,8 +68,8 @@ function tienda_img_url($img) {
                     if (!empty($producto['imagen3'])) { $galeria[] = tienda_img_url($producto['imagen3']); }
                     $galeriaAttr = htmlspecialchars(implode('|', $galeria), ENT_QUOTES, 'UTF-8');
                 ?>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card h-100" data-galeria="<?php echo $galeriaAttr; ?>">
+                <div class="col-md-6 col-lg-4 mb-4 product-col">
+                    <div class="card h-100 product-item-card" data-galeria="<?php echo $galeriaAttr; ?>">
                             <img src="<?php echo $galeria[0] ?? tienda_img_url($producto['imagen']); ?>" 
                                 class="card-img-top" alt="<?php echo sanitizar($producto['nombre']); ?>" style="height: 250px; object-fit: cover; cursor:pointer;" onclick="abrirModalGaleria(this)">
                         <div class="card-body">
