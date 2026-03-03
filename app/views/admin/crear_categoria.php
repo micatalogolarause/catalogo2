@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Crear Nueva Categoría</h3>
-    <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=categorias" class="btn btn-secondary">
+    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=categorias" class="btn btn-secondary">
         <i class="bi bi-arrow-left"></i> Volver
     </a>
 </div>

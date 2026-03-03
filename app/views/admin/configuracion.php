@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
@@ -112,7 +112,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="bi bi-check-circle"></i> Guardar Cambios
                         </button>
-                        <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=inicio" class="btn btn-outline-secondary">
+                        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=inicio" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left"></i> Volver al Dashboard
                         </a>
                     </div>

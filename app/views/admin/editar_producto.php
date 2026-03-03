@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
@@ -18,7 +18,7 @@ function admin_producto_img_url($img) {
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Editar Producto</h3>
-    <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=productos" class="btn btn-secondary">
+    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=productos" class="btn btn-secondary">
         <i class="bi bi-arrow-left"></i> Volver
     </a>
 </div>

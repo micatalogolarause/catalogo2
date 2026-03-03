@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
@@ -13,7 +13,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                 <h5 class="mb-0"><i class="bi bi-person-badge"></i> Información Personal</h5>
             </div>
             <div class="card-body">
-                <form method="POST" action="<?php echo APP_URL; ?>/index.php?controller=admin&action=actualizarPerfil">
+                <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarPerfil">
                     <input type="hidden" name="accion" value="info">
                     
                     <div class="mb-3">
@@ -48,7 +48,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                 <h5 class="mb-0"><i class="bi bi-shield-lock"></i> Cambiar Contraseña</h5>
             </div>
             <div class="card-body">
-                <form method="POST" action="<?php echo APP_URL; ?>/index.php?controller=admin&action=actualizarPerfil">
+                <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarPerfil">
                     <input type="hidden" name="accion" value="password">
                     
                     <div class="mb-3">

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
@@ -19,7 +19,7 @@ function admin_producto_img_url($img) {
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Gestión de Productos</h3>
     <div class="btn-group">
-        <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=crearProducto" class="btn btn-primary">
+        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=crearProducto" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Nuevo Producto
         </a>
         <div class="btn-group" role="group">
@@ -27,10 +27,10 @@ function admin_producto_img_url($img) {
                 <i class="bi bi-download"></i> Exportar
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/index.php?controller=admin&action=reporteProductosPDF&filtro=<?php echo $_GET['estado'] ?? 'todos'; ?>" target="_blank">
+                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=reporteProductosPDF&filtro=<?php echo $_GET['estado'] ?? 'todos'; ?>" target="_blank">
                     <i class="bi bi-file-earmark-pdf text-danger"></i> Exportar PDF
                 </a></li>
-                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/index.php?controller=admin&action=reporteProductosExcel&filtro=<?php echo $_GET['estado'] ?? 'todos'; ?>" target="_blank">
+                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=reporteProductosExcel&filtro=<?php echo $_GET['estado'] ?? 'todos'; ?>" target="_blank">
                     <i class="bi bi-file-earmark-excel text-success"></i> Exportar Excel
                 </a></li>
             </ul>
@@ -56,7 +56,7 @@ function admin_producto_img_url($img) {
         <div class="col-md-3">
             <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button>
             <?php if ((isset($_GET['busqueda']) && !empty($_GET['busqueda'])) || (isset($_GET['estado']) && !empty($_GET['estado']))): ?>
-            <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=productos" class="btn btn-secondary w-100 mt-2">
+            <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=productos" class="btn btn-secondary w-100 mt-2">
                 <i class="bi bi-arrow-counterclockwise"></i> Limpiar
             </a>
             <?php endif; ?>
@@ -142,9 +142,9 @@ function admin_producto_img_url($img) {
                         </span>
                     </td>
                     <td>
-                        <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=editarProducto&id=<?php echo $prod['id']; ?>" 
+                        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=editarProducto&id=<?php echo $prod['id']; ?>" 
                            class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-                                                <form method="POST" action="<?php echo APP_URL; ?>/index.php?controller=admin&action=cambiarEstadoProducto" 
+                                                <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=cambiarEstadoProducto" 
                                                             style="display:inline;">
                                                         <input type="hidden" name="id" value="<?php echo $prod['id']; ?>">
                                                         <input type="hidden" name="estado" value="<?php echo $prod['activo'] ? '0' : '1'; ?>">
@@ -153,7 +153,7 @@ function admin_producto_img_url($img) {
                                                                 <i class="bi bi-<?php echo $prod['activo'] ? 'x-circle' : 'check-circle'; ?>"></i>
                                                         </button>
                                                 </form>
-                        <form method="POST" action="<?php echo APP_URL; ?>/index.php?controller=admin&action=eliminarProducto" 
+                        <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=eliminarProducto" 
                               style="display:inline;" onsubmit="return confirm('¿Eliminar este producto?');">
                             <input type="hidden" name="id" value="<?php echo $prod['id']; ?>">
                             <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>

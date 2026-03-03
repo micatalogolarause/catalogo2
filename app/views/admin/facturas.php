@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
@@ -166,7 +166,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                                        class="btn btn-sm btn-danger" title="Descargar PDF" target="_blank">
                                         <i class="bi bi-file-earmark-pdf"></i>
                                     </a>
-                                    <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=generarFacturaExcel&id=<?php echo $factura['id']; ?>" 
+                                    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=generarFacturaExcel&id=<?php echo $factura['id']; ?>" 
                                        class="btn btn-sm btn-success" title="Descargar Excel" target="_blank">
                                         <i class="bi bi-file-earmark-excel"></i>
                                     </a>

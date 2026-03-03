@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 
 // Calcular estadísticas
@@ -495,7 +495,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
 
 <script>
 function filtrarPorEstado(estado) {
-    const url = '<?php echo APP_URL; ?>/index.php?controller=admin&action=pedidos';
+    const url = '<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=pedidos';
     if (estado) {
         window.location.href = url + '&estado=' + encodeURIComponent(estado);
     } else {

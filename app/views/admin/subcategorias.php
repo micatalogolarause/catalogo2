@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Gestión de Subcategorías</h3>
-    <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=crearSubcategoria" class="btn btn-primary">
+    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=crearSubcategoria" class="btn btn-primary">
         <i class="bi bi-plus-circle"></i> Nueva Subcategoría
     </a>
 </div>
@@ -20,7 +20,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
         <div class="col-md-4">
             <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button>
             <?php if (isset($_GET['busqueda']) && !empty($_GET['busqueda'])): ?>
-            <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=subcategorias" class="btn btn-secondary w-100 mt-2">
+            <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=subcategorias" class="btn btn-secondary w-100 mt-2">
                 <i class="bi bi-arrow-counterclockwise"></i> Limpiar
             </a>
             <?php endif; ?>
@@ -62,9 +62,9 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                         </span>
                     </td>
                     <td>
-                        <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=editarSubcategoria&id=<?php echo $sub['id']; ?>" 
+                        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=editarSubcategoria&id=<?php echo $sub['id']; ?>" 
                            class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-                        <form method="POST" action="<?php echo APP_URL; ?>/index.php?controller=admin&action=eliminarSubcategoria" 
+                        <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=eliminarSubcategoria" 
                               style="display:inline;" onsubmit="return confirm('¿Eliminar esta subcategoría?');">
                             <input type="hidden" name="id" value="<?php echo $sub['id']; ?>">
                             <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>

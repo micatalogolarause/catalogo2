@@ -70,8 +70,15 @@ class TenantResolver {
         
         // No hay slug en URL, verificar sesión
         if (isset($_SESSION['tenant_id']) && isset($_SESSION['tenant_slug'])) {
-            // Revalidar estado del tenant desde BD
-            $tenant = self::getTenantBySlug($_SESSION['tenant_slug']);
+            // Usar caché de cookie primero (evita consulta BD en cada request)
+            $slug = $_SESSION['tenant_slug'];
+            $tenant = self::getCachedTenant($slug);
+            if (!$tenant) {
+                $tenant = self::getTenantBySlug($slug);
+                if ($tenant && $tenant['estado'] === 'activo') {
+                    self::setCachedTenant($tenant);
+                }
+            }
             
             if (!$tenant || $tenant['estado'] !== 'activo') {
                 // Tenant desactivado o eliminado, limpiar sesión

@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Gestión de Categorías</h3>
-    <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=crearCategoria" class="btn btn-primary">
+    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=crearCategoria" class="btn btn-primary">
         <i class="bi bi-plus-circle"></i> Nueva Categoría
     </a>
 </div>
@@ -20,7 +20,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
         <div class="col-md-4">
             <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button>
             <?php if (isset($_GET['busqueda']) && !empty($_GET['busqueda'])): ?>
-            <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=categorias" class="btn btn-secondary w-100 mt-2">
+            <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=categorias" class="btn btn-secondary w-100 mt-2">
                 <i class="bi bi-arrow-counterclockwise"></i> Limpiar
             </a>
             <?php endif; ?>
@@ -60,9 +60,9 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                         </span>
                     </td>
                     <td>
-                        <a href="<?php echo APP_URL; ?>/index.php?controller=admin&action=editarCategoria&id=<?php echo $cat['id']; ?>" 
+                        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=editarCategoria&id=<?php echo $cat['id']; ?>" 
                            class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-                        <form method="POST" action="<?php echo APP_URL; ?>/index.php?controller=admin&action=eliminarCategoria" 
+                        <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=eliminarCategoria" 
                               style="display:inline;" onsubmit="return confirm('¿Eliminar esta categoría?');">
                             <input type="hidden" name="id" value="<?php echo $cat['id']; ?>">
                             <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
