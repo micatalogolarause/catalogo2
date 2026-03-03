@@ -5,6 +5,10 @@
     {
       "src": "index.php",
       "use": "vercel-php@0.7.2"
+    },
+    {
+      "src": "test_cloudinary_diag.php",
+      "use": "vercel-php@0.7.2"
     }
   ],
   "routes": [
