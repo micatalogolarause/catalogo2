@@ -10,40 +10,45 @@ require_once 'config/config.php';
 // Servir archivos estáticos de /public cuando la petición llega a index.php
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '';
 $basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
-$relativePath = $requestPath;
+$pathCandidates = [$requestPath];
 
-if (!empty($basePath) && strpos($relativePath, $basePath . '/') === 0) {
-    $relativePath = substr($relativePath, strlen($basePath));
+if (!empty($basePath) && strpos($requestPath, $basePath . '/') === 0) {
+    $pathCandidates[] = substr($requestPath, strlen($basePath));
 }
 
-if (str_starts_with($relativePath, '/public/')) {
-    $assetPath = APP_ROOT . $relativePath;
-
-    if (is_file($assetPath)) {
-        $ext = strtolower(pathinfo($assetPath, PATHINFO_EXTENSION));
-        $mimeTypes = [
-            'css' => 'text/css; charset=UTF-8',
-            'js' => 'application/javascript; charset=UTF-8',
-            'png' => 'image/png',
-            'jpg' => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
-            'gif' => 'image/gif',
-            'svg' => 'image/svg+xml',
-            'webp' => 'image/webp',
-            'ico' => 'image/x-icon',
-            'woff' => 'font/woff',
-            'woff2' => 'font/woff2',
-            'ttf' => 'font/ttf'
-        ];
-
-        if (isset($mimeTypes[$ext])) {
-            header('Content-Type: ' . $mimeTypes[$ext]);
-        }
-
-        header('Cache-Control: public, max-age=3600');
-        readfile($assetPath);
-        exit;
+foreach ($pathCandidates as $candidatePath) {
+    if (!str_starts_with($candidatePath, '/public/')) {
+        continue;
     }
+
+    $assetPath = APP_ROOT . $candidatePath;
+    if (!is_file($assetPath)) {
+        continue;
+    }
+
+    $ext = strtolower(pathinfo($assetPath, PATHINFO_EXTENSION));
+    $mimeTypes = [
+        'css' => 'text/css; charset=UTF-8',
+        'js' => 'application/javascript; charset=UTF-8',
+        'png' => 'image/png',
+        'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'gif' => 'image/gif',
+        'svg' => 'image/svg+xml',
+        'webp' => 'image/webp',
+        'ico' => 'image/x-icon',
+        'woff' => 'font/woff',
+        'woff2' => 'font/woff2',
+        'ttf' => 'font/ttf'
+    ];
+
+    if (isset($mimeTypes[$ext])) {
+        header('Content-Type: ' . $mimeTypes[$ext]);
+    }
+
+    header('Cache-Control: public, max-age=3600');
+    readfile($assetPath);
+    exit;
 }
 
 // Autoloader de Composer (Cloudinary, TCPDF, etc.)
