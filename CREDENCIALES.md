@@ -114,7 +114,7 @@
 ✅ Reportes de productos (PDF/Excel) con filtros  
 ✅ Reportes de pedidos (PDF/Excel) con filtros avanzados  
 ✅ Script de seeding para datos de prueba (90 productos, 10 clientes, 10 pedidos por tenant)  
-✅ Edición de productos mantiene subcategoría seleccionada
+✅ Edición de productos mantiene subcategoría seleccionadauuu
 
 ### Scripts de Utilidad
 - **Limpiar sesión:** http://localhost/catalogo2/limpiar-sesion.php
