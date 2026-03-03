@@ -61,8 +61,8 @@ class FacturaPDF {
                     $logoAreaY = 6;
                     $logoAreaH = 28;
 
-                    if (!empty($tenant['logo']) && is_file(APP_ROOT . '/' . $tenant['logo'])) {
-                        $logoPath = APP_ROOT . '/' . $tenant['logo'];
+                    $logoPath = ReportUtils::getLogoLocalPath($tenant);
+                    if ($logoPath !== null) {
                         try {
                             $info = @getimagesize($logoPath);
                             if ($info) {

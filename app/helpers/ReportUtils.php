@@ -86,5 +86,36 @@ class ReportUtils {
                          str_pad(dechex($g), 2, '0', STR_PAD_LEFT) .
                          str_pad(dechex($b), 2, '0', STR_PAD_LEFT));
     }
+
+    /**
+     * Obtener ruta local del logo del tenant.
+     * Si el logo es una URL remota (Cloudinary, etc.) lo descarga a /tmp y
+     * devuelve la ruta temporal. Si es ruta local, la devuelve si existe.
+     * Devuelve null si no hay logo o no se puede obtener.
+     */
+    public static function getLogoLocalPath($tenant) {
+        $logo = $tenant['logo'] ?? '';
+        if (empty($logo)) return null;
+
+        // URL remota → descargar a /tmp
+        if (preg_match('#^https?://#i', $logo)) {
+            $ext = strtolower(pathinfo(parse_url($logo, PHP_URL_PATH), PATHINFO_EXTENSION));
+            // Eliminar query params del ext
+            $ext = preg_replace('/[^a-z0-9].*/', '', $ext);
+            if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) $ext = 'jpg';
+            $tmpPath = '/tmp/logo_' . md5($logo) . '.' . $ext;
+            // Usar caché en /tmp
+            if (!file_exists($tmpPath)) {
+                $data = @file_get_contents($logo);
+                if ($data === false) return null;
+                file_put_contents($tmpPath, $data);
+            }
+            return $tmpPath;
+        }
+
+        // Ruta local
+        $localPath = APP_ROOT . '/' . ltrim($logo, '/');
+        return is_file($localPath) ? $localPath : null;
+    }
 }
 ?>

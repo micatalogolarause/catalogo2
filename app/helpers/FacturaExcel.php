@@ -33,9 +33,10 @@ class FacturaExcel {
         // ENCABEZADO DE LA EMPRESA
         // Insertar logo si existe
         $logoInsertado = false;
-        if (!empty($tenant['logo']) && is_file(APP_ROOT . '/' . $tenant['logo'])) {
+        $logoPathLocal = ReportUtils::getLogoLocalPath($tenant);
+        if ($logoPathLocal !== null) {
             try {
-                $logoPath = APP_ROOT . '/' . $tenant['logo'];
+                $logoPath = $logoPathLocal;
                 $imageInfo = @getimagesize($logoPath);
                 
                 // Verificar que es una imagen válida y soportada (JPG, PNG, GIF, WEBP)
