@@ -244,18 +244,12 @@ class FacturaPDF {
             "Para cualquier consulta, contáctenos por WhatsApp: " . $tenant['whatsapp_phone'],
             0, 'C');
         
-        // Guardar PDF
-        $dir = APP_ROOT . '/public/facturas';
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-        
         $nombreArchivo = 'cuenta_cobro_' . str_pad($displayNumber, 6, '0', STR_PAD_LEFT) . '_' . date('Ymd_His') . '.pdf';
-        $rutaCompleta = $dir . '/' . $nombreArchivo;
-        
-        $pdf->Output($rutaCompleta, 'F');
-        
-        return APP_URL . '/public/facturas/' . $nombreArchivo;
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
+        header('Cache-Control: private, max-age=0, must-revalidate');
+        $pdf->Output($nombreArchivo, 'D');
+        exit;
     }
 }
 ?>

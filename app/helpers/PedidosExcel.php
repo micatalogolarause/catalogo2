@@ -140,32 +140,14 @@ class PedidosExcel {
         $sheet->getColumnDimension('G')->setWidth(15);
         $sheet->getColumnDimension('H')->setWidth(30);
         
-        // Guardar archivo
-        $dir = APP_ROOT . '/public/reportes';
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-        
         $nombreArchivo = 'pedidos_' . date('Ymd_His') . '.xlsx';
-        $rutaCompleta = $dir . '/' . $nombreArchivo;
-        
-        // Configurar el writer con opciones de compatibilidad
         $writer = new Xlsx($spreadsheet);
         $writer->setPreCalculateFormulas(false);
-        
-        // Guardar el archivo
-        try {
-            $writer->save($rutaCompleta);
-        } catch (Exception $e) {
-            throw new Exception('Error al guardar archivo Excel: ' . $e->getMessage());
-        }
-        
-        // Verificar que el archivo se creó correctamente
-        if (!file_exists($rutaCompleta) || filesize($rutaCompleta) === 0) {
-            throw new Exception('El archivo Excel no se generó correctamente');
-        }
-        
-        return APP_URL . '/public/reportes/' . $nombreArchivo;
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
+        header('Cache-Control: private, max-age=0, must-revalidate');
+        $writer->save('php://output');
+        exit;
     }
     
     /**

@@ -128,18 +128,12 @@ class PedidosPDF {
         $pdf->SetTextColor(100, 100, 100);
         $pdf->Cell(0, 3, 'Reporte generado automáticamente por Catálogo Digital | Total pedidos: ' . count($pedidos), 0, 1, 'C');
         
-        // Guardar PDF
-        $dir = APP_ROOT . '/public/reportes';
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-        
         $nombreArchivo = 'pedidos_' . date('Ymd_His') . '.pdf';
-        $rutaCompleta = $dir . '/' . $nombreArchivo;
-        
-        $pdf->Output($rutaCompleta, 'F');
-        
-        return APP_URL . '/public/reportes/' . $nombreArchivo;
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
+        header('Cache-Control: private, max-age=0, must-revalidate');
+        $pdf->Output($nombreArchivo, 'D');
+        exit;
     }
     
     /**

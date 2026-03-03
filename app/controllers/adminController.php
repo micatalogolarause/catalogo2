@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Controlador Admin - Panel de administración
  */
@@ -1119,7 +1119,7 @@ class AdminController {
             
             if (empty($usuario) || empty($nombre) || empty($email)) {
                 $_SESSION['error'] = 'Todos los campos son requeridos';
-                header('Location: ' . APP_URL . '/index.php?controller=admin&action=miPerfil');
+                header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=miPerfil');
                 exit;
             }
             
@@ -1158,19 +1158,19 @@ class AdminController {
             
             if (empty($password_actual) || empty($password_nueva) || empty($password_confirmar)) {
                 $_SESSION['error'] = 'Todos los campos son requeridos';
-                header('Location: ' . APP_URL . '/index.php?controller=admin&action=miPerfil');
+                header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=miPerfil');
                 exit;
             }
             
             if (strlen($password_nueva) < 6) {
                 $_SESSION['error'] = 'La nueva contraseña debe tener al menos 6 caracteres';
-                header('Location: ' . APP_URL . '/index.php?controller=admin&action=miPerfil');
+                header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=miPerfil');
                 exit;
             }
             
             if ($password_nueva !== $password_confirmar) {
                 $_SESSION['error'] = 'Las contraseñas no coinciden';
-                header('Location: ' . APP_URL . '/index.php?controller=admin&action=miPerfil');
+                header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=miPerfil');
                 exit;
             }
             
@@ -1179,7 +1179,7 @@ class AdminController {
             $sql = "SELECT id FROM usuarios WHERE id = ? AND password = ?";
             if (!obtenerFila($sql, "is", [$_SESSION['usuario_id'], $hash_actual])) {
                 $_SESSION['error'] = 'La contraseña actual es incorrecta';
-                header('Location: ' . APP_URL . '/index.php?controller=admin&action=miPerfil');
+                header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=miPerfil');
                 exit;
             }
             
@@ -1265,7 +1265,7 @@ class AdminController {
         
         if (!$id) {
             $_SESSION['error'] = 'ID de pedido inválido';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=pedidos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=pedidos');
             exit;
         }
         
@@ -1274,7 +1274,7 @@ class AdminController {
         
         if (!$pedido) {
             $_SESSION['error'] = 'Pedido no encontrado';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=pedidos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=pedidos');
             exit;
         }
         
@@ -1293,7 +1293,7 @@ class AdminController {
         
         if (!$tenant) {
             $_SESSION['error'] = 'Error al obtener datos del tenant';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=verPedido&id=' . $id);
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=verPedido&id=' . $id);
             exit;
         }
         
@@ -1306,7 +1306,7 @@ class AdminController {
             exit;
         } catch (Exception $e) {
             $_SESSION['error'] = 'Error al generar la cuenta de cobro: ' . $e->getMessage();
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=verPedido&id=' . $id);
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=verPedido&id=' . $id);
             exit;
         }
     }
@@ -1387,7 +1387,7 @@ class AdminController {
         
         if (!$id) {
             $_SESSION['error'] = 'ID de pedido inválido';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=pedidos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=pedidos');
             exit;
         }
         
@@ -1396,7 +1396,7 @@ class AdminController {
         
         if (!$pedido) {
             $_SESSION['error'] = 'Pedido no encontrado';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=pedidos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=pedidos');
             exit;
         }
         
@@ -1415,7 +1415,7 @@ class AdminController {
         
         if (!$tenant) {
             $_SESSION['error'] = 'Error al obtener datos del tenant';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=verPedido&id=' . $id);
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=verPedido&id=' . $id);
             exit;
         }
         
@@ -1428,7 +1428,7 @@ class AdminController {
             exit;
         } catch (Exception $e) {
             $_SESSION['error'] = 'Error al generar factura Excel: ' . $e->getMessage();
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=verPedido&id=' . $id);
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=verPedido&id=' . $id);
             exit;
         }
     }
@@ -1449,7 +1449,7 @@ class AdminController {
         
         if (!$tenant) {
             $_SESSION['error'] = 'Error al obtener datos del tenant';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=productos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=productos');
             exit;
         }
         
@@ -1459,7 +1459,7 @@ class AdminController {
             exit;
         } catch (Exception $e) {
             $_SESSION['error'] = 'Error al generar reporte PDF: ' . $e->getMessage();
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=productos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=productos');
             exit;
         }
     }
@@ -1480,7 +1480,7 @@ class AdminController {
         
         if (!$tenant) {
             $_SESSION['error'] = 'Error al obtener datos del tenant';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=productos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=productos');
             exit;
         }
         
@@ -1490,7 +1490,7 @@ class AdminController {
             exit;
         } catch (Exception $e) {
             $_SESSION['error'] = 'Error al generar reporte Excel: ' . $e->getMessage();
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=productos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=productos');
             exit;
         }
     }
@@ -1548,7 +1548,7 @@ class AdminController {
         
         if (!$tenant) {
             $_SESSION['error'] = 'Error al obtener datos del tenant';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=pedidos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=pedidos');
             exit;
         }
         
@@ -1566,7 +1566,7 @@ class AdminController {
             exit;
         } catch (Exception $e) {
             $_SESSION['error'] = 'Error al generar reporte PDF: ' . $e->getMessage();
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=pedidos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=pedidos');
             exit;
         }
     }
@@ -1601,7 +1601,7 @@ class AdminController {
         
         if (!$tenant) {
             $_SESSION['error'] = 'Error al obtener datos del tenant';
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=pedidos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=pedidos');
             exit;
         }
         
@@ -1619,7 +1619,7 @@ class AdminController {
             exit;
         } catch (Exception $e) {
             $_SESSION['error'] = 'Error al generar reporte Excel: ' . $e->getMessage();
-            header('Location: ' . APP_URL . '/index.php?controller=admin&action=pedidos');
+            header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=pedidos');
             exit;
         }
     }
