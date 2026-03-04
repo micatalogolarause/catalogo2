@@ -43,7 +43,6 @@ if (getenv('APP_URL')) {
         }
     }
 }
-}
 
 define('APP_UPLOADS', APP_ROOT . '/public/images');
 
