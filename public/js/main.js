@@ -53,6 +53,9 @@ function agregarAlCarrito(productoId, cantidad) {
             mostrarNotificacion('✓ Producto agregado al carrito', 'success');
             marcarProductoAgregado(productoId);
             actualizarCarroBadge();
+            setTimeout(() => {
+                window.location = getBaseUrl() + '/index.php?controller=tienda&action=carrito';
+            }, 600);
         } else {
             mostrarNotificacion(data.message, 'danger');
         }
