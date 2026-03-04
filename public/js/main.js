@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function getBaseUrl() {
-    if (typeof APP_BASE_URL !== 'undefined' && typeof TENANT_SLUG !== 'undefined' && TENANT_SLUG) {
-        return APP_BASE_URL + '/' + TENANT_SLUG;
+    if (typeof APP_BASE_URL !== 'undefined' && APP_BASE_URL) {
+        return APP_BASE_URL;
     }
-    // Fallback: derivar de la URL actual
+    // Fallback: derivar de la URL actual (origen + primer segmento = slug)
     let parts = window.location.pathname.split('/').filter(p => p && p !== 'index.php');
     return window.location.origin + (parts.length > 0 ? '/' + parts[0] : '');
 }

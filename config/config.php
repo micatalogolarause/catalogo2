@@ -21,7 +21,11 @@ if (getenv('APP_URL')) {
     // VERCEL_URL es la URL del deployment específico (no usar para assets)
     define('APP_URL', 'https://' . getenv('VERCEL_URL'));
 } else {
-    $protocol  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    // En Vercel el protocolo real llega en X-Forwarded-Proto (no en $_SERVER['HTTPS'])
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+               || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+               || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on');
+    $protocol  = $isHttps ? 'https' : 'http';
     $host      = $_SERVER['HTTP_HOST'];
     $base_path = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
     $base_path = rtrim($base_path, '/');

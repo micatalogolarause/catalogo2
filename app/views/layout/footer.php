@@ -98,8 +98,8 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        var APP_BASE_URL = '<?php echo APP_URL; ?>';
-        var TENANT_SLUG  = '<?php echo isset($_SESSION['tenant_slug']) ? sanitizar($_SESSION['tenant_slug']) : (defined('TENANT_SLUG') ? TENANT_SLUG : ''); ?>';
+        var APP_BASE_URL = '<?php echo defined('TENANT_SLUG') && TENANT_SLUG ? rtrim(APP_URL, '/') . '/' . TENANT_SLUG : rtrim(APP_URL, '/'); ?>';
+        var TENANT_SLUG  = '<?php echo defined('TENANT_SLUG') ? TENANT_SLUG : ''; ?>';
     </script>
     <script src="<?php echo APP_URL; ?>/public/js/main.js"></script>
     <script>
