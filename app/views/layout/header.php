@@ -27,8 +27,8 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
     <title><?php echo sanitizar($_SESSION['tenant_data']['titulo_empresa'] ?? $_SESSION['tenant_data']['nombre'] ?? 'Tienda Virtual'); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/estilos.css">
-    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/temas.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/estilos.css?v=<?php echo filemtime(APP_ROOT . '/public/css/estilos.css'); ?>">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/temas.css?v=<?php echo filemtime(APP_ROOT . '/public/css/temas.css'); ?>">
     <link rel="icon" href="data:,">
 </head>
 <body class="tema-<?php $t=sanitizar($_SESSION['tenant_data']['tema']??'claro'); echo ($t==='default'?'claro':$t); ?> color-<?php $c=sanitizar($_SESSION['tenant_data']['tema_color']??'azul'); echo ($c?$c:'azul'); ?>">
