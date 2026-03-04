@@ -17,7 +17,8 @@ if (!isset($_SESSION['usuario_id'])) {
     <title>Panel Admin - <?php echo sanitizar($_SESSION['tenant_data']['titulo_empresa'] ?? $_SESSION['tenant_data']['nombre'] ?? 'Tienda'); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/admin.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/admin.css?v=<?php echo filemtime(APP_ROOT . '/public/css/admin.css'); ?>">
+    <link rel="icon" href="data:,">
 </head>
 <body>
     <!-- Navbar para móvil -->
