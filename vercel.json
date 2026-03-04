@@ -5,10 +5,32 @@
     {
       "src": "index.php",
       "use": "vercel-php@0.7.2"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/public/css/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+      ]
     },
     {
-      "src": "test_cloudinary_diag.php",
-      "use": "vercel-php@0.7.2"
+      "source": "/public/js/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/public/images/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/public/(.*)\\.webp",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=2592000" }
+      ]
     }
   ],
   "routes": [

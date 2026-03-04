@@ -46,7 +46,14 @@ foreach ($pathCandidates as $candidatePath) {
         header('Content-Type: ' . $mimeTypes[$ext]);
     }
 
-    header('Cache-Control: public, max-age=3600');
+    // Cachear CSS/JS 7 días, imágenes/fuentes 30 días en navegador
+    $imagenExt = ['png','jpg','jpeg','gif','webp','svg','ico'];
+    $fuenteExt = ['woff','woff2','ttf'];
+    if (in_array($ext, $imagenExt) || in_array($ext, $fuenteExt)) {
+        header('Cache-Control: public, max-age=2592000, stale-while-revalidate=86400');
+    } else {
+        header('Cache-Control: public, max-age=604800, stale-while-revalidate=86400');
+    }
     readfile($assetPath);
     exit;
 }
