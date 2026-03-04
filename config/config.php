@@ -25,15 +25,24 @@ if (getenv('APP_URL')) {
     $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
                || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
                || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on');
-    $protocol  = $isHttps ? 'https' : 'http';
-    $host      = $_SERVER['HTTP_HOST'];
-    $base_path = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-    $base_path = rtrim($base_path, '/');
-    if ($base_path === '' || $base_path === '/') {
+    $protocol = $isHttps ? 'https' : 'http';
+    $host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
+
+    // En Vercel/proxy, SCRIPT_NAME incluye el slug (/la77/index.php), lo que
+    // falsea el base_path. Si hay X-Forwarded-Proto o estamos en Vercel, usar
+    // solo scheme://host sin path (el slug va en la URL de la ruta, no en APP_URL).
+    if (getenv('VERCEL') || getenv('VERCEL_ENV') || isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
         define('APP_URL', $protocol . '://' . $host);
     } else {
-        define('APP_URL', $protocol . '://' . $host . $base_path);
+        $base_path = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        $base_path = rtrim($base_path, '/');
+        if ($base_path === '' || $base_path === '/') {
+            define('APP_URL', $protocol . '://' . $host);
+        } else {
+            define('APP_URL', $protocol . '://' . $host . $base_path);
+        }
     }
+}
 }
 
 define('APP_UPLOADS', APP_ROOT . '/public/images');
