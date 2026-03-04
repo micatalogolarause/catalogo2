@@ -15,27 +15,29 @@ define('APP_ROOT', dirname(dirname(__FILE__)));
 if (getenv('APP_URL')) {
     define('APP_URL', rtrim(getenv('APP_URL'), '/'));
 } elseif (getenv('VERCEL_PROJECT_PRODUCTION_URL')) {
-    // Disponible en Vercel: URL estable de producción (ej: catalogo2-khaki.vercel.app)
     define('APP_URL', 'https://' . getenv('VERCEL_PROJECT_PRODUCTION_URL'));
 } elseif (getenv('VERCEL_URL')) {
-    // VERCEL_URL es la URL del deployment específico (no usar para assets)
     define('APP_URL', 'https://' . getenv('VERCEL_URL'));
 } else {
-    // En Vercel el protocolo real llega en X-Forwarded-Proto (no en $_SERVER['HTTPS'])
-    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-               || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
-               || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on');
-    $protocol = $isHttps ? 'https' : 'http';
-    $host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 
-    // En Vercel/proxy, SCRIPT_NAME incluye el slug (/la77/index.php), lo que
-    // falsea el base_path. Si hay X-Forwarded-Proto o estamos en Vercel, usar
-    // solo scheme://host sin path (el slug va en la URL de la ruta, no en APP_URL).
-    if (getenv('VERCEL') || getenv('VERCEL_ENV') || isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-        define('APP_URL', $protocol . '://' . $host);
+    // Si el host es .vercel.app, Railway, Render u otro proxy: siempre https, sin base_path
+    $esProduccion = (
+        str_contains($host, '.vercel.app') ||
+        str_contains($host, '.railway.app') ||
+        str_contains($host, '.onrender.com') ||
+        getenv('VERCEL') ||
+        getenv('VERCEL_ENV') ||
+        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+    );
+
+    if ($esProduccion) {
+        define('APP_URL', 'https://' . $host);
     } else {
-        $base_path = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
-        $base_path = rtrim($base_path, '/');
+        // Local: detectar protocolo y base_path normalmente
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+        $protocol  = $isHttps ? 'https' : 'http';
+        $base_path = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
         if ($base_path === '' || $base_path === '/') {
             define('APP_URL', $protocol . '://' . $host);
         } else {

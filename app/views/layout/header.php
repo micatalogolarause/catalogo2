@@ -29,6 +29,8 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/estilos.css">
     <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/temas.css">
+    <link rel="icon" href="<?php echo APP_URL; ?>/public/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="<?php echo APP_URL; ?>/public/images/favicon.ico" type="image/x-icon">
 </head>
 <body class="tema-<?php $t=sanitizar($_SESSION['tenant_data']['tema']??'claro'); echo ($t==='default'?'claro':$t); ?> color-<?php $c=sanitizar($_SESSION['tenant_data']['tema_color']??'azul'); echo ($c?$c:'azul'); ?>">
     <!-- Navbar -->
