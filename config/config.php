@@ -23,11 +23,11 @@ if (getenv('APP_URL')) {
 
     // Si el host es .vercel.app, Railway, Render u otro proxy: siempre https, sin base_path
     $esProduccion = (
-        str_contains($host, '.vercel.app') ||
-        str_contains($host, '.railway.app') ||
-        str_contains($host, '.onrender.com') ||
-        getenv('VERCEL') ||
-        getenv('VERCEL_ENV') ||
+        strpos($host, '.vercel.app') !== false ||
+        strpos($host, '.railway.app') !== false ||
+        strpos($host, '.onrender.com') !== false ||
+        getenv('VERCEL') !== false ||
+        getenv('VERCEL_ENV') !== false ||
         (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
     );
 
