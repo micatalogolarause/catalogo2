@@ -2,28 +2,28 @@
 include APP_ROOT . '/app/views/admin/layout/header.php';
 ?>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-box"></i> Total Productos</h5>
-                <p class="card-text display-4"><?php echo $total_productos; ?></p>
+<div class="row g-2">
+    <div class="col-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body p-2 text-center">
+                <div class="small"><i class="bi bi-box"></i> Productos</div>
+                <div class="fw-bold fs-4"><?php echo $total_productos; ?></div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-success mb-3">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-cart-check"></i> Total Pedidos</h5>
-                <p class="card-text display-4"><?php echo $total_pedidos; ?></p>
+    <div class="col-4">
+        <div class="card text-white bg-success">
+            <div class="card-body p-2 text-center">
+                <div class="small"><i class="bi bi-cart-check"></i> Pedidos</div>
+                <div class="fw-bold fs-4"><?php echo $total_pedidos; ?></div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-info mb-3">
-            <div class="card-body">
-                <h5 class="card-title"><i class="bi bi-speedometer"></i> En pedido</h5>
-                <p class="card-text display-4"><?php echo count(array_filter($pedidos_recientes, function($p) { return $p['estado'] === 'en_pedido'; })); ?></p>
+    <div class="col-4">
+        <div class="card text-white bg-info">
+            <div class="card-body p-2 text-center">
+                <div class="small"><i class="bi bi-speedometer"></i> En pedido</div>
+                <div class="fw-bold fs-4"><?php echo count(array_filter($pedidos_recientes, function($p) { return $p['estado'] === 'en_pedido'; })); ?></div>
             </div>
         </div>
     </div>
