@@ -127,39 +127,36 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
 </div>
 
 <!-- Tarjetas de Estadísticas -->
-<div class="row g-3 mb-4">
-    <div class="col-12 col-sm-6 col-lg-3">
+<div class="row g-2 mb-3">
+    <div class="col-6 col-lg-3">
         <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0d6efd !important;">
-            <div class="card-body text-center py-3">
-                <h2 class="mb-1 text-primary fw-bold" style="font-size: 2.5rem;"><?php echo $total_pedidos; ?></h2>
-                <p class="text-muted mb-0 small">Total Pedidos</p>
+            <div class="card-body text-center py-2 px-1">
+                <div class="fw-bold text-primary" style="font-size:1.6rem;"><?php echo $total_pedidos; ?></div>
+                <div class="text-muted" style="font-size:0.72rem;">Total Pedidos</div>
             </div>
         </div>
     </div>
-    
-    <div class="col-12 col-sm-6 col-lg-3">
+    <div class="col-6 col-lg-3">
         <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0dcaf0 !important;">
-            <div class="card-body text-center py-3">
-                <h2 class="mb-1 fw-bold" style="font-size: 2.5rem; color: #0dcaf0;"><?php echo $en_preparacion; ?></h2>
-                <p class="text-muted mb-0 small">En Preparación</p>
+            <div class="card-body text-center py-2 px-1">
+                <div class="fw-bold" style="font-size:1.6rem; color:#0dcaf0;"><?php echo $en_preparacion; ?></div>
+                <div class="text-muted" style="font-size:0.72rem;">En Preparación</div>
             </div>
         </div>
     </div>
-    
-    <div class="col-12 col-sm-6 col-lg-3">
+    <div class="col-6 col-lg-3">
         <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #6c757d !important;">
-            <div class="card-body text-center py-3">
-                <h2 class="mb-1 text-secondary fw-bold" style="font-size: 2.5rem;"><?php echo $pendientes; ?></h2>
-                <p class="text-muted mb-0 small">Pendientes</p>
+            <div class="card-body text-center py-2 px-1">
+                <div class="fw-bold text-secondary" style="font-size:1.6rem;"><?php echo $pendientes; ?></div>
+                <div class="text-muted" style="font-size:0.72rem;">Pendientes</div>
             </div>
         </div>
     </div>
-    
-    <div class="col-12 col-sm-6 col-lg-3">
+    <div class="col-6 col-lg-3">
         <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #dc3545 !important;">
-            <div class="card-body text-center py-3">
-                <h2 class="mb-1 text-danger fw-bold" style="font-size: 2.5rem;"><?php echo $con_faltantes; ?></h2>
-                <p class="text-muted mb-0 small">Con Faltantes</p>
+            <div class="card-body text-center py-2 px-1">
+                <div class="fw-bold text-danger" style="font-size:1.6rem;"><?php echo $con_faltantes; ?></div>
+                <div class="text-muted" style="font-size:0.72rem;">Con Faltantes</div>
             </div>
         </div>
     </div>
