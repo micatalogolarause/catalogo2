@@ -31,22 +31,11 @@ function admin_producto_img_url($img) {
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="categoria_id" class="form-label">Categoría *</label>
-                            <select class="form-control" id="categoria_id" name="categoria_id" required onchange="cargarSubcategorias()">
+                            <select class="form-control" id="categoria_id" name="categoria_id" required>
                                 <option value="">Seleccionar...</option>
                                 <?php foreach ($categorias as $cat): ?>
                                 <option value="<?php echo $cat['id']; ?>" <?php echo $cat['id'] == $producto['categoria_id'] ? 'selected' : ''; ?>>
                                     <?php echo sanitizar($cat['nombre']); ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="subcategoria_id" class="form-label">Subcategoría *</label>
-                            <select class="form-control" id="subcategoria_id" name="subcategoria_id" required data-selected-id="<?php echo $producto['subcategoria_id']; ?>">
-                                <?php foreach ($subcategorias as $sub): ?>
-                                <option value="<?php echo $sub['id']; ?>" <?php echo $sub['id'] == $producto['subcategoria_id'] ? 'selected' : ''; ?>>
-                                    <?php echo sanitizar($sub['nombre']); ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>
@@ -97,38 +86,6 @@ function admin_producto_img_url($img) {
         </div>
     </div>
 </div>
-
-<script>
-function cargarSubcategorias() {
-    let categoriaId = document.getElementById('categoria_id').value;
-    let select = document.getElementById('subcategoria_id');
-    
-    if (!categoriaId) {
-        select.innerHTML = '<option value="">Seleccionar categoría primero</option>';
-        return;
-    }
-
-    fetch('<?php echo APP_URL; ?>/api/obtener_subcategorias.php?categoria_id=' + categoriaId)
-        .then(response => response.json())
-        .then(data => {
-            let selectedId = document.getElementById('subcategoria_id').dataset.selectedId || '<?php echo $producto['subcategoria_id']; ?>';
-            select.innerHTML = '<option value="">Seleccionar subcategoría</option>';
-            data.forEach(sub => {
-                const option = document.createElement('option');
-                option.value = sub.id;
-                option.textContent = sub.nombre;
-                if (sub.id == selectedId) option.selected = true;
-                select.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            select.innerHTML = '<option value="">Error al cargar</option>';
-        });
-}
-
-// Nota: No recargar automáticamente al abrir, para preservar la subcategoría seleccionada.
-</script>
 
 <?php
 include APP_ROOT . '/app/views/admin/layout/footer.php';

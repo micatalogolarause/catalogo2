@@ -6,14 +6,8 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
     try {
         require_once APP_ROOT . '/config/database.php';
         require_once APP_ROOT . '/app/models/CategoriaModel.php';
-        require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
         $categoriaModel = new CategoriaModel($conn);
-        $subcategoriaModel = new SubcategoriaModel($conn);
         $categorias = $categoriaModel->obtenerTodas();
-        foreach ($categorias as &$cat) {
-            $cat['subcategorias'] = $subcategoriaModel->obtenerPorCategoria($cat['id']);
-        }
-        unset($cat);
     } catch (Throwable $e) {
         $categorias = array();
     }
@@ -73,15 +67,6 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                                     <?php echo sanitizar($cat['nombre']); ?>
                                 </a>
                             </li>
-                                <?php if (!empty($cat['subcategorias'])): ?>
-                                    <?php foreach ($cat['subcategorias'] as $sub): ?>
-                                    <li>
-                                        <a class="dropdown-item ps-4" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=subcategoria&id=<?php echo $sub['id']; ?>">
-                                            <i class="bi bi-chevron-right small"></i> <?php echo sanitizar($sub['nombre']); ?>
-                                        </a>
-                                    </li>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
                             <li><hr class="dropdown-divider"></li>
                             <?php endforeach; ?>
                         </ul>
@@ -95,13 +80,6 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                         <a class="nav-link py-1 ps-3" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>">
                             <i class="bi bi-tag"></i> <?php echo sanitizar($cat['nombre']); ?>
                         </a>
-                            <?php if (!empty($cat['subcategorias'])): ?>
-                                <?php foreach ($cat['subcategorias'] as $sub): ?>
-                                <a class="nav-link py-1 ps-5 text-muted" style="font-size:0.9rem;" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=subcategoria&id=<?php echo $sub['id']; ?>">
-                                    <i class="bi bi-chevron-right small"></i> <?php echo sanitizar($sub['nombre']); ?>
-                                </a>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
                         <?php endforeach; ?>
                     </li>
                     <li class="nav-item">

@@ -4,7 +4,6 @@
  */
 class TiendaController {
     private $categoriaModel;
-    private $subcategoriaModel;
     private $productoModel;
     private $clienteModel;
     private $pedidoModel;
@@ -13,24 +12,17 @@ class TiendaController {
      * Construye array de categorías con sus subcategorías para menús desplegables
      */
     private function obtenerCategoriasConSubcategorias() {
-        $categorias = $this->categoriaModel->obtenerTodas();
-        foreach ($categorias as &$cat) {
-            $cat['subcategorias'] = $this->subcategoriaModel->obtenerPorCategoria($cat['id']);
-        }
-        unset($cat); // romper referencia
-        return $categorias;
+        return $this->categoriaModel->obtenerTodas();
     }
     
     public function __construct() {
         require_once APP_ROOT . '/app/models/CategoriaModel.php';
-        require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
         require_once APP_ROOT . '/app/models/ProductoModel.php';
         require_once APP_ROOT . '/app/models/ClienteModel.php';
         require_once APP_ROOT . '/app/models/PedidoModel.php';
         
         global $conn;
         $this->categoriaModel = new CategoriaModel($conn);
-        $this->subcategoriaModel = new SubcategoriaModel($conn);
         $this->productoModel = new ProductoModel($conn);
         $this->clienteModel = new ClienteModel($conn);
         $this->pedidoModel = new PedidoModel($conn);
@@ -65,7 +57,7 @@ class TiendaController {
     public function categoria() {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         
-        $categoria = $this->categoriaModel->obtenerConSubcategorias($id);
+        $categoria = $this->categoriaModel->obtenerPorId($id);
         if (!$categoria) {
             http_response_code(404);
             include APP_ROOT . '/app/views/404.php';
@@ -88,37 +80,6 @@ class TiendaController {
         $categorias = $this->obtenerCategoriasConSubcategorias();
         
         include APP_ROOT . '/app/views/tienda/categoria.php';
-    }
-    
-    /**
-     * Ver subcategoría con sus productos
-     */
-    public function subcategoria() {
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-        
-        $subcategoria = $this->subcategoriaModel->obtenerPorId($id);
-        if (!$subcategoria) {
-            http_response_code(404);
-            include APP_ROOT . '/app/views/404.php';
-            return;
-        }
-        
-        $productos = $this->productoModel->obtenerPorSubcategoria($id);
-        $productos = $this->aplicarFiltrosYOrdenamiento($productos);
-        
-        // Paginación
-        $total_productos = count($productos);
-        $productos_por_pagina = 24;
-        $pagina_actual = isset($_GET['pagina']) ? max(1, (int)$_GET['pagina']) : 1;
-        $total_paginas = ceil($total_productos / $productos_por_pagina);
-        $pagina_actual = min($pagina_actual, $total_paginas);
-        
-        $offset = ($pagina_actual - 1) * $productos_por_pagina;
-        $productos = array_slice($productos, $offset, $productos_por_pagina);
-        
-        $categorias = $this->obtenerCategoriasConSubcategorias();
-        
-        include APP_ROOT . '/app/views/tienda/subcategoria.php';
     }
     
     /**
@@ -196,21 +157,6 @@ class TiendaController {
      */
     private function construirUrlPaginacionCategoria($pagina, $categoriaId) {
         $url = APP_URL . '/' . sanitizar($_SESSION['tenant_slug']) . '/index.php?controller=tienda&action=categoria&id=' . $categoriaId;
-        if (isset($_GET['busqueda']) && !empty($_GET['busqueda'])) {
-            $url .= '&busqueda=' . urlencode($_GET['busqueda']);
-        }
-        if (isset($_GET['orden']) && !empty($_GET['orden'])) {
-            $url .= '&orden=' . sanitizar($_GET['orden']);
-        }
-        $url .= '&pagina=' . $pagina;
-        return $url;
-    }
-    
-    /**
-     * Construir URL de paginación para subcategoría
-     */
-    private function construirUrlPaginacionSubcategoria($pagina, $subcategoriaId) {
-        $url = APP_URL . '/' . sanitizar($_SESSION['tenant_slug']) . '/index.php?controller=tienda&action=subcategoria&id=' . $subcategoriaId;
         if (isset($_GET['busqueda']) && !empty($_GET['busqueda'])) {
             $url .= '&busqueda=' . urlencode($_GET['busqueda']);
         }

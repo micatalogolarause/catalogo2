@@ -29,25 +29,10 @@ function tienda_img_url($img) {
                             <i class="bi bi-house"></i> Todos
                         </a>
                         <?php foreach ($categorias as $cat): ?>
-                        <button class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" 
-                                type="button" data-bs-toggle="collapse" data-bs-target="#sub_<?php echo $cat['id']; ?>"
-                                aria-expanded="<?php echo $cat['id'] == $categoria['id'] ? 'true' : 'false'; ?>">
-                            <span><?php echo sanitizar($cat['nombre']); ?></span>
-                            <i class="bi bi-chevron-down"></i>
-                        </button>
-                        <div class="collapse <?php echo $cat['id'] == $categoria['id'] ? 'show' : ''; ?>" 
-                             id="sub_<?php echo $cat['id']; ?>">
-                            <div class="list-group list-group-flush">
-                                <?php if (!empty($cat['subcategorias'])): ?>
-                                    <?php foreach ($cat['subcategorias'] as $sub): ?>
-                                    <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=subcategoria&id=<?php echo $sub['id']; ?>" 
-                                       class="list-group-item list-group-item-action ps-4">
-                                       <i class="bi bi-dot"></i> <?php echo sanitizar($sub['nombre']); ?>
-                                    </a>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </div>
-                        </div>
+                        <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>" 
+                           class="list-group-item list-group-item-action <?php echo $cat['id'] == $categoria['id'] ? 'active' : ''; ?>">
+                            <i class="bi bi-tag"></i> <?php echo sanitizar($cat['nombre']); ?>
+                        </a>
                         <?php endforeach; ?>
                     </div>
                 </div>

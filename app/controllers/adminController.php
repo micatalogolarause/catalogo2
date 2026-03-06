@@ -4,7 +4,6 @@
  */
 class AdminController {
     private $categoriaModel;
-    private $subcategoriaModel;
     private $productoModel;
     private $pedidoModel;
     
@@ -16,7 +15,6 @@ class AdminController {
         }
         
         require_once APP_ROOT . '/app/models/CategoriaModel.php';
-        require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
         require_once APP_ROOT . '/app/models/ProductoModel.php';
         require_once APP_ROOT . '/app/models/PedidoModel.php';
         require_once APP_ROOT . '/config/uploads.php';
@@ -29,7 +27,6 @@ class AdminController {
         
         global $conn;
         $this->categoriaModel = new CategoriaModel($conn);
-        $this->subcategoriaModel = new SubcategoriaModel($conn);
         $this->productoModel = new ProductoModel($conn);
         $this->pedidoModel = new PedidoModel($conn);
     }
@@ -230,109 +227,6 @@ class AdminController {
     }
     
     /**
-     * Gestión de subcategorías
-     */
-    public function subcategorias() {
-        $busqueda = isset($_GET['busqueda']) ? sanitizar($_GET['busqueda']) : '';
-        
-        if (!empty($busqueda)) {
-            $sql = "SELECT sc.*, c.nombre as categoria FROM subcategorias sc 
-                    JOIN categorias c ON sc.categoria_id = c.id AND sc.tenant_id = c.tenant_id
-                    WHERE sc.tenant_id = ? AND sc.activa = 1 AND (sc.nombre LIKE ? OR sc.descripcion LIKE ? OR c.nombre LIKE ?)";
-            $termino = "%$busqueda%";
-            $subcategorias = obtenerFilasScoped($sql, "sss", array($termino, $termino, $termino));
-        } else {
-            $subcategorias = $this->subcategoriaModel->obtenerTodas();
-        }
-        
-        include APP_ROOT . '/app/views/admin/subcategorias.php';
-    }
-    
-    /**
-     * Crear subcategoría
-     */
-    public function crearSubcategoria() {
-        $categorias = $this->categoriaModel->obtenerTodas();
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $categoria_id = isset($_POST['categoria_id']) ? (int)$_POST['categoria_id'] : 0;
-            $nombre = sanitizar($_POST['nombre'] ?? '');
-            $descripcion = sanitizar($_POST['descripcion'] ?? '');
-            
-            if (!$nombre || !$categoria_id) {
-                $_SESSION['error'] = 'El nombre de la subcategoría y la categoría son requeridos';
-            } else {
-                $resultado = $this->subcategoriaModel->crear($categoria_id, $nombre, $descripcion);
-                if ($resultado) {
-                    $_SESSION['success'] = 'Subcategoría creada exitosamente';
-                    header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=subcategorias');
-                    exit;
-                } else {
-                    $_SESSION['error'] = 'Error al crear la subcategoría';
-                }
-            }
-        }
-        
-        include APP_ROOT . '/app/views/admin/crear_subcategoria.php';
-    }
-    
-    /**
-     * Editar subcategoría
-     */
-    public function editarSubcategoria() {
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-        $subcategoria = $this->subcategoriaModel->obtenerPorId($id);
-        
-        if (!$subcategoria) {
-            http_response_code(404);
-            include APP_ROOT . '/app/views/404.php';
-            return;
-        }
-        
-        $categorias = $this->categoriaModel->obtenerTodas();
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $categoria_id = isset($_POST['categoria_id']) ? (int)$_POST['categoria_id'] : 0;
-            $nombre = sanitizar($_POST['nombre'] ?? '');
-            $descripcion = sanitizar($_POST['descripcion'] ?? '');
-            
-            if (!$nombre || !$categoria_id) {
-                $_SESSION['error'] = 'El nombre de la subcategoría y la categoría son requeridos';
-            } else {
-                $resultado = $this->subcategoriaModel->actualizar($id, $nombre, $descripcion);
-                if ($resultado) {
-                    $_SESSION['success'] = 'Subcategoría actualizada exitosamente';
-                    header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=subcategorias');
-                    exit;
-                }
-            }
-        }
-        
-        include APP_ROOT . '/app/views/admin/editar_subcategoria.php';
-    }
-    
-    /**
-     * Eliminar subcategoría
-     */
-    public function eliminarSubcategoria() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            return;
-        }
-        
-        $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-        
-        if ($this->subcategoriaModel->eliminar($id)) {
-            $_SESSION['success'] = 'Subcategoría eliminada exitosamente';
-        } else {
-            $_SESSION['error'] = 'Error al eliminar la subcategoría';
-        }
-        
-        header('Location: ' . APP_URL . '/' . TENANT_SLUG . '/index.php?controller=admin&action=subcategorias');
-        exit;
-    }
-
-    /**
      * Gestión de productos
      */
     public function productos() {
@@ -340,10 +234,9 @@ class AdminController {
         $filtro_estado = isset($_GET['estado']) ? sanitizar($_GET['estado']) : '';
         
         global $conn;
-        $sql = "SELECT p.*, c.nombre as categoria, sc.nombre as subcategoria 
+        $sql = "SELECT p.*, c.nombre as categoria
                 FROM productos p 
                 JOIN categorias c ON p.categoria_id = c.id 
-                JOIN subcategorias sc ON p.subcategoria_id = sc.id 
                 WHERE p.tenant_id = ?";
         
         $params = array($_SESSION['tenant_id']);
@@ -412,7 +305,6 @@ class AdminController {
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $categoria_id = isset($_POST['categoria_id']) ? (int)$_POST['categoria_id'] : 0;
-            $subcategoria_id = isset($_POST['subcategoria_id']) ? (int)$_POST['subcategoria_id'] : 0;
             $nombre = sanitizar($_POST['nombre'] ?? '');
             $descripcion = sanitizar($_POST['descripcion'] ?? '');
             $precio = isset($_POST['precio']) ? (float)$_POST['precio'] : 0;
@@ -458,12 +350,11 @@ class AdminController {
             
             if ($uploadError) {
                 // Error de subida: no guardar el producto
-            } elseif (!$nombre || !$categoria_id || !$subcategoria_id || !$precio || !$imagen) {
+            } elseif (!$nombre || !$categoria_id || !$precio || !$imagen) {
                 $_SESSION['error'] = 'Por favor complete todos los campos obligatorios (incluyendo imagen principal)';
             } else {
                 $data = array(
                     'categoria_id' => $categoria_id,
-                    'subcategoria_id' => $subcategoria_id,
                     'nombre' => $nombre,
                     'descripcion' => $descripcion,
                     'precio' => $precio,
@@ -501,11 +392,10 @@ class AdminController {
         }
         
         $categorias = $this->categoriaModel->obtenerTodas();
-        $subcategorias = $this->subcategoriaModel->obtenerPorCategoria($producto['categoria_id']);
+        $subcategorias = array();
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $categoria_id = isset($_POST['categoria_id']) ? (int)$_POST['categoria_id'] : 0;
-            $subcategoria_id = isset($_POST['subcategoria_id']) ? (int)$_POST['subcategoria_id'] : 0;
             $nombre = sanitizar($_POST['nombre'] ?? '');
             $descripcion = sanitizar($_POST['descripcion'] ?? '');
             $precio = isset($_POST['precio']) ? (float)$_POST['precio'] : 0;
@@ -578,12 +468,11 @@ class AdminController {
             
             if ($uploadError) {
                 // Error de subida: no actualizar el producto
-            } elseif (!$nombre || !$categoria_id || !$subcategoria_id || !$precio) {
+            } elseif (!$nombre || !$categoria_id || !$precio) {
                 $_SESSION['error'] = 'Por favor complete todos los campos obligatorios';
             } else {
                 $data = array(
                     'categoria_id' => $categoria_id,
-                    'subcategoria_id' => $subcategoria_id,
                     'nombre' => $nombre,
                     'descripcion' => $descripcion,
                     'precio' => $precio,

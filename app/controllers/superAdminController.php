@@ -640,24 +640,6 @@ class SuperAdminController {
                 $categoria_ids[$cat['nombre']] = obtenerUltimoId();
             }
             
-            // 3. Crear subcategorías iniciales
-            $subcategorias = [
-                ['categoria' => 'Electrónica', 'nombre' => 'Smartphones', 'descripcion' => 'Teléfonos inteligentes'],
-                ['categoria' => 'Electrónica', 'nombre' => 'Laptops', 'descripcion' => 'Computadoras portátiles'],
-                ['categoria' => 'Ropa', 'nombre' => 'Hombre', 'descripcion' => 'Ropa para caballeros'],
-                ['categoria' => 'Ropa', 'nombre' => 'Mujer', 'descripcion' => 'Ropa para damas'],
-                ['categoria' => 'Hogar', 'nombre' => 'Cocina', 'descripcion' => 'Electrodomésticos de cocina'],
-                ['categoria' => 'Hogar', 'nombre' => 'Dormitorio', 'descripcion' => 'Muebles de dormitorio']
-            ];
-            
-            foreach ($subcategorias as $subcat) {
-                $categoria_id = $categoria_ids[$subcat['categoria']] ?? null;
-                if (!$categoria_id) continue;
-                
-                $sql = "INSERT INTO subcategorias (tenant_id, categoria_id, nombre, descripcion, activa, fecha_creacion, fecha_actualizacion) VALUES (?, ?, ?, ?, 1, NOW(), NOW())";
-                ejecutarConsulta($sql, "iiss", [$tenant_id, $categoria_id, $subcat['nombre'], $subcat['descripcion']]);
-            }
-            
             // 4. Crear usuario admin del tenant
             if (!empty($data['admin_email']) && !empty($data['admin_usuario'])) {
                 $password_hash = hash('sha256', $data['admin_password'] ?? 'admin123');

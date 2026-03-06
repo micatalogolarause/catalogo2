@@ -47,9 +47,6 @@ function tienda_img_url($img) {
                 <p class="text-muted">
                     <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=categoria&id=<?php echo $producto['categoria_id']; ?>">
                         <?php echo sanitizar($producto['categoria']); ?>
-                    </a> / 
-                    <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=subcategoria&id=<?php echo $producto['subcategoria_id']; ?>">
-                        <?php echo sanitizar($producto['subcategoria']); ?>
                     </a>
                 </p>
 
@@ -93,7 +90,7 @@ function tienda_img_url($img) {
             require_once 'app/models/ProductoModel.php';
             global $conn;
             $productoModel = new ProductoModel($conn);
-            $relacionados = $productoModel->obtenerPorSubcategoria($producto['subcategoria_id']);
+            $relacionados = $productoModel->obtenerPorCategoria($producto['categoria_id']);
             
             foreach ($relacionados as $prod):
                 if ($prod['id'] === $producto['id']) continue;

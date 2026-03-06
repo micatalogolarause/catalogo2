@@ -27,18 +27,9 @@ function tienda_img_url($img) {
                     <select class="form-select" id="categoriaSelect" onchange="cambiarCategoria(this.value)">
                         <option value="">📂 Todas las categorías</option>
                         <?php foreach ($categorias as $cat): ?>
-                        <optgroup label="<?php echo sanitizar($cat['nombre']); ?>">
-                            <option value="categoria_<?php echo $cat['id']; ?>">
-                                ▶ <?php echo sanitizar($cat['nombre']); ?>
-                            </option>
-                            <?php if (!empty($cat['subcategorias'])): ?>
-                                <?php foreach ($cat['subcategorias'] as $sub): ?>
-                                <option value="subcategoria_<?php echo $sub['id']; ?>">
-                                    &nbsp;&nbsp;&nbsp;└ <?php echo sanitizar($sub['nombre']); ?>
-                                </option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </optgroup>
+                        <option value="categoria_<?php echo $cat['id']; ?>">
+                            <?php echo sanitizar($cat['nombre']); ?>
+                        </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -252,8 +243,6 @@ function cambiarCategoria(valor) {
     
     if (tipo === 'categoria') {
         window.location = '<?php echo APP_URL; ?>/index.php?controller=tienda&action=categoria&id=' + id;
-    } else if (tipo === 'subcategoria') {
-        window.location = '<?php echo APP_URL; ?>/index.php?controller=tienda&action=subcategoria&id=' + id;
     }
 }
 

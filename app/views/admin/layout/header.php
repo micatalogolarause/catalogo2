@@ -74,11 +74,6 @@ if (!isset($_SESSION['usuario_id'])) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=subcategorias">
-                            <i class="bi bi-tag"></i> Subcategorías
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=productos">
                             <i class="bi bi-box"></i> Productos
                         </a>
@@ -141,11 +136,6 @@ if (!isset($_SESSION['usuario_id'])) {
                         <li class="nav-item">
                             <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=categorias">
                                 <i class="bi bi-tags"></i> Categorías
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=subcategorias">
-                                <i class="bi bi-tag"></i> Subcategorías
                             </a>
                         </li>
                         <li class="nav-item">

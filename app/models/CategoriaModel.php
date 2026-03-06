@@ -66,12 +66,7 @@ class CategoriaModel {
     ++ * Filtrado por tenant_id actual
      */
     public function obtenerConSubcategorias($id) {
-        $categoria = $this->obtenerPorId($id);
-        if ($categoria) {
-            $sql = "SELECT * FROM subcategorias WHERE tenant_id = ? AND categoria_id = ? AND activa = 1 ORDER BY nombre";
-            $categoria['subcategorias'] = obtenerFilasScoped($sql, "i", array($id));
-        }
-        return $categoria;
+        return $this->obtenerPorId($id);
     }
 }
 ?>

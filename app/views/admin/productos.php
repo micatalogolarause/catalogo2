@@ -76,7 +76,6 @@ function admin_producto_img_url($img) {
                 <th>Imagen</th>
                 <th>Nombre</th>
                 <th>Categoría</th>
-                <th>Subcategoría</th>
                 <th>Precio</th>
                 <th>Stock</th>
                 <th>Valor Total</th>
@@ -87,7 +86,7 @@ function admin_producto_img_url($img) {
         <tbody>
             <?php if (empty($productos)): ?>
             <tr>
-                <td colspan="10" class="text-center text-muted py-4">No hay productos registrados</td>
+                <td colspan="9" class="text-center text-muted py-4">No hay productos registrados</td>
             </tr>
             <?php else: ?>
                 <?php foreach ($productos as $prod): ?>
@@ -126,7 +125,6 @@ function admin_producto_img_url($img) {
                     </td>
                     <td><strong><?php echo sanitizar($prod['nombre']); ?></strong></td>
                     <td><?php echo sanitizar($prod['categoria']); ?></td>
-                    <td><?php echo sanitizar($prod['subcategoria']); ?></td>
                     <td class="text-success">$<?php echo number_format($prod['precio'], 2); ?></td>
                     <td>
                         <span class="badge bg-<?php echo $prod['stock'] > 0 ? 'success' : 'danger'; ?>">

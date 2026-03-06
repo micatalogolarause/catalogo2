@@ -4,14 +4,8 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
     try {
         require_once APP_ROOT . '/config/database.php';
         require_once APP_ROOT . '/app/models/CategoriaModel.php';
-        require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
         $categoriaModel = new CategoriaModel($conn);
-        $subcategoriaModel = new SubcategoriaModel($conn);
         $categorias = $categoriaModel->obtenerTodas();
-        foreach ($categorias as &$cat) {
-            $cat['subcategorias'] = $subcategoriaModel->obtenerPorCategoria($cat['id']);
-        }
-        unset($cat);
     } catch (Throwable $e) {
         $categorias = array();
     }

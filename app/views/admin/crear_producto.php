@@ -17,18 +17,11 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="categoria_id" class="form-label">Categoría *</label>
-                            <select class="form-control" id="categoria_id" name="categoria_id" required onchange="cargarSubcategorias()">
+                            <select class="form-control" id="categoria_id" name="categoria_id" required>
                                 <option value="">Seleccionar...</option>
                                 <?php foreach ($categorias as $cat): ?>
                                 <option value="<?php echo $cat['id']; ?>"><?php echo sanitizar($cat['nombre']); ?></option>
                                 <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="subcategoria_id" class="form-label">Subcategoría *</label>
-                            <select class="form-control" id="subcategoria_id" name="subcategoria_id" required>
-                                <option value="">Seleccionar categoría primero</option>
                             </select>
                         </div>
                     </div>
@@ -71,34 +64,6 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
         </div>
     </div>
 </div>
-
-<script>
-function cargarSubcategorias() {
-    let categoriaId = document.getElementById('categoria_id').value;
-    let select = document.getElementById('subcategoria_id');
-    
-    if (!categoriaId) {
-        select.innerHTML = '<option value="">Seleccionar categoría primero</option>';
-        return;
-    }
-
-    fetch('<?php echo APP_URL; ?>/api/obtener_subcategorias.php?categoria_id=' + categoriaId)
-        .then(response => response.json())
-        .then(data => {
-            select.innerHTML = '<option value="">Seleccionar subcategoría</option>';
-            data.forEach(sub => {
-                const option = document.createElement('option');
-                option.value = sub.id;
-                option.textContent = sub.nombre;
-                select.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            select.innerHTML = '<option value="">Error al cargar</option>';
-        });
-}
-</script>
 
 <?php
 include APP_ROOT . '/app/views/admin/layout/footer.php';

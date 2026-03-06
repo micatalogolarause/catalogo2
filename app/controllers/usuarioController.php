@@ -87,11 +87,6 @@ class UsuarioController {
         global $conn;
         $categoriaModel = new CategoriaModel($conn);
         $categorias = $categoriaModel->obtenerTodas();
-        foreach ($categorias as &$cat) {
-            require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
-            $subcategoriaModel = new SubcategoriaModel($conn);
-            $cat['subcategorias'] = $subcategoriaModel->obtenerPorCategoria($cat['id']);
-        }
         
         include APP_ROOT . '/app/views/tienda/registro.php';
     }
@@ -220,11 +215,6 @@ class UsuarioController {
         require_once APP_ROOT . '/app/models/CategoriaModel.php';
         $categoriaModel = new CategoriaModel($conn);
         $categorias = $categoriaModel->obtenerTodas();
-        foreach ($categorias as &$cat) {
-            require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
-            $subcategoriaModel = new SubcategoriaModel($conn);
-            $cat['subcategorias'] = $subcategoriaModel->obtenerPorCategoria($cat['id']);
-        }
         
         include APP_ROOT . '/app/views/tienda/perfil.php';
     }
@@ -251,13 +241,8 @@ class UsuarioController {
 
         // Obtener categorías para el menú
         require_once APP_ROOT . '/app/models/CategoriaModel.php';
-        require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
         $categoriaModel = new CategoriaModel($conn);
-        $subcategoriaModel = new SubcategoriaModel($conn);
         $categorias = $categoriaModel->obtenerTodas();
-        foreach ($categorias as &$cat) {
-            $cat['subcategorias'] = $subcategoriaModel->obtenerPorCategoria($cat['id']);
-        }
 
         include APP_ROOT . '/app/views/tienda/mis_pedidos.php';
     }
@@ -300,13 +285,8 @@ class UsuarioController {
 
         // Obtener categorías para el menú
         require_once APP_ROOT . '/app/models/CategoriaModel.php';
-        require_once APP_ROOT . '/app/models/SubcategoriaModel.php';
         $categoriaModel = new CategoriaModel($conn);
-        $subcategoriaModel = new SubcategoriaModel($conn);
         $categorias = $categoriaModel->obtenerTodas();
-        foreach ($categorias as &$cat) {
-            $cat['subcategorias'] = $subcategoriaModel->obtenerPorCategoria($cat['id']);
-        }
 
         include APP_ROOT . '/app/views/tienda/ver_pedido.php';
     }
