@@ -152,14 +152,14 @@ class TenantResolver {
         $segments = explode('/', $path);
         $first_segment = $segments[0];
         
-        // Validar que no sea un controlador conocido (para evitar conflictos)
+        // Validar que no sea un controlador conocido (comparación sin importar mayúsculas)
         $known_controllers = ['admin', 'tienda', 'auth', 'api', 'index.php'];
-        if (in_array($first_segment, $known_controllers)) {
+        if (in_array(strtolower($first_segment), $known_controllers)) {
             return null;
         }
         
-        // Validar formato de slug (solo letras, números, guiones)
-        if (preg_match('/^[a-z0-9\-]+$/', $first_segment)) {
+        // Validar formato de slug (letras, números, guiones - mayúsculas y minúsculas)
+        if (preg_match('/^[a-zA-Z0-9\-]+$/', $first_segment)) {
             return $first_segment;
         }
         
@@ -455,8 +455,8 @@ class TenantResolver {
      * @return string
      */
     private static function sanitizeSlug($slug) {
-        $slug = strtolower(trim($slug));
-        $slug = preg_replace('/[^a-z0-9\-]/', '', $slug);
+        $slug = trim($slug);
+        $slug = preg_replace('/[^a-zA-Z0-9\-]/', '', $slug);
         return $slug;
     }
     
