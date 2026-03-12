@@ -13,7 +13,30 @@ define('APP_ROOT', dirname(dirname(__FILE__)));
 //   3) VERCEL_URL (URL única del deployment — cambia con cada deploy, usar solo como fallback)
 //   4) auto-detección local (XAMPP / IIS)
 if (getenv('APP_URL')) {
-    define('APP_URL', rtrim(getenv('APP_URL'), '/'));
+    $configuredAppUrl = rtrim(getenv('APP_URL'), '/');
+    $parsedConfiguredUrl = parse_url($configuredAppUrl);
+
+    // Evitar APP_URL con path de tenant en producción (ej: .../JYM) para no duplicar /JYM/JYM
+    if (
+        $parsedConfiguredUrl !== false &&
+        isset($parsedConfiguredUrl['scheme']) &&
+        isset($parsedConfiguredUrl['host']) &&
+        (
+            strpos($parsedConfiguredUrl['host'], '.vercel.app') !== false ||
+            strpos($parsedConfiguredUrl['host'], '.railway.app') !== false ||
+            strpos($parsedConfiguredUrl['host'], '.onrender.com') !== false ||
+            getenv('VERCEL') !== false ||
+            getenv('VERCEL_ENV') !== false
+        )
+    ) {
+        $origin = $parsedConfiguredUrl['scheme'] . '://' . $parsedConfiguredUrl['host'];
+        if (isset($parsedConfiguredUrl['port'])) {
+            $origin .= ':' . $parsedConfiguredUrl['port'];
+        }
+        define('APP_URL', $origin);
+    } else {
+        define('APP_URL', $configuredAppUrl);
+    }
 } elseif (getenv('VERCEL_PROJECT_PRODUCTION_URL')) {
     define('APP_URL', 'https://' . getenv('VERCEL_PROJECT_PRODUCTION_URL'));
 } elseif (getenv('VERCEL_URL')) {
@@ -44,6 +67,37 @@ if (getenv('APP_URL')) {
             define('APP_URL', $protocol . '://' . $host . $base_path);
         }
     }
+}
+
+/**
+ * URL base del tenant sin duplicar slug
+ * - Si APP_URL ya termina en /{slug}, lo reutiliza tal cual
+ * - Si no, agrega /{slug}
+ */
+function tenant_base_url($slug = null) {
+    $base = rtrim(APP_URL, '/');
+
+    if ($slug === null || $slug === '') {
+        if (defined('TENANT_SLUG') && TENANT_SLUG !== '') {
+            $slug = TENANT_SLUG;
+        } elseif (!empty($_SESSION['tenant_slug'])) {
+            $slug = $_SESSION['tenant_slug'];
+        }
+    }
+
+    $slug = trim((string)$slug, '/');
+    if ($slug === '') {
+        return $base;
+    }
+
+    $basePath = parse_url($base, PHP_URL_PATH);
+    $basePath = $basePath ? rtrim($basePath, '/') : '';
+
+    if ($basePath !== '' && preg_match('#/' . preg_quote($slug, '#') . '$#i', $basePath)) {
+        return $base;
+    }
+
+    return $base . '/' . $slug;
 }
 
 define('APP_UPLOADS', APP_ROOT . '/public/images');

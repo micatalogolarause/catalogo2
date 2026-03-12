@@ -29,7 +29,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-items-center" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>">
+            <a class="navbar-brand d-flex align-items-center" href="<?php echo tenant_base_url(); ?>">
                 <?php
                 $logoVal = $_SESSION['tenant_data']['logo'] ?? '';
                 if (!empty($logoVal)) {
@@ -51,7 +51,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>">
+                        <a class="nav-link" href="<?php echo tenant_base_url(); ?>">
                             <i class="bi bi-house"></i> Inicio
                         </a>
                     </li>
@@ -63,7 +63,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="categoriasDropdown">
                             <?php foreach ($categorias as $cat): ?>
                             <li>
-                                <a class="dropdown-item fw-semibold" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>">
+                                <a class="dropdown-item fw-semibold" href="<?php echo tenant_base_url(); ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>">
                                     <?php echo sanitizar($cat['nombre']); ?>
                                 </a>
                             </li>
@@ -77,13 +77,13 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                             <i class="bi bi-list"></i> Categorías
                         </span>
                         <?php foreach ($categorias as $cat): ?>
-                        <a class="nav-link py-1 ps-3" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>">
+                        <a class="nav-link py-1 ps-3" href="<?php echo tenant_base_url(); ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>">
                             <i class="bi bi-tag"></i> <?php echo sanitizar($cat['nombre']); ?>
                         </a>
                         <?php endforeach; ?>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link position-relative" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=carrito">
+                        <a class="nav-link position-relative" href="<?php echo tenant_base_url(); ?>/index.php?controller=tienda&action=carrito">
                             <i class="bi bi-bag" style="font-size: 1.3rem;"></i> Carrito
                             <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="carrito-badge" style="display:none;">0</span>
                         </a>
@@ -94,14 +94,14 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                             <i class="bi bi-person-circle"></i> <?php echo sanitizar($_SESSION['cliente_nombre']); ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=usuario&action=perfil">
+                            <li><a class="dropdown-item" href="<?php echo tenant_base_url(); ?>/index.php?controller=usuario&action=perfil">
                                 <i class="bi bi-person"></i> Mi Perfil
                             </a></li>
-                            <li><a class="dropdown-item" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=usuario&action=misPedidos">
+                            <li><a class="dropdown-item" href="<?php echo tenant_base_url(); ?>/index.php?controller=usuario&action=misPedidos">
                                 <i class="bi bi-receipt"></i> Mis Pedidos
                             </a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=usuario&action=logout">
+                            <li><a class="dropdown-item text-danger" href="<?php echo tenant_base_url(); ?>/index.php?controller=usuario&action=logout">
                                 <i class="bi bi-door-open"></i> Cerrar Sesión
                             </a></li>
                         </ul>
@@ -110,7 +110,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                     <!-- Login/registro ocultos -->
                     <?php endif; ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo APP_URL; ?>/<?php echo sanitizar($_SESSION['tenant_slug'] ?? ''); ?>/index.php?controller=admin&action=login">
+                        <a class="nav-link" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=login">
                             <i class="bi bi-gear"></i> Admin
                         </a>
                     </li>

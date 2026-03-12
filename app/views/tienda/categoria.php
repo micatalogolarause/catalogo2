@@ -18,7 +18,31 @@ function tienda_img_url($img) {
 
 <div class="container-fluid px-4">
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-12 d-lg-none mb-3">
+            <button class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#mobileCategorias" aria-expanded="false" aria-controls="mobileCategorias">
+                <span><i class="bi bi-funnel"></i> Categorias</span>
+                <i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="collapse mt-2" id="mobileCategorias">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            <a href="<?php echo APP_URL; ?>" class="list-group-item list-group-item-action">
+                                <i class="bi bi-house"></i> Todos
+                            </a>
+                            <?php foreach ($categorias as $cat): ?>
+                            <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>"
+                               class="list-group-item list-group-item-action <?php echo $cat['id'] == $categoria['id'] ? 'active' : ''; ?>">
+                                <i class="bi bi-tag"></i> <?php echo sanitizar($cat['nombre']); ?>
+                            </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 d-none d-lg-block">
             <div class="card sticky-top" style="top: 130px;">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-funnel"></i> Categorías</h5>

@@ -62,11 +62,11 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
 
     <!-- Barra flotante móvil - Carrito y acceso rápido -->
     <div class="mobile-bottom-nav d-md-none">
-        <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>" class="mobile-nav-item" title="Inicio">
+        <a href="<?php echo tenant_base_url(); ?>" class="mobile-nav-item" title="Inicio">
             <i class="bi bi-house"></i>
             <span>Inicio</span>
         </a>
-        <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=tienda&action=carrito" class="mobile-nav-item cart-item" title="Carrito">
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=tienda&action=carrito" class="mobile-nav-item cart-item" title="Carrito">
             <div style="position: relative; display: inline-block;">
                 <i class="bi bi-bag-fill"></i>
                 <span class="badge-mobile" id="carrito-badge-mobile" style="display:none;">0</span>
@@ -74,16 +74,16 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
             <span>Carrito</span>
         </a>
         <?php if (isset($_SESSION['cliente_id'])): ?>
-        <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=usuario&action=misPedidos" class="mobile-nav-item" title="Pedidos">
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=usuario&action=misPedidos" class="mobile-nav-item" title="Pedidos">
             <i class="bi bi-receipt"></i>
             <span>Pedidos</span>
         </a>
-        <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=usuario&action=perfil" class="mobile-nav-item" title="Perfil">
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=usuario&action=perfil" class="mobile-nav-item" title="Perfil">
             <i class="bi bi-person"></i>
             <span>Perfil</span>
         </a>
         <?php else: ?>
-        <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>/index.php?controller=usuario&action=login" class="mobile-nav-item" title="Iniciar sesión">
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=usuario&action=login" class="mobile-nav-item" title="Iniciar sesión">
             <i class="bi bi-door-open"></i>
             <span>Sesión</span>
         </a>
@@ -92,7 +92,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        var APP_BASE_URL = '<?php echo defined('TENANT_SLUG') && TENANT_SLUG ? rtrim(APP_URL, '/') . '/' . TENANT_SLUG : rtrim(APP_URL, '/'); ?>';
+        var APP_BASE_URL = '<?php echo tenant_base_url(); ?>';
         var TENANT_SLUG  = '<?php echo defined('TENANT_SLUG') ? TENANT_SLUG : ''; ?>';
     </script>
     <script src="<?php echo APP_URL; ?>/public/js/main.js?v=<?php echo filemtime(APP_ROOT . '/public/js/main.js'); ?>"></script>
