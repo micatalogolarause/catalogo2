@@ -4,10 +4,10 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Nuevo Cliente</h3>
-    <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=clientes" class="btn btn-secondary">Volver</a>
+    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=clientes" class="btn btn-secondary">Volver</a>
 </div>
 
-<form method="POST" action="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=guardarCliente">
+<form method="POST" action="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=guardarCliente">
     <div class="row">
         <div class="col-md-6 mb-3">
             <label class="form-label">Usuario</label>

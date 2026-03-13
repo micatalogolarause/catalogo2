@@ -1,8 +1,8 @@
-ï»¿<?php
+<?php
 if (!isset($_SESSION['usuario_id'])) {
     $tenantSlug = $_SESSION['tenant_slug'] ?? (defined('TENANT_SLUG') ? TENANT_SLUG : '');
     if (!empty($tenantSlug)) {
-        header('Location: ' . APP_URL . '/' . $tenantSlug . '/index.php?controller=admin&action=login');
+        header('Location: ' . tenant_base_url($tenantSlug) . '/index.php?controller=admin&action=login');
     } else {
         header('Location: ' . APP_URL . '/index.php?controller=admin&action=login');
     }
@@ -21,7 +21,7 @@ if (!isset($_SESSION['usuario_id'])) {
     <link rel="icon" href="data:,">
 </head>
 <body>
-    <!-- Navbar para mÃ³vil -->
+    <!-- Navbar para móvil -->
     <nav class="navbar navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
@@ -59,38 +59,38 @@ if (!isset($_SESSION['usuario_id'])) {
 
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=inicio">
+                        <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=inicio">
                             <i class="bi bi-graph-up"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=clientes">
+                        <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=clientes">
                             <i class="bi bi-people"></i> Clientes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=categorias">
-                            <i class="bi bi-tags"></i> CategorÃ­as
+                        <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=categorias">
+                            <i class="bi bi-tags"></i> Categorías
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=productos">
+                        <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=productos">
                             <i class="bi bi-box"></i> Productos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=pedidos">
+                        <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=pedidos">
                             <i class="bi bi-cart-check"></i> Pedidos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=facturas">
+                        <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=facturas">
                             <i class="bi bi-receipt"></i> Cuentas de Cobro
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=configuracion">
-                            <i class="bi bi-gear-fill"></i> ConfiguraciÃ³n
+                        <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=configuracion">
+                            <i class="bi bi-gear-fill"></i> Configuración
                         </a>
                     </li>
                 </ul>
@@ -98,14 +98,14 @@ if (!isset($_SESSION['usuario_id'])) {
                 <hr class="bg-secondary my-3">
 
                 <div class="list-group list-group-flush">
-                    <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=miPerfil" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
+                    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=miPerfil" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
                         <i class="bi bi-person-circle"></i> Mi Perfil
                     </a>
-                    <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
+                    <a href="<?php echo tenant_base_url(); ?>" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
                         <i class="bi bi-box-arrow-left"></i> Ir a la Tienda
                     </a>
-                    <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger border-secondary">
-                        <i class="bi bi-door-open"></i> Cerrar SesiÃ³n
+                    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger border-secondary">
+                        <i class="bi bi-door-open"></i> Cerrar Sesión
                     </a>
                 </div>
             </div>
@@ -124,38 +124,38 @@ if (!isset($_SESSION['usuario_id'])) {
 
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=inicio">
+                            <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=inicio">
                                 <i class="bi bi-graph-up"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=clientes">
+                            <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=clientes">
                                 <i class="bi bi-people"></i> Clientes
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=categorias">
-                                <i class="bi bi-tags"></i> CategorÃ­as
+                            <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=categorias">
+                                <i class="bi bi-tags"></i> Categorías
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=productos">
+                            <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=productos">
                                 <i class="bi bi-box"></i> Productos
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=pedidos">
+                            <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=pedidos">
                                 <i class="bi bi-cart-check"></i> Pedidos
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=facturas">
+                            <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=facturas">
                                 <i class="bi bi-receipt"></i> Cuentas de Cobro
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=configuracion">
-                                <i class="bi bi-gear-fill"></i> ConfiguraciÃ³n
+                            <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=configuracion">
+                                <i class="bi bi-gear-fill"></i> Configuración
                             </a>
                         </li>
                     </ul>
@@ -163,14 +163,14 @@ if (!isset($_SESSION['usuario_id'])) {
                     <hr class="bg-secondary">
 
                     <div class="list-group">
-                        <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=miPerfil" class="list-group-item list-group-item-action bg-dark text-white">
+                        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=miPerfil" class="list-group-item list-group-item-action bg-dark text-white">
                             <i class="bi bi-person-circle"></i> Mi Perfil
                         </a>
-                        <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>" class="list-group-item list-group-item-action bg-dark text-white">
+                        <a href="<?php echo tenant_base_url(); ?>" class="list-group-item list-group-item-action bg-dark text-white">
                             <i class="bi bi-box-arrow-left"></i> Ir a la Tienda
                         </a>
-                        <a href="<?php echo APP_URL . '/' . TENANT_SLUG; ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger">
-                            <i class="bi bi-door-open"></i> Cerrar SesiÃ³n
+                        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger">
+                            <i class="bi bi-door-open"></i> Cerrar Sesión
                         </a>
                     </div>
                 </div>
@@ -182,7 +182,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Panel de Control</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <small class="text-muted d-none d-md-inline">Ãšltima actualizaciÃ³n: <?php echo date('d/m/Y H:i'); ?></small>
+                        <small class="text-muted d-none d-md-inline">Última actualización: <?php echo date('d/m/Y H:i'); ?></small>
                     </div>
                 </div>
 
@@ -200,3 +200,4 @@ if (!isset($_SESSION['usuario_id'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <?php unset($_SESSION['error']); endif; ?>
+
