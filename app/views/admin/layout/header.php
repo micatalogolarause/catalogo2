@@ -21,7 +21,7 @@ if (!isset($_SESSION['usuario_id'])) {
     <link rel="icon" href="data:,">
 </head>
 <body>
-    <!-- Navbar para móvil -->
+    <!-- Navbar para movil -->
     <nav class="navbar navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
@@ -70,7 +70,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=categorias">
-                            <i class="bi bi-tags"></i> Categorías
+                            <i class="bi bi-tags"></i> Categorias
                         </a>
                     </li>
                     <li class="nav-item">
@@ -90,7 +90,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=configuracion">
-                            <i class="bi bi-gear-fill"></i> Configuración
+                            <i class="bi bi-gear-fill"></i> Configuracion
                         </a>
                     </li>
                 </ul>
@@ -105,7 +105,7 @@ if (!isset($_SESSION['usuario_id'])) {
                         <i class="bi bi-box-arrow-left"></i> Ir a la Tienda
                     </a>
                     <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger border-secondary">
-                        <i class="bi bi-door-open"></i> Cerrar Sesión
+                        <i class="bi bi-door-open"></i> Cerrar Sesion
                     </a>
                 </div>
             </div>
@@ -135,7 +135,7 @@ if (!isset($_SESSION['usuario_id'])) {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=categorias">
-                                <i class="bi bi-tags"></i> Categorías
+                                <i class="bi bi-tags"></i> Categorias
                             </a>
                         </li>
                         <li class="nav-item">
@@ -155,7 +155,7 @@ if (!isset($_SESSION['usuario_id'])) {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=configuracion">
-                                <i class="bi bi-gear-fill"></i> Configuración
+                                <i class="bi bi-gear-fill"></i> Configuracion
                             </a>
                         </li>
                     </ul>
@@ -170,7 +170,7 @@ if (!isset($_SESSION['usuario_id'])) {
                             <i class="bi bi-box-arrow-left"></i> Ir a la Tienda
                         </a>
                         <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=logout" class="list-group-item list-group-item-action bg-dark text-danger">
-                            <i class="bi bi-door-open"></i> Cerrar Sesión
+                            <i class="bi bi-door-open"></i> Cerrar Sesion
                         </a>
                     </div>
                 </div>
@@ -182,7 +182,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Panel de Control</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <small class="text-muted d-none d-md-inline">Última actualización: <?php echo date('d/m/Y H:i'); ?></small>
+                        <small class="text-muted d-none d-md-inline">Ultima actualizacion: <?php echo date('d/m/Y H:i'); ?></small>
                     </div>
                 </div>
 
