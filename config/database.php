@@ -34,6 +34,9 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
+
+    // Refuerzo de encoding para evitar pérdida de caracteres especiales.
+    $pdo->exec("SET client_encoding TO 'UTF8'");
 } catch (PDOException $e) {
     error_log("Error de conexión Supabase: " . $e->getMessage());
     die("Error en la conexión a la base de datos. Por favor intente más tarde.");

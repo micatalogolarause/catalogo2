@@ -229,7 +229,21 @@ restore_session_from_auth_cookie();
 
 // Función de sanitización
 function sanitizar($texto) {
-    return htmlspecialchars($texto ?? '', ENT_QUOTES, 'UTF-8');
+    $texto = (string)($texto ?? '');
+
+    // Normalizar entrada a UTF-8 para conservar tildes, eñes y otros caracteres especiales.
+    if (function_exists('mb_check_encoding') && !mb_check_encoding($texto, 'UTF-8')) {
+        if (function_exists('mb_convert_encoding')) {
+            $texto = mb_convert_encoding($texto, 'UTF-8', 'UTF-8, ISO-8859-1, Windows-1252');
+        } elseif (function_exists('iconv')) {
+            $convertido = @iconv('Windows-1252', 'UTF-8//IGNORE', $texto);
+            if ($convertido !== false) {
+                $texto = $convertido;
+            }
+        }
+    }
+
+    return htmlspecialchars($texto, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 // Función para validar email
