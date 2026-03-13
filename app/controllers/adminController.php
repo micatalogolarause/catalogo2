@@ -1557,5 +1557,3 @@ class AdminController {
     }
 }
 
-?>
-
