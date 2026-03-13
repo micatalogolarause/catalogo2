@@ -1,23 +1,11 @@
-<?php
-// Fallback en el footer: asegurar $categorias disponible
-if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
-    try {
-        require_once APP_ROOT . '/config/database.php';
-        require_once APP_ROOT . '/app/models/CategoriaModel.php';
-        $categoriaModel = new CategoriaModel($conn);
-        $categorias = $categoriaModel->obtenerTodas();
-    } catch (Throwable $e) {
-        $categorias = array();
-    }
-}
-?>
+<?php ?>
     </main>
 
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="row mb-4">
-                <div class="col-md-4 mb-4">
+                <div class="col-md-6 mb-4">
                     <h5 style="font-weight: 700; margin-bottom: 15px;">
                         <i class="bi bi-shop"></i> Tienda Virtual
                     </h5>
@@ -25,22 +13,7 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                         Tu tienda de confianza para comprar en línea. Productos de calidad garantizada con envío rápido y seguro.
                     </p>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <h5 style="font-weight: 700; margin-bottom: 15px;">
-                        <i class="bi bi-list"></i> Categorías
-                    </h5>
-                    <ul class="list-unstyled">
-                        <?php foreach ($categorias as $cat): ?>
-                        <li style="margin-bottom: 8px;">
-                            <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>" 
-                               style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">
-                                <i class="bi bi-chevron-right"></i> <?php echo sanitizar($cat['nombre']); ?>
-                            </a>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-                <div class="col-md-4 mb-4">
+                <div class="col-md-6 mb-4">
                     <h5 style="font-weight: 700; margin-bottom: 15px;">
                         <i class="bi bi-telephone"></i> Contacto
                     </h5>
