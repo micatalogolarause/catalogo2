@@ -94,6 +94,11 @@ class TiendaController {
             include APP_ROOT . '/app/views/404.php';
             return;
         }
+
+        $relacionados = $this->productoModel->obtenerPorCategoria($producto['categoria_id']);
+        $relacionados = array_values(array_filter($relacionados, function($p) use ($producto) {
+            return (int)($p['id'] ?? 0) !== (int)$producto['id'];
+        }));
         
         $categorias = $this->obtenerCategoriasConSubcategorias();
         
