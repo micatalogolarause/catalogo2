@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     actualizarCarroBadge();
     marcarProductosEnCarrito();
     inicializarVistaProductos();
+    inicializarBusquedaEnVivo();
     
     // Delegar click en botones agregar al carrito
     document.addEventListener('click', function(e) {
@@ -185,4 +186,62 @@ function aplicarVistaProductos(vista, toggles, containers) {
             btn.classList.toggle('btn-outline-secondary', !activa);
         });
     });
+}
+
+function normalizarBusquedaTexto(texto) {
+    return (texto || '')
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+}
+
+function inicializarBusquedaEnVivo() {
+    const inputBusqueda = document.querySelector('input[name="busqueda"]');
+    const contenedor = document.querySelector('.products-container');
+
+    if (!inputBusqueda || !contenedor) {
+        return;
+    }
+
+    const items = Array.from(contenedor.querySelectorAll('.product-col'));
+    if (!items.length) {
+        return;
+    }
+
+    const resumen = document.querySelector('.text-muted.mb-2 small');
+    const totalOriginal = items.length;
+
+    const alertaSinResultados = document.createElement('div');
+    alertaSinResultados.className = 'col-12';
+    alertaSinResultados.style.display = 'none';
+    alertaSinResultados.innerHTML = '<div class="alert alert-warning" style="padding: 24px; text-align: center; border-radius: 12px;"><h5 class="mb-2"><i class="bi bi-search"></i> Sin coincidencias</h5><p class="mb-0">No se encontraron productos con ese criterio.</p></div>';
+    contenedor.appendChild(alertaSinResultados);
+
+    function aplicarFiltroEnVivo() {
+        const criterio = normalizarBusquedaTexto(inputBusqueda.value);
+        let visibles = 0;
+
+        items.forEach((item) => {
+            const titulo = item.querySelector('.product-title')?.textContent || '';
+            const descripcion = item.querySelector('.product-description')?.textContent || '';
+            const texto = normalizarBusquedaTexto(titulo + ' ' + descripcion);
+            const coincide = !criterio || texto.includes(criterio);
+
+            item.style.display = coincide ? '' : 'none';
+            if (coincide) visibles++;
+        });
+
+        alertaSinResultados.style.display = visibles === 0 ? '' : 'none';
+
+        if (resumen) {
+            resumen.innerHTML = 'Se encontraron <strong>' + visibles + '</strong> producto(s)';
+            if (!criterio && visibles === totalOriginal) {
+                resumen.innerHTML = 'Se encontraron <strong>' + totalOriginal + '</strong> producto(s)';
+            }
+        }
+    }
+
+    inputBusqueda.addEventListener('input', aplicarFiltroEnVivo);
 }
