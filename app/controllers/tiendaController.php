@@ -89,7 +89,7 @@ class TiendaController {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         
         $producto = $this->productoModel->obtenerPorId($id);
-        if (!$producto) {
+        if (!$producto || (int)($producto['stock'] ?? 0) <= 0) {
             http_response_code(404);
             include APP_ROOT . '/app/views/404.php';
             return;
@@ -104,6 +104,11 @@ class TiendaController {
      * Aplicar filtros y ordenamiento a productos
      */
     private function aplicarFiltrosYOrdenamiento($productos) {
+        // Catálogo público: ocultar productos sin stock
+        $productos = array_filter($productos, function($p) {
+            return (int)($p['stock'] ?? 0) > 0;
+        });
+
         // Búsqueda por nombre
         $busqueda = isset($_GET['busqueda']) ? sanitizar($_GET['busqueda']) : '';
         if (!empty($busqueda)) {
@@ -176,6 +181,9 @@ class TiendaController {
         
         if (strlen($termino) >= 2) {
             $productos = $this->productoModel->buscar($termino);
+            $productos = array_values(array_filter($productos, function($p) {
+                return (int)($p['stock'] ?? 0) > 0;
+            }));
         }
         
         $categorias = $this->obtenerCategoriasConSubcategorias();
