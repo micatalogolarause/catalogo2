@@ -95,7 +95,7 @@ function tienda_img_url($img) {
                         <input type="hidden" name="controller" value="tienda">
                         <input type="hidden" name="action" value="categoria">
                         <input type="hidden" name="id" value="<?php echo $categoria['id']; ?>">
-                        <input type="text" class="form-control" name="busqueda" placeholder="Buscar en categoría..." 
+                           <input type="text" class="form-control" name="busqueda" placeholder="Buscar producto..." 
                                value="<?php echo isset($_GET['busqueda']) ? sanitizar($_GET['busqueda']) : ''; ?>">
                         <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
                     </form>
