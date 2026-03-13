@@ -87,7 +87,7 @@ function tienda_img_url($img) {
         <h3>Productos Relacionados</h3>
         <div class="row">
             <?php 
-            require_once 'app/models/ProductoModel.php';
+            require_once APP_ROOT . '/app/models/ProductoModel.php';
             global $conn;
             $productoModel = new ProductoModel($conn);
             $relacionados = $productoModel->obtenerPorCategoria($producto['categoria_id']);
