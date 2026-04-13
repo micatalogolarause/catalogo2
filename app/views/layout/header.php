@@ -1,30 +1,7 @@
 <?php
 // Verificar sesión
 if (!session_id()) session_start();
-// Fallback: cargar categorías para el menú si no vienen del controlador
-if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
-    try {
-        require_once APP_ROOT . '/config/database.php';
-        require_once APP_ROOT . '/app/models/CategoriaModel.php';
-        $categoriaModel = new CategoriaModel($conn);
-        $categorias = $categoriaModel->obtenerTodas();
-    } catch (Throwable $e) {
-        $categorias = array();
-    }
-}
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo sanitizar($_SESSION['tenant_data']['titulo_empresa'] ?? $_SESSION['tenant_data']['nombre'] ?? 'Tienda Virtual'); ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/estilos.css?v=<?php echo filemtime(APP_ROOT . '/public/css/estilos.css'); ?>">
-    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/temas.css?v=<?php echo filemtime(APP_ROOT . '/public/css/temas.css'); ?>">
-    <link rel="icon" href="data:,">
-</head>
 <body class="tema-<?php $t=sanitizar($_SESSION['tenant_data']['tema']??'claro'); echo ($t==='default'?'claro':$t); ?> color-<?php $c=sanitizar($_SESSION['tenant_data']['tema_color']??'azul'); echo ($c?$c:'azul'); ?>">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -54,33 +31,6 @@ if (!isset($categorias) || !is_array($categorias) || empty($categorias)) {
                         <a class="nav-link" href="<?php echo tenant_base_url(); ?>">
                             <i class="bi bi-house"></i> Inicio
                         </a>
-                    </li>
-                    <!-- DESKTOP: dropdown de categorías -->
-                    <li class="nav-item dropdown d-none d-lg-block">
-                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="categoriasDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-list"></i> Categorías
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="categoriasDropdown">
-                            <?php foreach ($categorias as $cat): ?>
-                            <li>
-                                <a class="dropdown-item fw-semibold" href="<?php echo tenant_base_url(); ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>">
-                                    <?php echo sanitizar($cat['nombre']); ?>
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </li>
-                    <!-- MÓVIL: categorías directas (sin dropdown, 1 toque) -->
-                    <li class="nav-item d-lg-none">
-                        <span class="nav-link fw-bold text-muted" style="font-size:0.85rem; padding-bottom:2px;">
-                            <i class="bi bi-list"></i> Categorías
-                        </span>
-                        <?php foreach ($categorias as $cat): ?>
-                        <a class="nav-link py-1 ps-3" href="<?php echo tenant_base_url(); ?>/index.php?controller=tienda&action=categoria&id=<?php echo $cat['id']; ?>">
-                            <i class="bi bi-tag"></i> <?php echo sanitizar($cat['nombre']); ?>
-                        </a>
-                        <?php endforeach; ?>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="<?php echo tenant_base_url(); ?>/index.php?controller=tienda&action=carrito">
