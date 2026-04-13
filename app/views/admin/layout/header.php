@@ -69,11 +69,6 @@ if (!isset($_SESSION['usuario_id'])) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=categorias">
-                            <i class="bi bi-tags"></i> Categorias
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=productos">
                             <i class="bi bi-box"></i> Productos
                         </a>
@@ -131,11 +126,6 @@ if (!isset($_SESSION['usuario_id'])) {
                         <li class="nav-item">
                             <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=clientes">
                                 <i class="bi bi-people"></i> Clientes
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=categorias">
-                                <i class="bi bi-tags"></i> Categorias
                             </a>
                         </li>
                         <li class="nav-item">
