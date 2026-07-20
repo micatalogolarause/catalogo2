@@ -148,7 +148,7 @@ Admin:
 
 Super-Admin:
   http://34.193.89.155:81/catalogo2/index.php?controller=superAdmin&action=login
-  User: superadmin / Pass: SuperAdmin123! (⚠️ CAMBIAR)
+  User: superadmin / Pass: 00 (⚠️ CAMBIAR)
 
 Validador:
   http://34.193.89.155:81/catalogo2/scripts/deployment_check.php
