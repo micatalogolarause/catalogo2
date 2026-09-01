@@ -110,7 +110,7 @@ function tienda_img_url($img) {
 
             <!-- Encabezado de Subcategoría -->
             <div class="mb-5">
-                <h1 class="mb-3" style="font-size: 2.5rem; font-weight: 700; color: #2c3e50;">
+                <h1 class="mb-3" style="font-size: clamp(1.4rem, 5vw, 2.5rem); font-weight: 700; color: #2c3e50;">
                     <i class="bi bi-tag-fill" style="color: #667eea;"></i> <?php echo sanitizar($subcategoria['nombre']); ?>
                 </h1>
                 <p class="text-muted mb-4" style="font-size: 1.1rem;"><?php echo sanitizar($subcategoria['descripcion']); ?></p>
