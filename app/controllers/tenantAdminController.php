@@ -169,6 +169,14 @@ class TenantAdminController {
         $sql = "UPDATE tenants SET " . implode(", ", $campos) . " WHERE id = ?";
         ejecutarConsulta($sql, '', $params);
 
+        if (!class_exists('TenantResolver')) {
+            require_once APP_ROOT . '/config/TenantResolver.php';
+        }
+        $tenant = obtenerFila("SELECT slug FROM tenants WHERE id = ?", "i", [$tenant_id]);
+        if ($tenant) {
+            TenantResolver::invalidateTenantCache($tenant['slug']);
+        }
+
         return ['success' => true, 'message' => 'Tenant actualizado'];
     }
 

@@ -976,7 +976,8 @@ class AdminController {
             if ($tenant_actualizado) {
                 $_SESSION['tenant_data'] = $tenant_actualizado;
             }
-            
+            TenantResolver::invalidateTenantCache(TENANT_SLUG);
+
             $_SESSION['success'] = 'Configuración actualizada exitosamente. Los cambios se verán reflejados en la tienda.';
         } else {
             $_SESSION['error'] = 'Error al actualizar la configuración';
@@ -1153,6 +1154,7 @@ class AdminController {
         
         if (ejecutarConsulta($sql, "si", [$logoPath, $tenantId])) {
             $_SESSION['tenant_data']['logo'] = $logoPath;
+            TenantResolver::invalidateTenantCache(TENANT_SLUG);
             $_SESSION['success'] = 'Logo actualizado exitosamente';
         } else {
             $_SESSION['error'] = 'Error al actualizar el logo en la base de datos';

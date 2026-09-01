@@ -21,7 +21,22 @@ class SuperAdminController {
             exit;
         }
     }
-    
+
+    /**
+     * Invalida la cookie de caché (5 min) de un tenant tras modificarlo desde
+     * el panel de superadmin, para que el tenant vea el cambio de inmediato
+     * en vez de hasta 5 minutos después.
+     */
+    private function invalidarCacheTenant($tenant_id) {
+        if (!class_exists('TenantResolver')) {
+            require_once APP_ROOT . '/config/TenantResolver.php';
+        }
+        $tenant = obtenerFila("SELECT slug FROM tenants WHERE id = ?", "i", [$tenant_id]);
+        if ($tenant) {
+            TenantResolver::invalidateTenantCache($tenant['slug']);
+        }
+    }
+
     /**
      * Login del super administrador
      */
@@ -180,8 +195,9 @@ class SuperAdminController {
         }
         
         $sql = "UPDATE tenants SET estado = ?, updated_at = NOW() WHERE id = ?";
-        
+
         if (ejecutarConsulta($sql, "si", [$nuevo_estado, $tenant_id])) {
+            $this->invalidarCacheTenant($tenant_id);
             $_SESSION['success'] = 'Estado del tenant actualizado exitosamente';
         } else {
             $_SESSION['error'] = 'Error al actualizar el estado';
@@ -249,8 +265,9 @@ class SuperAdminController {
         
         // Cambiar estado a eliminado
         $sql = "UPDATE tenants SET estado = 'eliminado', updated_at = NOW() WHERE id = ?";
-        
+
         if (ejecutarConsulta($sql, "i", [$tenant_id])) {
+            $this->invalidarCacheTenant($tenant_id);
             $_SESSION['success'] = 'Tenant eliminado exitosamente';
         } else {
             $_SESSION['error'] = 'Error al eliminar el tenant';
@@ -355,6 +372,7 @@ class SuperAdminController {
         $sql = "UPDATE tenants SET nombre = ?, titulo_empresa = ?, whatsapp_phone = ?, logo = ?, tema = ?, tema_color = ?, estado = ?, updated_at = NOW() WHERE id = ?";
         
         if (ejecutarConsulta($sql, "sssssssi", [$nombre, $titulo_empresa, $whatsapp_phone, $logo, $tema, $tema_color, $estado, $tenant_id])) {
+            $this->invalidarCacheTenant($tenant_id);
             $_SESSION['success'] = 'Tenant actualizado exitosamente';
             header('Location: ' . APP_URL . '/index.php?controller=superAdmin&action=verTenant&id=' . $tenant_id);
         } else {

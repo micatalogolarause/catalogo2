@@ -184,7 +184,7 @@ class TenantResolver {
      * Leer tenant cacheado en cookie (TTL 5 min)
      */
     private static function getCachedTenant($slug) {
-        $cookieName = 'tc_' . preg_replace('/[^a-z0-9]/', '', $slug);
+        $cookieName = self::cachedTenantCookieName($slug);
         if (empty($_COOKIE[$cookieName])) return null;
         $data = json_decode(base64_decode($_COOKIE[$cookieName]), true);
         if (!is_array($data) || empty($data['ts']) || empty($data['sig'])) return null;
@@ -203,7 +203,7 @@ class TenantResolver {
         $ts = time();
         $sig = hash_hmac('sha256', $tenant['slug'] . '|' . $tenant['id'] . '|' . $ts, $secret);
         $payload = array_merge($tenant, ['ts' => $ts, 'sig' => $sig]);
-        $cookieName = 'tc_' . preg_replace('/[^a-z0-9]/', '', $tenant['slug']);
+        $cookieName = self::cachedTenantCookieName($tenant['slug']);
         if (!headers_sent()) {
             setcookie($cookieName, base64_encode(json_encode($payload)), [
                 'expires'  => $ts + 300,
@@ -213,6 +213,29 @@ class TenantResolver {
                 'samesite' => 'Lax',
             ]);
         }
+    }
+
+    private static function cachedTenantCookieName($slug) {
+        return 'tc_' . strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $slug));
+    }
+
+    /**
+     * Invalidar la cookie de caché de un tenant (llamar tras cualquier UPDATE
+     * a la tabla tenants) para que la próxima request lea el dato fresco de
+     * la BD en vez de servir hasta 5 minutos de datos viejos (logo, config, etc).
+     */
+    public static function invalidateTenantCache($slug) {
+        if (empty($slug) || headers_sent()) {
+            return;
+        }
+        $cookieName = self::cachedTenantCookieName($slug);
+        setcookie($cookieName, '', [
+            'expires'  => time() - 3600,
+            'path'     => '/',
+            'secure'   => true,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
     }
 
     /**
