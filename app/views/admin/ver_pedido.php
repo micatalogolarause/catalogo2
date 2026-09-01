@@ -5,15 +5,15 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Detalles del Pedido #<?php echo $pedido['numero_pedido'] ?? $pedido['id']; ?></h3>
     <div class="btn-group">
-        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=generarFacturaPDF&id=<?php echo $pedido['id']; ?>" 
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=generarFacturaPDF&id=<?php echo $pedido['id']; ?>" 
            class="btn btn-danger" target="_blank">
             <i class="bi bi-file-earmark-pdf"></i> Descargar PDF
         </a>
-        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=generarFacturaExcel&id=<?php echo $pedido['id']; ?>" 
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=generarFacturaExcel&id=<?php echo $pedido['id']; ?>" 
            class="btn btn-success" target="_blank">
             <i class="bi bi-file-earmark-excel"></i> Descargar Excel
         </a>
-        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=pedidos" class="btn btn-secondary">
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=pedidos" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>

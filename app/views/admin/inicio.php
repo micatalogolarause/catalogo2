@@ -69,7 +69,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                 </td>
                 <td><?php echo date('d/m/Y', strtotime($pedido['fecha_creacion'])); ?></td>
                 <td>
-                    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=verPedido&id=<?php echo $pedido['id']; ?>" 
+                    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=verPedido&id=<?php echo $pedido['id']; ?>" 
                        class="btn btn-sm btn-outline-primary">Ver</a>
                 </td>
             </tr>

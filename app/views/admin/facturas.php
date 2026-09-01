@@ -23,7 +23,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
 <!-- Filtros -->
 <div class="card mb-4">
     <div class="card-body">
-        <form method="GET" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php" id="filtroFormFacturas">
+        <form method="GET" action="<?php echo tenant_base_url(); ?>/index.php" id="filtroFormFacturas">
             <input type="hidden" name="controller" value="admin">
             <input type="hidden" name="action" value="facturas">
             
@@ -63,7 +63,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                 
                 <div class="col-md-3 d-flex align-items-end gap-2">
                     <?php if (!empty($_GET['busqueda']) || !empty($_GET['desde']) || !empty($_GET['hasta']) || !empty($_GET['estado'])): ?>
-                    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=facturas" class="btn btn-secondary flex-fill">
+                    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=facturas" class="btn btn-secondary flex-fill">
                         <i class="bi bi-x-circle"></i> Limpiar
                     </a>
                     <?php endif; ?>
@@ -158,15 +158,15 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=verPedido&id=<?php echo $factura['id']; ?>" 
+                                    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=verPedido&id=<?php echo $factura['id']; ?>" 
                                        class="btn btn-sm btn-info" title="Ver detalles">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=generarFacturaPDF&id=<?php echo $factura['id']; ?>" 
+                                    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=generarFacturaPDF&id=<?php echo $factura['id']; ?>" 
                                        class="btn btn-sm btn-danger" title="Descargar PDF" target="_blank">
                                         <i class="bi bi-file-earmark-pdf"></i>
                                     </a>
-                                    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=generarFacturaExcel&id=<?php echo $factura['id']; ?>" 
+                                    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=generarFacturaExcel&id=<?php echo $factura['id']; ?>" 
                                        class="btn btn-sm btn-success" title="Descargar Excel" target="_blank">
                                         <i class="bi bi-file-earmark-excel"></i>
                                     </a>

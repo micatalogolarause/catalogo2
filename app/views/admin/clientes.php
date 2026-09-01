@@ -4,7 +4,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Gestión de Clientes</h3>
-    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=crearCliente" class="btn btn-success">
+    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=crearCliente" class="btn btn-success">
         <i class="bi bi-plus-circle"></i> Nuevo Cliente
     </a>
 </div>
@@ -20,7 +20,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
         <div class="col-md-4">
             <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button>
             <?php if (isset($_GET['busqueda']) && !empty($_GET['busqueda'])): ?>
-            <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=clientes" class="btn btn-secondary w-100 mt-2">
+            <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=clientes" class="btn btn-secondary w-100 mt-2">
                 <i class="bi bi-arrow-counterclockwise"></i> Limpiar
             </a>
             <?php endif; ?>
@@ -83,11 +83,11 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                     </td>
                     <td><?php echo date('d/m/Y', strtotime($cliente['fecha_registro'])); ?></td>
                     <td>
-                                <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=verCliente&id=<?php echo $cliente['id']; ?>" 
+                                <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=verCliente&id=<?php echo $cliente['id']; ?>" 
                            class="btn btn-sm btn-info"><i class="bi bi-eye"></i></a>
-                                <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=editarCliente&id=<?php echo $cliente['id']; ?>" 
+                                <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=editarCliente&id=<?php echo $cliente['id']; ?>" 
                                     class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
-                                <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=desactivarCliente" 
+                                <form method="POST" action="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=desactivarCliente" 
                               style="display:inline;" onsubmit="return confirm('¿<?php echo $cliente['activo'] ? 'Desactivar' : 'Activar'; ?> este cliente?');">
                             <input type="hidden" name="id" value="<?php echo $cliente['id']; ?>">
                             <button type="submit" class="btn btn-sm btn-<?php echo $cliente['activo'] ? 'warning' : 'success'; ?>">

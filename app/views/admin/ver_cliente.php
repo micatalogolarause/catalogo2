@@ -4,10 +4,10 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Detalle del Cliente</h3>
-    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=clientes" class="btn btn-secondary">
+    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=clientes" class="btn btn-secondary">
         <i class="bi bi-arrow-left"></i> Volver
     </a>
-    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=editarCliente&id=<?php echo $cliente['id']; ?>" class="btn btn-primary">
+    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=editarCliente&id=<?php echo $cliente['id']; ?>" class="btn btn-primary">
         <i class="bi bi-pencil"></i> Editar
     </a>
 </div>
@@ -99,7 +99,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                 <h5 class="mb-0"><i class="bi bi-gear"></i> Acciones</h5>
             </div>
             <div class="card-body">
-                    <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=desactivarCliente" 
+                    <form method="POST" action="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=desactivarCliente" 
                       onsubmit="return confirm('¿<?php echo $cliente['activo'] ? 'Desactivar' : 'Activar'; ?> este cliente?');">
                     <input type="hidden" name="id" value="<?php echo $cliente['id']; ?>">
                     <button type="submit" class="btn btn-<?php echo $cliente['activo'] ? 'warning' : 'success'; ?> w-100">

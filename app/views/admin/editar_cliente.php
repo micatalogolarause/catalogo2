@@ -5,7 +5,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>Editar Cliente</h3>
     <div>
-        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=verCliente&id=<?php echo $cliente['id']; ?>" class="btn btn-secondary">
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=verCliente&id=<?php echo $cliente['id']; ?>" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Volver
         </a>
     </div>
@@ -18,7 +18,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                 <h5 class="mb-0"><i class="bi bi-pencil-square"></i> Datos del Cliente</h5>
             </div>
             <div class="card-body">
-                <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarCliente">
+                <form method="POST" action="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=actualizarCliente">
                     <input type="hidden" name="id" value="<?php echo (int)$cliente['id']; ?>">
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -66,7 +66,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                     </div>
                     <div class="mt-4 d-flex gap-2">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar cambios</button>
-                        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=verCliente&id=<?php echo $cliente['id']; ?>" class="btn btn-outline-secondary">Cancelar</a>
+                        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=verCliente&id=<?php echo $cliente['id']; ?>" class="btn btn-outline-secondary">Cancelar</a>
                     </div>
                 </form>
             </div>

@@ -19,7 +19,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
 <!-- Filtros Avanzados -->
 <div class="card mb-4">
     <div class="card-body">
-        <form method="GET" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php" id="filtroForm">
+        <form method="GET" action="<?php echo tenant_base_url(); ?>/index.php" id="filtroForm">
             <input type="hidden" name="controller" value="admin">
             <input type="hidden" name="action" value="pedidos">
             
@@ -59,7 +59,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                 <div class="col-md-2 d-flex align-items-end">
                     <div class="w-100">
                         <?php if (!empty($_GET['cliente']) || !empty($_GET['desde']) || !empty($_GET['hasta']) || !empty($_GET['estado'])): ?>
-                        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=pedidos" 
+                        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=pedidos" 
                            class="btn btn-secondary w-100">
                             <i class="bi bi-x-circle"></i> Limpiar
                         </a>
@@ -73,7 +73,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                             <i class="bi bi-download"></i> Exportar
                         </button>
                         <ul class="dropdown-menu w-100">
-                            <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=reportePedidosPDF<?php 
+                            <li><a class="dropdown-item" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=reportePedidosPDF<?php 
                                 echo !empty($_GET['cliente']) ? '&cliente=' . urlencode($_GET['cliente']) : '';
                                 echo !empty($_GET['desde']) ? '&desde=' . urlencode($_GET['desde']) : '';
                                 echo !empty($_GET['hasta']) ? '&hasta=' . urlencode($_GET['hasta']) : '';
@@ -81,7 +81,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                             ?>" target="_blank">
                                 <i class="bi bi-file-earmark-pdf text-danger"></i> PDF
                             </a></li>
-                            <li><a class="dropdown-item" href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=reportePedidosExcel<?php 
+                            <li><a class="dropdown-item" href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=reportePedidosExcel<?php 
                                 echo !empty($_GET['cliente']) ? '&cliente=' . urlencode($_GET['cliente']) : '';
                                 echo !empty($_GET['desde']) ? '&desde=' . urlencode($_GET['desde']) : '';
                                 echo !empty($_GET['hasta']) ? '&hasta=' . urlencode($_GET['hasta']) : '';
@@ -465,7 +465,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                 </div>
                 <div class="col-md-6 text-md-end">
                     <!-- Selector de estado -->
-                    <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=verPedido&id=<?php echo $pedido['id']; ?>" 
+                    <form method="POST" action="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=verPedido&id=<?php echo $pedido['id']; ?>" 
                           class="d-inline me-2 form-cambiar-estado" style="min-width: 170px;" id="formEstado<?php echo $pedido['id']; ?>">
                         <select name="estado" class="form-select form-select-sm select-estado" data-pedido-id="<?php echo $pedido['id']; ?>">
                             <option value="" disabled <?php echo !$pedido['estado'] ? 'selected' : ''; ?>>Cambiar estado...</option>
@@ -478,7 +478,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                     </form>
 
                     <!-- Botones de acción -->
-                    <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=verPedido&id=<?php echo $pedido['id']; ?>" 
+                    <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=verPedido&id=<?php echo $pedido['id']; ?>" 
                        class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-eye"></i> Ver
                     </a>
@@ -492,7 +492,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
 
 <script>
 function filtrarPorEstado(estado) {
-    const url = '<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=pedidos';
+    const url = '<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=pedidos';
     if (estado) {
         window.location.href = url + '&estado=' + encodeURIComponent(estado);
     } else {
@@ -511,7 +511,7 @@ function cambiarPreparacion(btn) {
     formData.append('detalle_id', detalleId);
     formData.append('estado', nuevoEstado);
 
-    fetch('<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarEstadoPreparacion', {
+    fetch('<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=actualizarEstadoPreparacion', {
         method: 'POST',
         body: formData
     })
@@ -587,7 +587,7 @@ function guardarCantidadEntregada(btn) {
     formData.append('estado', 'pendiente'); // será ajustado por el server según cantidades
     formData.append('cantidad_entregada', cantidad);
 
-    fetch('<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarEstadoPreparacion', {
+    fetch('<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=actualizarEstadoPreparacion', {
         method: 'POST',
         body: formData
     })
@@ -626,7 +626,7 @@ function marcarEmpaquetadoLista(pedidoId) {
     formData.append('pedido_id', pedidoId);
     formData.append('estado', 'empaquetado');
     
-    fetch('<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarEstadoPedido', {
+    fetch('<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=actualizarEstadoPedido', {
         method: 'POST',
         body: formData
     })
@@ -653,7 +653,7 @@ function desempaquetar(pedidoId) {
     formData.append('pedido_id', pedidoId);
     formData.append('estado', 'alistado');
     
-    fetch('<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarEstadoPedido', {
+    fetch('<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=actualizarEstadoPedido', {
         method: 'POST',
         body: formData
     })
@@ -677,7 +677,7 @@ function verificarPedidoLista(pedidoId, observaciones = '') {
     formData.append('estado', 'verificado');
     formData.append('observaciones', observaciones);
     
-    fetch('<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarEstadoPedido', {
+    fetch('<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=actualizarEstadoPedido', {
         method: 'POST',
         body: formData
     })
@@ -792,7 +792,7 @@ function marcarListoEntrega(pedidoId) {
     formData.append('estado', 'en_reparto');
     formData.append('observaciones', 'Pedido listo para entrega');
     
-    fetch('<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarEstadoPedido', {
+    fetch('<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=actualizarEstadoPedido', {
         method: 'POST',
         body: formData
     })

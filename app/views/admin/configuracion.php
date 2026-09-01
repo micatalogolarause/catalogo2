@@ -12,7 +12,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
             <div class="card-body">
                 <h5 class="card-title mb-4">Personalización</h5>
                 
-                <form method="POST" action="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=actualizarConfiguracion">
+                <form method="POST" action="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=actualizarConfiguracion">
                     <div class="mb-4">
                         <label class="form-label fw-bold">Título de la Empresa</label>
                         <input type="text" class="form-control" name="titulo_empresa" 
@@ -112,7 +112,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="bi bi-check-circle"></i> Guardar Cambios
                         </button>
-                        <a href="<?php echo APP_URL; ?>/<?php echo TENANT_SLUG; ?>/index.php?controller=admin&action=inicio" class="btn btn-outline-secondary">
+                        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=inicio" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left"></i> Volver al Dashboard
                         </a>
                     </div>
