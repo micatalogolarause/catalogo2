@@ -14,8 +14,12 @@
 // ─── SUPABASE CONNECTION SETTINGS ─────────────────────────────────────────────
 // En Vercel se leen desde variables de entorno (Vercel Dashboard → Settings → Environment Variables)
 // En local se usan los valores hardcodeados como fallback
+// Puerto 6543 = pooler en modo "transaction" (Supavisor/pgbouncer), recomendado
+// por Supabase para apps serverless: cada request abre una conexión nueva y
+// corta, que es justo el patrón para el que está pensado ese modo. El puerto
+// 5432 (modo "session") es más pesado de establecer por conexión.
 define('DB_HOST',    getenv('DB_HOST')    ?: 'aws-0-us-west-2.pooler.supabase.com');
-define('DB_PORT',    getenv('DB_PORT')    ?: '5432');
+define('DB_PORT',    getenv('DB_PORT')    ?: '6543');
 define('DB_USER',    getenv('DB_USER')    ?: 'postgres.ebpvdrwptoqiainuvztx');
 define('DB_PASS',    getenv('DB_PASS')    ?: 'Larause820626');
 define('DB_NAME',    getenv('DB_NAME')    ?: 'postgres');
@@ -32,7 +36,10 @@ try {
     $pdo = new PDO($dsn, DB_USER, DB_PASS, [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
+        // true (emuladas): obligatorio con el pooler en modo "transaction" (puerto
+        // 6543) — con prepares reales, el PREPARE y el EXECUTE pueden caer en
+        // conexiones físicas distintas del pool y romper la consulta.
+        PDO::ATTR_EMULATE_PREPARES   => true,
     ]);
 
     // Refuerzo de encoding para evitar pérdida de caracteres especiales.
