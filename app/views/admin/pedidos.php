@@ -269,7 +269,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                         // Si hay nombre de imagen en BD
                         if (!empty($imgNombre)) {
                             if (str_starts_with($imgNombre, 'http://') || str_starts_with($imgNombre, 'https://')) {
-                                $imgUrl = $imgNombre; // URL de Cloudinary u externa
+                                if (str_contains($imgNombre, 'res.cloudinary.com') && str_contains($imgNombre, '/upload/')) { $imgUrl = str_replace('/upload/', '/upload/w_150,q_auto,f_auto/', $imgNombre); } else { $imgUrl = $imgNombre; }
                             } elseif (file_exists(APP_ROOT . '/public/images/productos/' . $imgNombre)) {
                                 $imgUrl = APP_URL . '/public/images/productos/' . $imgNombre;
                             } else {
@@ -320,7 +320,7 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                                     
                                     if (!empty($imgNombre)) {
                                         if (str_starts_with($imgNombre, 'http://') || str_starts_with($imgNombre, 'https://')) {
-                                            $imgUrl = $imgNombre; // URL de Cloudinary u externa
+                                            if (str_contains($imgNombre, 'res.cloudinary.com') && str_contains($imgNombre, '/upload/')) { $imgUrl = str_replace('/upload/', '/upload/w_150,q_auto,f_auto/', $imgNombre); } else { $imgUrl = $imgNombre; }
                                         } elseif (file_exists(APP_ROOT . '/public/images/productos/' . $imgNombre)) {
                                             $imgUrl = APP_URL . '/public/images/productos/' . $imgNombre;
                                         } else {

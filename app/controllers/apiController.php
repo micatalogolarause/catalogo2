@@ -6,7 +6,12 @@ class ApiController {
     private function buildImageUrl($img) {
         if (!$img) return '';
         if (str_starts_with($img, 'http://') || str_starts_with($img, 'https://')) {
-            return $img; // URL de Cloudinary u externa
+            // URL de Cloudinary: pedir versión redimensionada/comprimida
+            // (la miniatura del carrito se muestra a 50px, no hace falta la original)
+            if (str_contains($img, 'res.cloudinary.com') && str_contains($img, '/upload/')) {
+                return str_replace('/upload/', '/upload/w_150,q_auto,f_auto/', $img);
+            }
+            return $img;
         }
         if (str_starts_with($img, 'public/tenants/')) {
             return APP_URL . '/' . $img;

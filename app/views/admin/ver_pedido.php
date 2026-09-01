@@ -67,7 +67,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                             $no_se_entrega = $cantEnt === 0;
                             $imgDetalle = $detalle['imagen'] ?? '';
                             if (str_starts_with($imgDetalle, 'http://') || str_starts_with($imgDetalle, 'https://')) {
-                                $imgSrc = $imgDetalle; // URL de Cloudinary u externa
+                                if (str_contains($imgDetalle, 'res.cloudinary.com') && str_contains($imgDetalle, '/upload/')) { $imgSrc = str_replace('/upload/', '/upload/w_150,q_auto,f_auto/', $imgDetalle); } else { $imgSrc = $imgDetalle; }
                             } elseif (str_starts_with($imgDetalle, 'public/tenants/')) {
                                 $imgSrc = APP_URL . '/' . $imgDetalle;
                             } else {
