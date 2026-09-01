@@ -158,9 +158,6 @@ function cargarCarrito() {
                                         <button type="button" class="btn btn-outline-primary flex-fill" onclick="actualizarCarrito(${item.producto_id}, Math.min(12, ${item.stock}))">12</button>
                                         <button type="button" class="btn btn-outline-primary flex-fill" onclick="actualizarCarrito(${item.producto_id}, Math.min(24, ${item.stock}))">24</button>
                                         <button type="button" class="btn btn-outline-primary flex-fill" onclick="actualizarCarrito(${item.producto_id}, Math.min(36, ${item.stock}))">36</button>
-                                        <button type="button" class="btn btn-outline-primary flex-fill" onclick="actualizarCarrito(${item.producto_id}, Math.min(48, ${item.stock}))">48</button>
-                                        <button type="button" class="btn btn-outline-primary flex-fill" onclick="actualizarCarrito(${item.producto_id}, Math.min(60, ${item.stock}))">60</button>
-                                        <button type="button" class="btn btn-outline-primary flex-fill" onclick="actualizarCarrito(${item.producto_id}, Math.min(72, ${item.stock}))">72</button>
                                     </div>
                                 </div>
                             </td>
