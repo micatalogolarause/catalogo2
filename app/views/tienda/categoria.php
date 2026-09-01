@@ -86,13 +86,6 @@ function tienda_img_url($img) {
                 <div style="height: 4px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 200px; border-radius: 2px;"></div>
             </div>
 
-            <!-- Título de Productos -->
-            <div class="mb-5">
-                <h3 style="font-size: 1.3rem; font-weight: 600; margin-bottom: 20px; color: #2c3e50;">
-                    <i class="bi bi-box2" style="color: #667eea;"></i> Productos
-                </h3>
-            </div>
-
             <!-- Filtros y Búsqueda -->
             <div class="row mb-4 g-2">
                 <div class="col-md-6">
