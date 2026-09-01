@@ -232,18 +232,20 @@ class TenantResolver {
 
         if (count($tenants_disponibles) === 1) {
             // Un solo tenant activo: redirigir directamente
+            // Usa tenant_base_url() (APP_URL + slug, con chequeo anti-duplicado)
+            // en vez de reconstruir la URL desde SCRIPT_NAME: en Vercel ese valor
+            // a veces ya incluye el slug del tenant, causando .../JYM/JYM.
             $slug = $tenants_disponibles[0]['slug'];
-            $base_url = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
-            $base_path = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
-            header('Location: ' . $base_url . $base_path . '/' . $slug);
+            header('Location: ' . tenant_base_url($slug));
             exit;
         }
         http_response_code(404);
-        
-        $base_url = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
-        $base_path = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-        $base_path = rtrim($base_path, '/');
-        
+
+        // Igual que en el redirect de arriba: usar APP_URL (ya validado para
+        // Vercel) en vez de reconstruir desde SCRIPT_NAME para no duplicar el slug.
+        $base_url = rtrim(APP_URL, '/');
+        $base_path = '';
+
         echo "<!DOCTYPE html>
 <html lang='es'>
 <head>
@@ -353,7 +355,7 @@ class TenantResolver {
                 <h3>🛍️ Tiendas Disponibles:</h3>";
             
             foreach ($tenants_disponibles as $tenant) {
-                $tenant_url = $base_url . $base_path . '/' . htmlspecialchars($tenant['slug']);
+                $tenant_url = htmlspecialchars(tenant_base_url($tenant['slug']));
                 $tenant_titulo = htmlspecialchars($tenant['titulo_empresa'] ?: $tenant['nombre']);
                 $tenant_slug = htmlspecialchars($tenant['slug']);
                 
