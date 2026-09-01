@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "regions": ["pdx1"],
   "installCommand": "composer install --no-dev --optimize-autoloader",
   "builds": [
     {

@@ -140,7 +140,8 @@ function cargarCarrito() {
                                     <img src="${item.imagen}" style="width:50px; height:50px; object-fit:cover;" class="me-2 rounded">
                                     <div>
                                         <div class="fw-bold">${item.nombre}</div>
-                                        <small class="text-muted d-md-none">$${parseFloat(item.precio).toFixed(2)}</small>
+                                        <small class="text-muted d-md-none">$${parseFloat(item.precio).toFixed(2)} c/u</small><br>
+                                        <small class="text-muted d-md-none">Subtotal: <strong>$${parseFloat(item.subtotal).toFixed(2)}</strong></small>
                                     </div>
                                 </div>
                             </td>
