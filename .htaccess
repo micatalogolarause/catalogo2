@@ -2,24 +2,24 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /catalogo2/
-    
+
+    # Bloquear acceso web directo a directorios internos (código fuente,
+    # configuración con credenciales, dumps de BD, scripts de desarrollo).
+    # Antes, config/database.php, config/cloudinary.php, etc. quedaban
+    # accesibles vía URL porque el FilesMatch de abajo solo cubría
+    # "config.php" literal, no todo el directorio config/.
+    RewriteRule ^(config|app|database|_dev-tools|docs)(/|$) - [F,L]
+
     # Permitir archivos y carpetas existentes
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    
+
     # Redirigir todas las solicitudes al index.php
     RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 </IfModule>
 
-# Configuración de seguridad
-<FilesMatch "\.php$">
-    Order Deny,Allow
-    Deny from all
-    Allow from all
-</FilesMatch>
-
-# Proteger archivos sensibles
-<FilesMatch "\.(htaccess|config\.php)$">
+# Proteger archivos sensibles (por si mod_rewrite no está disponible)
+<FilesMatch "\.(htaccess|sql|log|env)$">
     Order Deny,Allow
     Deny from all
 </FilesMatch>

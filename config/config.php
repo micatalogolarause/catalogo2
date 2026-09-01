@@ -146,6 +146,7 @@ function set_auth_cookie(array $data) {
         'uid' => (int)($data['uid'] ?? 0),
         'rol' => (string)($data['rol'] ?? ''),
         'tenant_slug' => (string)($data['tenant_slug'] ?? ''),
+        'admin_tenant_id' => (int)($data['admin_tenant_id'] ?? 0),
         'usuario' => (string)($data['usuario'] ?? ''),
         'nombre' => (string)($data['nombre'] ?? ''),
         'exp' => time() + (REMEMBER_ME_DAYS * 24 * 60 * 60)
@@ -217,6 +218,10 @@ function restore_session_from_auth_cookie() {
     $_SESSION['rol'] = (string)$payload['rol'];
     $_SESSION['usuario'] = (string)($payload['usuario'] ?? '');
     $_SESSION['nombre'] = (string)($payload['nombre'] ?? '');
+
+    if (!empty($payload['admin_tenant_id'])) {
+        $_SESSION['admin_tenant_id'] = (int)$payload['admin_tenant_id'];
+    }
 
     if (!empty($payload['tenant_slug']) && empty($_SESSION['tenant_slug'])) {
         $_SESSION['tenant_slug'] = (string)$payload['tenant_slug'];

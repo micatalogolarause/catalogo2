@@ -9,6 +9,15 @@ session_start();
 require_once '../config/database.php';
 require_once '../app/controllers/tenantAdminController.php';
 
+// Gestión de tenants (crear/listar/actualizar) es una operación de superadmin.
+// Este endpoint no pasaba por index.php ni por ningún chequeo de sesión, por lo
+// que cualquiera podía crear o modificar tenants sin autenticarse.
+if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'superadmin') {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'No autorizado']);
+    exit;
+}
+
 $controller = new TenantAdminController();
 $response = ['success' => false, 'message' => 'Sin acción especificada'];
 

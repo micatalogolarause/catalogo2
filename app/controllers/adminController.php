@@ -41,6 +41,17 @@ class AdminController {
             header('Location: ' . tenant_base_url() . '/index.php?controller=admin&action=login');
             exit;
         }
+
+        // El admin autenticado solo puede operar sobre el tenant al que pertenece.
+        // Sin esto, un admin logueado en la Tienda A que navega a la URL de la
+        // Tienda B (que redefine TENANT_ID desde el slug) heredaba control total
+        // sobre los datos de la Tienda B sin volver a autenticarse.
+        if (!isset($_SESSION['admin_tenant_id']) || (int)$_SESSION['admin_tenant_id'] !== getTenantId()) {
+            unset($_SESSION['usuario_id'], $_SESSION['rol'], $_SESSION['usuario'], $_SESSION['nombre'], $_SESSION['admin_tenant_id']);
+            clear_auth_cookie();
+            header('Location: ' . tenant_base_url() . '/index.php?controller=admin&action=login');
+            exit;
+        }
     }
     
     /**
@@ -64,21 +75,23 @@ class AdminController {
                 global $conn;
                 $password_hash = hash('sha256', $password);
                 
-                $sql = "SELECT id, usuario, nombre, rol FROM usuarios 
-                        WHERE usuario = ? AND password = ? AND rol = 'admin' AND activo = 1";
-                
-                $admin = obtenerFila($sql, "ss", array(&$usuario, &$password_hash));
-                
+                $sql = "SELECT id, usuario, nombre, rol, tenant_id FROM usuarios
+                        WHERE usuario = ? AND password = ? AND rol = 'admin' AND activo = 1 AND tenant_id = ?";
+
+                $admin = obtenerFila($sql, "ssi", array(&$usuario, &$password_hash, getTenantId()));
+
                 if ($admin) {
                     $_SESSION['usuario_id'] = $admin['id'];
                     $_SESSION['usuario'] = $admin['usuario'];
                     $_SESSION['nombre'] = $admin['nombre'];
                     $_SESSION['rol'] = $admin['rol'];
+                    $_SESSION['admin_tenant_id'] = (int)$admin['tenant_id'];
 
                     set_auth_cookie([
                         'uid' => $admin['id'],
                         'rol' => $admin['rol'],
                         'tenant_slug' => TENANT_SLUG,
+                        'admin_tenant_id' => $admin['tenant_id'],
                         'usuario' => $admin['usuario'],
                         'nombre' => $admin['nombre']
                     ]);
@@ -827,21 +840,22 @@ class AdminController {
         }
 
         global $conn;
+        $tenant_id = getTenantId();
         // Si viene cantidad_entregada, ajustar estado en función de la cantidad
         if ($cant_entregada !== null) {
             // Obtener cantidad pedida para calcular límites
-            $sql_info = "SELECT cantidad FROM pedido_detalles WHERE id = ? AND pedido_id = ?";
-            $info = obtenerFila($sql_info, "ii", array(&$detalle_id, &$pedido_id));
+            $sql_info = "SELECT cantidad FROM pedido_detalles WHERE id = ? AND pedido_id = ? AND tenant_id = ?";
+            $info = obtenerFila($sql_info, "iii", array(&$detalle_id, &$pedido_id, &$tenant_id));
             if ($info) {
                 if ($cant_entregada < 0) $cant_entregada = 0;
                 if ($cant_entregada > (int)$info['cantidad']) $cant_entregada = (int)$info['cantidad'];
                 $estado = ($cant_entregada >= (int)$info['cantidad']) ? 'listo' : 'pendiente';
             }
-            $sql = "UPDATE pedido_detalles SET estado_preparacion = ?, cantidad_entregada = ? WHERE id = ? AND pedido_id = ?";
-            $ok = ejecutarConsulta($sql, "siii", array(&$estado, &$cant_entregada, &$detalle_id, &$pedido_id));
+            $sql = "UPDATE pedido_detalles SET estado_preparacion = ?, cantidad_entregada = ? WHERE id = ? AND pedido_id = ? AND tenant_id = ?";
+            $ok = ejecutarConsulta($sql, "siiii", array(&$estado, &$cant_entregada, &$detalle_id, &$pedido_id, &$tenant_id));
         } else {
-            $sql = "UPDATE pedido_detalles SET estado_preparacion = ? WHERE id = ? AND pedido_id = ?";
-            $ok = ejecutarConsulta($sql, "sii", array(&$estado, &$detalle_id, &$pedido_id));
+            $sql = "UPDATE pedido_detalles SET estado_preparacion = ? WHERE id = ? AND pedido_id = ? AND tenant_id = ?";
+            $ok = ejecutarConsulta($sql, "siii", array(&$estado, &$detalle_id, &$pedido_id, &$tenant_id));
         }
         
         if ($ok) {
@@ -851,8 +865,8 @@ class AdminController {
                             SUM(CASE WHEN estado_preparacion = 'listo' THEN 1 ELSE 0 END) as listos,
                             SUM(cantidad) as total_cant,
                             SUM(COALESCE(cantidad_entregada, CASE WHEN estado_preparacion='listo' THEN cantidad ELSE 0 END)) as total_entregada
-                          FROM pedido_detalles WHERE pedido_id = ?";
-            $result = obtenerFila($sql_total, "i", array(&$pedido_id));
+                          FROM pedido_detalles WHERE pedido_id = ? AND tenant_id = ?";
+            $result = obtenerFila($sql_total, "ii", array(&$pedido_id, &$tenant_id));
             
             $porcentaje = $result['total'] > 0 ? round(($result['listos'] / $result['total']) * 100) : 0;
             $faltantes = max(0, (int)$result['total_cant'] - (int)$result['total_entregada']);
@@ -894,11 +908,13 @@ class AdminController {
         }
 
         global $conn;
+        $tenant_id = getTenantId();
 
-        $sql = "UPDATE pedidos SET estado = ? WHERE id = ?";
-        if (!ejecutarConsulta($sql, "si", array(&$estado, &$pedido_id))) {
-            http_response_code(500);
-            echo json_encode(['error' => 'Error al actualizar estado']);
+        $sql = "UPDATE pedidos SET estado = ? WHERE id = ? AND tenant_id = ?";
+        $stmt = ejecutarConsulta($sql, "sii", array(&$estado, &$pedido_id, &$tenant_id));
+        if (!$stmt || $stmt->rowCount() === 0) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Pedido no encontrado']);
             exit;
         }
 
