@@ -5,6 +5,9 @@
 class ApiController {
     private function buildImageUrl($img) {
         if (!$img) return '';
+        if (str_starts_with($img, 'http://') || str_starts_with($img, 'https://')) {
+            return $img; // URL de Cloudinary u externa
+        }
         if (str_starts_with($img, 'public/tenants/')) {
             return APP_URL . '/' . $img;
         }

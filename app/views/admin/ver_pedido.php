@@ -65,10 +65,18 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
                             if ($cantEnt > $cant) { $cantEnt = $cant; }
                             $faltan = max(0, $cant - $cantEnt);
                             $no_se_entrega = $cantEnt === 0;
+                            $imgDetalle = $detalle['imagen'] ?? '';
+                            if (str_starts_with($imgDetalle, 'http://') || str_starts_with($imgDetalle, 'https://')) {
+                                $imgSrc = $imgDetalle; // URL de Cloudinary u externa
+                            } elseif (str_starts_with($imgDetalle, 'public/tenants/')) {
+                                $imgSrc = APP_URL . '/' . $imgDetalle;
+                            } else {
+                                $imgSrc = APP_URL . '/public/images/productos/' . $imgDetalle;
+                            }
                         ?>
                         <tr <?php echo $no_se_entrega ? 'class="table-danger"' : ''; ?>>
                             <td>
-                                <img src="<?php echo APP_URL; ?>/public/images/productos/<?php echo sanitizar($detalle['imagen']); ?>" 
+                                <img src="<?php echo sanitizar($imgSrc); ?>"
                                      style="width: 40px; height: 40px; object-fit: cover;" class="me-2">
                                 <?php echo sanitizar($detalle['nombre']); ?>
                             </td>

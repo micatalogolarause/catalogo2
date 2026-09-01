@@ -268,7 +268,9 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                         
                         // Si hay nombre de imagen en BD
                         if (!empty($imgNombre)) {
-                            if (file_exists(APP_ROOT . '/public/images/productos/' . $imgNombre)) {
+                            if (str_starts_with($imgNombre, 'http://') || str_starts_with($imgNombre, 'https://')) {
+                                $imgUrl = $imgNombre; // URL de Cloudinary u externa
+                            } elseif (file_exists(APP_ROOT . '/public/images/productos/' . $imgNombre)) {
                                 $imgUrl = APP_URL . '/public/images/productos/' . $imgNombre;
                             } else {
                                 $imgUrl = tenant_upload_base_url(TENANT_ID) . '/images/' . $imgNombre;
@@ -317,7 +319,9 @@ $con_faltantes = 0; // Puedes calcular esto según tu lógica
                                     $imgUrl = APP_URL . '/public/images/no-image.jpg';
                                     
                                     if (!empty($imgNombre)) {
-                                        if (file_exists(APP_ROOT . '/public/images/productos/' . $imgNombre)) {
+                                        if (str_starts_with($imgNombre, 'http://') || str_starts_with($imgNombre, 'https://')) {
+                                            $imgUrl = $imgNombre; // URL de Cloudinary u externa
+                                        } elseif (file_exists(APP_ROOT . '/public/images/productos/' . $imgNombre)) {
                                             $imgUrl = APP_URL . '/public/images/productos/' . $imgNombre;
                                         } else {
                                             $imgUrl = tenant_upload_base_url(TENANT_ID) . '/images/' . $imgNombre;
