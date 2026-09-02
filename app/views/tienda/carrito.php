@@ -39,7 +39,7 @@ include APP_ROOT . '/app/views/layout/header.php';
                     <strong>Total:</strong>
                     <strong id="total" class="text-primary h5">$0.00</strong>
                 </div>
-                <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>" class="btn btn-outline-secondary btn-sm w-100 mb-2">
+                <a href="<?php echo APP_URL . '/' . sanitizar($_SESSION['tenant_slug']); ?>" class="btn btn-primary btn-sm w-100 mb-2">
                     <i class="bi bi-arrow-left"></i> Seguir Comprando
                 </a>
                 <button class="btn btn-danger btn-sm w-100 mb-3" id="btn-vaciar">
