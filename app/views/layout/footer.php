@@ -18,9 +18,9 @@
                         <i class="bi bi-telephone"></i> Contacto
                     </h5>
                     <p style="opacity: 0.85; margin: 0;">
-                        <strong>Email:</strong> info@tienda.local<br>
-                        <strong>Teléfono:</strong> +57 300 000 0000<br>
-                        <strong>Horario:</strong> Lun - Vie 9am - 6pm
+                        <strong>Email:</strong> distrisanalba@gmail.com<br>
+                        <strong>Cel:</strong> 3142890961<br>
+                        <strong>Horario:</strong> Lunes a sábado 9 am - 6pm
                     </p>
                 </div>
             </div>
