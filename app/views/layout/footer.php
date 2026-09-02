@@ -56,7 +56,7 @@
             <span>Perfil</span>
         </a>
         <?php else: ?>
-        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=usuario&action=login" class="mobile-nav-item" title="Iniciar sesión">
+        <a href="<?php echo tenant_base_url(); ?>/index.php?controller=admin&action=login" class="mobile-nav-item" title="Iniciar sesión">
             <i class="bi bi-door-open"></i>
             <span>Sesión</span>
         </a>
