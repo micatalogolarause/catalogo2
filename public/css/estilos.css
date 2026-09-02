@@ -170,7 +170,8 @@ main {
 }
 
 .product-card:hover {
-    transform: translateY(-12px);
+    /* Sin translateY: mover la tarjeta hacia arriba sacaba el cursor de su
+       propia área bajo el mouse, generando un parpadeo hover/no-hover en bucle. */
     box-shadow: 0 20px 48px rgba(102, 126, 234, 0.2);
 }
 
