@@ -131,15 +131,32 @@ class TenantResolver {
         
         // Remover query string
         $path = parse_url($request_uri, PHP_URL_PATH);
-        
-        // Remover base path (/catalogo2)
-        $base_path = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-        $base_path = rtrim($base_path, '/');
-        
-        if (!empty($base_path) && strpos($path, $base_path) === 0) {
-            $path = substr($path, strlen($base_path));
+
+        // Remover base path (/catalogo2), solo aplica a instalaciones locales
+        // en subcarpeta (XAMPP/IIS). En Vercel y otros hosts serverless no hay
+        // subcarpeta física: SCRIPT_NAME puede reflejar la ruta completa de la
+        // petición (incluido el slug del tenant), y restarla como "base path"
+        // se comía el slug, dejando "index.php" como primer segmento y
+        // rompiendo la detección del tenant (ej: redirigía la ruta de admin
+        // a la tienda por creer que no había tenant en la URL).
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        $esServerless = (
+            strpos($host, '.vercel.app') !== false ||
+            strpos($host, '.railway.app') !== false ||
+            strpos($host, '.onrender.com') !== false ||
+            getenv('VERCEL') !== false ||
+            getenv('VERCEL_ENV') !== false
+        );
+
+        if (!$esServerless) {
+            $base_path = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+            $base_path = rtrim($base_path, '/');
+
+            if (!empty($base_path) && strpos($path, $base_path) === 0) {
+                $path = substr($path, strlen($base_path));
+            }
         }
-        
+
         // Limpiar path
         $path = trim($path, '/');
         
