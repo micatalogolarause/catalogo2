@@ -109,10 +109,10 @@ class ApiController {
         $tenant_id = getTenantId();
         
         global $conn;
-        $sql = "SELECT c.*, p.nombre, p.precio, p.imagen, p.stock 
-            FROM carrito c 
+        $sql = "SELECT c.*, p.nombre, p.precio, p.imagen, p.stock
+            FROM carrito c
             JOIN productos p ON c.producto_id = p.id AND c.tenant_id = p.tenant_id
-            WHERE c.tenant_id = ? AND c.session_id = ?";
+            WHERE c.tenant_id = ? AND c.session_id = ? AND p.activo = 1";
         
         $items = obtenerFilas($sql, "is", array($tenant_id, $session_id));
         
