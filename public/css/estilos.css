@@ -374,7 +374,7 @@ footer {
     color: white;
     margin-top: 80px;
     padding: 50px 0;
-    border-top: 3px solid #667eea;
+    border-top: 3px solid rgba(255, 255, 255, 0.3);
     text-align: center;
 }
 
