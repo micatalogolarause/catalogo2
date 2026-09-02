@@ -77,7 +77,7 @@ function admin_producto_img_url($img) {
                                  alt="<?php echo sanitizar($producto['nombre']); ?>" style="max-height: 150px;">
                         </div>
                         <?php endif; ?>
-                        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" capture="environment">
+                        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
                         <small class="text-muted">Deja en blanco si no deseas cambiar la imagen</small>
                     </div>
 

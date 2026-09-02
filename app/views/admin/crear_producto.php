@@ -50,7 +50,7 @@ include APP_ROOT . '/app/views/admin/layout/header.php';
 
                     <div class="mb-3">
                         <label for="imagen" class="form-label">Imagen Principal * (Obligatoria)</label>
-                        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" capture="environment" required>
+                        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>
                         <small class="text-muted">Formatos soportados: JPG, PNG, GIF, WebP (máx. 5MB)</small>
                     </div>
 
