@@ -49,8 +49,8 @@ function admin_producto_img_url($img) {
     <div class="row">
         <div class="col-md-4">
             <select name="estado" id="estadoFiltro" class="form-select" onchange="document.getElementById('productosFiltro').submit();">
-                <option value="">Todos los productos</option>
-                <option value="activo" <?php echo isset($_GET['estado']) && $_GET['estado'] === 'activo' ? 'selected' : ''; ?>>Solo Activos</option>
+                <option value="todos" <?php echo isset($_GET['estado']) && $_GET['estado'] === 'todos' ? 'selected' : ''; ?>>Todos los productos</option>
+                <option value="activo" <?php echo !isset($_GET['estado']) || $_GET['estado'] === 'activo' ? 'selected' : ''; ?>>Solo Activos</option>
                 <option value="inactivo" <?php echo isset($_GET['estado']) && $_GET['estado'] === 'inactivo' ? 'selected' : ''; ?>>Solo Inactivos</option>
             </select>
         </div>

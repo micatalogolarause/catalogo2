@@ -244,7 +244,9 @@ class AdminController {
      */
     public function productos() {
         $busqueda = isset($_GET['busqueda']) ? sanitizar($_GET['busqueda']) : '';
-        $filtro_estado = isset($_GET['estado']) ? sanitizar($_GET['estado']) : '';
+        // Por defecto (sin filtro elegido) se muestran solo los activos, para que
+        // "Eliminar" (que en realidad desactiva el producto) lo saque de la vista.
+        $filtro_estado = isset($_GET['estado']) ? sanitizar($_GET['estado']) : 'activo';
         
         global $conn;
         $sql = "SELECT p.*, c.nombre as categoria
