@@ -198,7 +198,10 @@ main {
 .product-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* contain (no cover): muestra la foto completa sin recortarla, aunque
+       queden franjas del fondo a los lados/arriba-abajo si la proporción
+       de la foto no coincide exacto con la de la tarjeta. */
+    object-fit: contain;
     transition: transform 0.4s ease;
 }
 
