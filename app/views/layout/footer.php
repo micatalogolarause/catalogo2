@@ -9,7 +9,7 @@
                     <h5 style="font-weight: 700; margin-bottom: 15px;">
                         <i class="bi bi-shop"></i> Tienda Virtual
                     </h5>
-                    <p style="opacity: 0.85;">
+                    <p>
                         Tu tienda de confianza para comprar en línea. Productos de calidad garantizada con envío rápido y seguro.
                     </p>
                 </div>
@@ -17,14 +17,14 @@
                     <h5 style="font-weight: 700; margin-bottom: 15px;">
                         <i class="bi bi-telephone"></i> Contacto
                     </h5>
-                    <p style="opacity: 0.85; margin: 0;">
+                    <p style="margin: 0;">
                         <strong>Email:</strong> distrisanalba@gmail.com<br>
                         <strong>Cel:</strong> 3142890961<br>
                         <strong>Horario:</strong> Lunes a sábado 9 am - 6pm
                     </p>
                 </div>
             </div>
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center; opacity: 0.8;">
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; text-align: center;">
                 <p style="margin: 0; font-size: 0.95rem;">
                     &copy; 2024 Tienda Virtual. Todos los derechos reservados. 
                     <i class="bi bi-shield-check"></i> Sitio seguro

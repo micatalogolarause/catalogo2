@@ -395,7 +395,10 @@ main {
 
 footer {
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-    color: white;
+    color: #ffffff;
+    /* Sombra sutil para que el texto blanco no se pierda contra colores de
+       tema vibrantes (rojo, naranja, etc.) */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
     margin-top: 80px;
     padding: 50px 0;
     border-top: 3px solid rgba(255, 255, 255, 0.3);
@@ -404,7 +407,6 @@ footer {
 
 footer p {
     margin: 0;
-    opacity: 0.9;
 }
 
 /* ============================================
