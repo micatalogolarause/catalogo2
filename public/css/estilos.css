@@ -187,7 +187,11 @@ main {
     position: relative;
     overflow: hidden;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    height: 280px;
+    /* aspect-ratio en vez de un height fijo: con 2 columnas en móvil (col-6)
+       una altura fija de 280px quedaba muy alta para una tarjeta angosta,
+       dejando la imagen recortada y "alargada". Así escala con el ancho
+       real de la tarjeta en cualquier breakpoint. */
+    aspect-ratio: 1 / 1;
 }
 
 .product-image {
