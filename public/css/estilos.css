@@ -190,8 +190,9 @@ main {
     /* aspect-ratio en vez de un height fijo: con 2 columnas en móvil (col-6)
        una altura fija de 280px quedaba muy alta para una tarjeta angosta,
        dejando la imagen recortada y "alargada". Así escala con el ancho
-       real de la tarjeta en cualquier breakpoint. */
-    aspect-ratio: 1 / 1;
+       real de la tarjeta en cualquier breakpoint. Un poco menos que
+       cuadrada (4/3) para aprovechar mejor el espacio vertical. */
+    aspect-ratio: 4 / 3;
 }
 
 .product-image {
@@ -218,19 +219,19 @@ main {
 }
 
 .product-info {
-    padding: 20px;
+    padding: 14px;
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 .product-title {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #2c3e50;
-    margin-bottom: 10px;
-    line-height: 1.4;
-    min-height: 2.8em;
+    margin-bottom: 6px;
+    line-height: 1.35;
+    min-height: 2.4em;
 }
 
 .product-title-link {
@@ -252,16 +253,21 @@ main {
 }
 
 .product-price {
-    font-size: 1.8rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: var(--color-primary, #667eea);
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .product-actions {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+.product-actions .btn {
+    padding: 8px 10px;
+    font-size: 0.9rem;
 }
 
 /* ============================================
