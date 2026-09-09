@@ -588,9 +588,13 @@ footer p {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.85);
+    color: #ffffff;
+    /* Sombra sutil para que el texto blanco no se pierda contra colores de
+       tema claros/vibrantes (rojo, naranja, etc.) */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
     text-decoration: none;
     font-size: 0.75rem;
+    font-weight: 600;
     gap: 4px;
     height: 100%;
     position: relative;
