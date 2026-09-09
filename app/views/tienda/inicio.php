@@ -104,25 +104,25 @@ function tienda_img_url($img) {
                             </div>
                             <div class="product-info">
                                 <h5 class="product-title">
-                                    <?php echo sanitizar($producto['nombre']); ?>
+                                    <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=producto&id=<?php echo $producto['id']; ?>" class="product-title-link">
+                                        <?php echo sanitizar($producto['nombre']); ?>
+                                    </a>
                                 </h5>
-                                <p class="product-description">
-                                    <?php echo substr(sanitizar($producto['descripcion']), 0, 100) . '...'; ?>
-                                </p>
                                 <div class="product-price">
                                     $<?php echo number_format($producto['precio'], 2); ?>
                                 </div>
                                 <div class="product-actions">
-                                    <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=producto&id=<?php echo $producto['id']; ?>" 
-                                       class="btn btn-primary" style="flex: 1.2;">
-                                        <i class="bi bi-eye"></i> Detalles
-                                    </a>
                                     <?php if ($producto['stock'] > 0): ?>
-                                    <button class="btn btn-success agregar-carrito" 
+                                    <button class="btn btn-success agregar-carrito w-100"
                                             data-producto-id="<?php echo $producto['id']; ?>"
                                             data-nombre="<?php echo sanitizar($producto['nombre']); ?>">
                                         <i class="bi bi-bag-check"></i> Añadir
                                     </button>
+                                    <?php else: ?>
+                                    <a href="<?php echo APP_URL; ?>/index.php?controller=tienda&action=producto&id=<?php echo $producto['id']; ?>"
+                                       class="btn btn-outline-secondary w-100">
+                                        <i class="bi bi-eye"></i> Ver detalles
+                                    </a>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -210,7 +210,7 @@ function buscarEnVivo(texto) {
         
         productos.forEach(producto => {
             const nombre = producto.querySelector('.product-title').textContent.toLowerCase();
-            const descripcion = producto.querySelector('.product-description').textContent.toLowerCase();
+            const descripcion = producto.querySelector('.product-description')?.textContent.toLowerCase() || '';
             
             if (textoBusqueda === '' || nombre.includes(textoBusqueda) || descripcion.includes(textoBusqueda)) {
                 producto.closest('.product-col').style.display = '';
